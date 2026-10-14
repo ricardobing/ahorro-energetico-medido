@@ -1,0 +1,29 @@
+# Dependencias y builds
+node_modules/
+dist/
+build/
+.vite/
+*.tsbuildinfo
+
+# Datos locales (MongoDB embebido, subidas de prueba)
+.data/
+uploads/
+
+# Secretos
+.env
+.env.*
+!.env.example
+
+# Tests y reportes
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# Sistema y editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.log

@@ -314,7 +314,7 @@ flowchart TD
   B -- sí --> H{¿Todas las facturas posteriores caen<br/>en la temporada alta del rubro?}
   H -- sí --> N4[[INSUFFICIENT_DATA · HIGH_SEASON]]
   H -- no --> RP[RECENT_PERIODS<br/>últimas 3 antes y las posteriores, sin temporada alta<br/>«sin corrección por temporada»]
-  YY & RP --> C[cambio = después / referencia − 1<br/>banda = 2σ√(1/n_ref + 1/n_después)]
+  YY & RP --> C["cambio = después / referencia − 1<br/>banda = 2σ√(1/n_ref + 1/n_después)"]
   C --> M{¿Cambio ≤ −banda?}
   M -- sí --> R1[[MEASURED · ahorro a la tarifa vigente + rango]]
   M -- no --> U{¿Cambio ≥ +banda o<br/>3 o más facturas después?}

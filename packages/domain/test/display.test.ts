@@ -24,6 +24,7 @@ function display(
     headline: plain(d.headline),
     methodLine: plain(d.methodLine),
     tariffNote: plain(d.tariffNote),
+    tariffHeadline: plain(d.tariffHeadline),
     nextStep: plain(d.nextStep),
     money: d.money && {
       text: plain(d.money.text),
@@ -51,6 +52,7 @@ describe('Lo que ve la usuaria', () => {
     expect(d.tariffNote).toBe(
       'Tu tarifa subió 8 % desde enero: por eso tu factura puede subir aunque uses menos luz. Eso no depende de ti.',
     );
+    expect(plain(d.tariffHeadline)).toBe('La tarifa subió 8 % desde enero');
   });
 
   it('Todavía no (sintético)', () => {

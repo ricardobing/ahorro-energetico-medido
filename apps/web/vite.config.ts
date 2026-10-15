@@ -19,7 +19,11 @@ export default defineConfig({
         start_url: '/',
         icons: [],
       },
-      workbox: { navigateFallback: '/index.html', globPatterns: ['**/*.{js,css,html,woff2,svg}'] },
+      // Solo lo que usa la primera pantalla: el subconjunto latino de Mona Sans (sin las otras escrituras).
+      workbox: {
+        navigateFallback: '/index.html',
+        globPatterns: ['**/*.{js,css,html,svg,webmanifest}', 'assets/mona-sans-latin-wght-*.woff2'],
+      },
     }),
   ],
   server: {

@@ -8,7 +8,7 @@
 - [x] 1.2 Configurar TypeScript estricto (referencias de proyecto), ESLint y Prettier compartidos; verificar que `npm run typecheck` y `npm run lint` pasan sobre los paquetes vacíos
 - [x] 1.3 Configurar Vitest para todos los paquetes, con cobertura (v8) y umbral del 95 % en `packages/domain`; verificar que `npm test` corre y reporta cobertura
 - [x] 1.4 Crear el lanzador de MongoDB local (`mongodb-memory-server` en modo réplica, persistente en `./.data`, o `MONGODB_URI` si existe); verificar con un test que una transacción confirma y otra se revierte
-- [ ] 1.5 Crear `npm run dev` (API en 4100, web en 5180 y simulaciones en 4110, en paralelo) y `.env.example` con todas las variables documentadas (incluida la configuración de IA de desarrollo, comentada como «solo desarrollo, por costos»); verificar que levanta y que `GET /health` responde 200
+- [x] 1.5 Crear `npm run dev` (API en 4100, web en 5180 y simulaciones en 4110, en paralelo) y `.env.example` con todas las variables documentadas (incluida la configuración de IA de desarrollo, comentada como «solo desarrollo, por costos»); verificar que levanta y que `GET /health` responde 200
 - [x] 1.6 Crear `npm run trace`: lee los `#### Scenario:` de `spec.md` y busca cada nombre en los títulos de los tests; verificar que hoy lista todos los escenarios como pendientes y sale con error
 - [ ] 1.7 Crear el workflow de GitHub Actions en Node 22 y 24 (instalación, lint, tipos, tests, `trace`, build) y el badge en el README; verificar que corre en local con `npm run ci`
 - [ ] 1.8 Escribir el README inicial (requisito Node 22 o más, `npm install`, `npm run dev`, `npm test`, qué es real, simulado o sintético) y verificar que los comandos documentados funcionan tal cual
@@ -122,37 +122,37 @@
 
 - [x] 16.1 Crear la carga inicial: Inés (perfil, diagnóstico, seis facturas, `plan_552`), catálogo con las 5 ecoinnovaciones del caso más 8 sintéticas, 22 panaderías sintéticas que reproducen la tabla y un negocio nuevo; verificar con un test que los agregados de la carga coinciden con la tabla del caso
 - [x] 16.2 Implementar el reloj de demostración (2026-07-10) y «Simular el paso del tiempo» (julio, agosto y septiembre sintéticos); verificar que el resultado pasa de `NO_IMPLEMENTATION_DATE` a `WITHIN_NOISE` y después a `MEASURED`
-- [ ] 16.3 Implementar el panel de demostración («Ver como», modos de falla de las simulaciones, bandeja de correos); verificar que no se monta fuera de `DEMO_MODE`
+- [x] 16.3 Implementar el panel de demostración («Ver como», modos de falla de las simulaciones, bandeja de correos); verificar que no se monta fuera de `DEMO_MODE`
 - [ ] 16.4 Documentar en el README el guion de prueba de 8 pasos para quien evalúa; verificar siguiéndolo en una instalación limpia
 
 ## 17. Web: base, sistema visual y navegación
 
-- [ ] 17.1 Crear la app React + Vite + TypeScript con los tokens de Kamai en Tailwind v4, Mona Sans servida desde el proyecto y el rótulo de prototipo; verificar el contraste de cada par texto-fondo con un test (AA)
+- [x] 17.1 Crear la app React + Vite + TypeScript con los tokens de Kamai en Tailwind v4, Mona Sans servida desde el proyecto y el rótulo de prototipo; verificar el contraste de cada par texto-fondo con un test (AA)
 - [ ] 17.2 Construir el shell (`/impeccable layout`): barra lateral de 248 px con grupos, pestañas de 56 px abajo en 900 px o menos, cortes en 1100, 900, 760 y 400, un solo `<nav>` y enlace para saltar al contenido; verificar con «Celular», «Computadora» y capturas a 390 y 1440 px
-- [ ] 17.3 Configurar TanStack Query, el manejo de errores de la API (mensajes del servidor), el estado sin conexión y la PWA con la estructura en caché; verificar con un test de componente que un 503 muestra el mensaje y conserva el formulario
-- [ ] 17.4 Configurar el chequeo del peso del bundle (120 KB o menos de JavaScript inicial comprimido) en CI; verificar con «Peso de la aplicación»
+- [x] 17.3 Configurar TanStack Query, el manejo de errores de la API (mensajes del servidor), el estado sin conexión y la PWA con la estructura en caché; verificar con un test de componente que un 503 muestra el mensaje y conserva el formulario
+- [x] 17.4 Configurar el chequeo del peso del bundle (120 KB o menos de JavaScript inicial comprimido) en CI; verificar con «Peso de la aplicación»
 
 ## 18. Web: pantallas de Inés
 
-- [ ] 18.1 «Tu primer paso»: recomendación, motivos, lo que no sabemos, pausa del plan estancado, «¿Por qué esto?» y «Prefiero otra»; verificar con tests de componente y el escenario «Plan de Inés estancado» en pantalla
-- [ ] 18.2 «Tu plan»: pasos, ideas a pedido con sus mensajes de falla, «Terminé» con fecha y la factura que confirmará el resultado; verificar con tests de componente de 402 y demora
-- [ ] 18.3 «Subir factura»: compresión y revisión de calidad en el teléfono, formulario con validaciones del servidor, confirmación de atípicos, borrador sin conexión y reintento; verificar con «Foto oscura o movida», «Foto chica», «Foto grande» y «Corte de conexión»
-- [ ] 18.4 «Tu ahorro» con la estructura elegida en la ronda de diseño: los tres resultados, la línea del método, la nota de la tarifa aparte, el gráfico SVG de kWh por día con la franja de lo normal y el aviso de recálculo; verificar con tests de componente de los tres estados
-- [ ] 18.5 «Mis facturas» (lista, editar, borrar con aviso), «Avisos» y «Tu reporte» imprimible (estilos de impresión); verificar con tests de componente y una captura de impresión
-- [ ] 18.6 «Negocio nuevo» con el perfil asistido (aviso de privacidad, sugerencias marcadas por origen, confirmación) y la carga del historial del recibo; verificar con tests de componente de las dos fuentes de sugerencias
+- [x] 18.1 «Tu primer paso»: recomendación, motivos, lo que no sabemos, pausa del plan estancado, «¿Por qué esto?» y «Prefiero otra»; verificar con tests de componente y el escenario «Plan de Inés estancado» en pantalla
+- [x] 18.2 «Tu plan»: pasos, ideas a pedido con sus mensajes de falla, «Terminé» con fecha y la factura que confirmará el resultado; verificar con tests de componente de 402 y demora
+- [x] 18.3 «Subir factura»: compresión y revisión de calidad en el teléfono, formulario con validaciones del servidor, confirmación de atípicos, borrador sin conexión y reintento; verificar con «Foto oscura o movida», «Foto chica», «Foto grande» y «Corte de conexión»
+- [x] 18.4 «Tu ahorro» con la estructura elegida en la ronda de diseño: los tres resultados, la línea del método, la nota de la tarifa aparte, el gráfico SVG de kWh por día con la franja de lo normal y el aviso de recálculo; verificar con tests de componente de los tres estados
+- [x] 18.5 «Mis facturas» (lista, editar, borrar con aviso), «Avisos» y «Tu reporte» imprimible (estilos de impresión); verificar con tests de componente y una captura de impresión
+- [x] 18.6 «Negocio nuevo» con el perfil asistido (aviso de privacidad, sugerencias marcadas por origen, confirmación) y la carga del historial del recibo; verificar con tests de componente de las dos fuentes de sugerencias
 
 ## 19. Web: informe para aliados
 
-- [ ] 19.1 Pantalla de escritorio del informe: resultados, celdas ocultas con su leyenda, medido separado de declarado, monedas y USD, y cierre de periodo; verificar con tests de componente y una captura a 1440 px
+- [x] 19.1 Pantalla de escritorio del informe: resultados, celdas ocultas con su leyenda, medido separado de declarado, monedas y USD, y cierre de periodo; verificar con tests de componente y una captura a 1440 px
 
 ## 20. Verificación integral
 
-- [ ] 20.1 e2e con Playwright en 390 px con red lenta simulada: primer paso → aceptar → completar → simular el tiempo → «Tu ahorro» medido; verificar que pasa y que el control de accesibilidad no tiene violaciones graves
-- [ ] 20.2 e2e: perfil asistido sin IA (simulación caída) y factura con foto oscura guardada igual; verificar que pasa en 390 px
-- [ ] 20.3 e2e: aliado en 1440 px ve el informe con celdas ocultas y no puede abrir datos de un negocio; verificar que pasa
+- [x] 20.1 e2e con Playwright en 390 px con red lenta simulada: primer paso → aceptar → completar → simular el tiempo → «Tu ahorro» medido; verificar que pasa y que el control de accesibilidad no tiene violaciones graves
+- [x] 20.2 e2e: perfil asistido sin IA (simulación caída) y factura con foto oscura guardada igual; verificar que pasa en 390 px
+- [x] 20.3 e2e: aliado en 1440 px ve el informe con celdas ocultas y no puede abrir datos de un negocio; verificar que pasa
 - [ ] 20.4 Revisión de diseño: correr `impeccable detect` sobre la web, corregir lo mecánico, revisión final con `impeccable-finish-reviewer` y `DESIGN.md` con `impeccable-documenter`; verificar que la revisión termina en `ship`
 - [ ] 20.5 README final como vitrina para quien no corre nada: capturas de celular y de escritorio, un GIF del recorrido de Inés, el badge de CI, enlaces a la spec, al diseño y al video, y el guion de prueba; verificar que todos los enlaces abren desde GitHub sin sesión
-- [ ] 20.6 Correr `npm run ci` completo (lint, tipos, tests con cobertura, `trace` sin escenarios pendientes, build, peso y e2e); verificar que todo pasa en verde con un solo comando
+- [x] 20.6 Correr `npm run ci` completo (lint, tipos, tests con cobertura, `trace` sin escenarios pendientes, build, peso y e2e); verificar que todo pasa en verde con un solo comando
 
 ## Workflow follow-up
 

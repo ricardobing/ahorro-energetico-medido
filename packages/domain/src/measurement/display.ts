@@ -24,6 +24,8 @@ export interface SavingsDisplay {
   methodLine: string | null;
   /** Respuesta a «¿Por qué tu factura no baja igual?» (efecto de la tarifa, aparte). */
   tariffNote: string | null;
+  /** La misma respuesta en una línea corta para el título de la tarjeta («La tarifa subió 8 % desde enero»). */
+  tariffHeadline?: string | null;
   /** Qué falta y cuándo se va a saber. */
   nextStep: string | null;
 }
@@ -63,6 +65,13 @@ function tariffNote(result: MeasurementResult, locale: string): string | null {
     : `Tu tarifa bajó ${formatPercentInt(pct)} desde ${since}: por eso tu factura puede bajar aunque no cambies nada. Esa baja no la contamos como ahorro tuyo.`;
 }
 
+function tariffHeadline(result: MeasurementResult, locale: string): string | null {
+  const change = result.tariffChange;
+  if (!change || Math.round(Math.abs(change.changePct)) === 0) return null;
+  const verb = change.changePct > 0 ? 'subió' : 'bajó';
+  return `La tarifa ${verb} ${formatPercentInt(Math.abs(change.changePct))} desde ${formatMonthName(change.fromDate, locale)}`;
+}
+
 function whenWeKnow(result: MeasurementResult, locale: string): string {
   return result.nextBillEta
     ? `Lo sabremos con tu factura que cierra alrededor del ${formatDayMonth(result.nextBillEta, locale)}.`
@@ -77,6 +86,7 @@ export function buildSavingsDisplay(result: MeasurementResult, ctx: DisplayConte
     status: result.status,
     methodLine: methodLine(result),
     tariffNote: tariffNote(result, locale),
+    tariffHeadline: tariffHeadline(result, locale),
   };
 
   if (result.status === 'MEASURED' && result.savings && result.changePct !== null) {

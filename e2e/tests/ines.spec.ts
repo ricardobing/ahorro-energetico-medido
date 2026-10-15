@@ -118,7 +118,8 @@ test.describe('recorridos de Inés', () => {
     await expect(page.getByRole('heading', { name: '¿Bajó tu consumo?' })).toBeVisible();
     await expect(page.getByText('Sí: usas 6 % menos luz por día')).toBeVisible();
     await expect(page.getByText('Unos S/ 90 menos por mes')).toBeVisible();
-    await expect(page.getByText(/La tarifa subió 8 %/)).toBeVisible();
+    // El porcentaje lleva espacio duro (como en el dominio): `\s` lo acepta.
+    await expect(page.getByText(/La tarifa subió 8\s%/)).toBeVisible();
   });
 
   test('perfil asistido sin IA y foto oscura guardada igual', async ({ page }) => {

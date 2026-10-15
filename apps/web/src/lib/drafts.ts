@@ -1,3 +1,5 @@
+import { del, get, set } from 'idb-keyval';
+
 /** Borrador de una factura guardado en el teléfono (IndexedDB) cuando se corta la conexión. */
 export interface BillDraft {
   serviceType: 'electricity';
@@ -10,14 +12,16 @@ export interface BillDraft {
   savedAt: string;
 }
 
+const KEY = 'kamai.borrador-factura';
+
 export async function saveDraft(draft: BillDraft): Promise<void> {
-  throw new Error(`No implementado todavía: saveDraft (${draft.savedAt})`);
+  await set(KEY, draft);
 }
 
 export async function loadDraft(): Promise<BillDraft | null> {
-  throw new Error('No implementado todavía: loadDraft');
+  return ((await get(KEY)) as BillDraft | undefined) ?? null;
 }
 
 export async function clearDraft(): Promise<void> {
-  throw new Error('No implementado todavía: clearDraft');
+  await del(KEY);
 }

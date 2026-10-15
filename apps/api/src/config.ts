@@ -37,7 +37,7 @@ export const DEFAULT_CONFIG: AppConfig = {
     maxRequestsPerDay: PROFILE_ASSIST_PARAMS.maxRequestsPerDay,
   },
   subtasksTimeoutMs: 10_000,
-  messaging: { url: 'http://localhost:4110/messaging', apiKey: 'dev-only' },
+  messaging: { url: 'http://localhost:4110/messaging', apiKey: 'solo-desarrollo' },
   currencyUrl: 'http://localhost:4110/currency',
   outboxBackoffMs: [60_000, 300_000, 1_800_000, 7_200_000, 43_200_000],
 };

@@ -70,7 +70,7 @@ Generado por `npm run trace` a partir de `openspec/changes/primer-paso-ahorro-me
 | 62 | Límite de uso del perfil asistido | Límite superado | `apps/api/test/profile.api.test.ts:102` |
 | 63 | Comparación en kWh por día | Febrero contra enero | `packages/domain/test/measurement.test.ts:17` |
 | 64 | Ningún ahorro sin implementación ni factura posterior | Inés hoy | `packages/domain/test/measurement.test.ts:29` |
-| 65 | Ningún ahorro sin implementación ni factura posterior | La resta simple ya no engaña | `packages/domain/test/display.test.ts:66` |
+| 65 | Ningún ahorro sin implementación ni factura posterior | La resta simple ya no engaña | `packages/domain/test/display.test.ts:68` |
 | 66 | Ningún ahorro sin implementación ni factura posterior | Sin factura posterior | `packages/domain/test/measurement.test.ts:37` |
 | 67 | Exclusión de la factura del cambio | Julio de Inés (sintético) | `packages/domain/test/measurement.test.ts:46` |
 | 68 | Elección del método de comparación | Periodos cercanos para Inés (sintético desde agosto) | `packages/domain/test/measurement.test.ts:58` |
@@ -85,8 +85,8 @@ Generado por `npm run trace` a partir de `openspec/changes/primer-paso-ahorro-me
 | 77 | Tres resultados posibles | Tres facturas sin cambio claro (sintético) | `packages/domain/test/measurement.test.ts:171` |
 | 78 | Valorización a la tarifa vigente y efecto de la tarifa aparte | Ahorro de Inés valorizado (sintético) | `packages/domain/test/measurement.test.ts:189` |
 | 79 | Valorización a la tarifa vigente y efecto de la tarifa aparte | Efecto de la tarifa | `packages/domain/test/measurement.test.ts:199` |
-| 80 | Lo que ve la usuaria | Resultado medido de Inés (sintético) | `packages/domain/test/display.test.ts:37` |
-| 81 | Lo que ve la usuaria | Todavía no (sintético) | `packages/domain/test/display.test.ts:56` |
+| 80 | Lo que ve la usuaria | Resultado medido de Inés (sintético) | `packages/domain/test/display.test.ts:38` |
+| 81 | Lo que ve la usuaria | Todavía no (sintético) | `packages/domain/test/display.test.ts:58` |
 | 82 | Recálculo determinista y versionado | Mismos datos | `packages/domain/test/measurement.properties.test.ts:14` |
 | 83 | Recálculo determinista y versionado | Factura editada | `apps/api/test/savings.api.test.ts:42` |
 | 84 | Cada día cuenta una vez | Orden de carga | `packages/domain/test/measurement.properties.test.ts:25` |

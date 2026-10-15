@@ -5,7 +5,7 @@
 [![CI](https://github.com/ricardobing/ahorro-energetico-medido/actions/workflows/ci.yml/badge.svg)](https://github.com/ricardobing/ahorro-energetico-medido/actions/workflows/ci.yml)
 ![Node 22 o más](https://img.shields.io/badge/node-%E2%89%A5%2022-3c873a)
 ![TypeScript estricto](https://img.shields.io/badge/TypeScript-estricto-3178c6)
-![279 tests + 10 e2e](https://img.shields.io/badge/tests-279%20%2B%2010%20e2e-44841a)
+![280 tests + 10 e2e](https://img.shields.io/badge/tests-280%20%2B%2010%20e2e-44841a)
 ![123 de 123 escenarios con test](https://img.shields.io/badge/escenarios%20con%20test-123%2F123-143938)
 
 > Hecho para el reto técnico de **Agora Partnerships** sobre su plataforma **Kamai**: la especificación que pide el reto y, además, el módulo completo, casi listo para producción. No es un producto oficial: la marca aparece como texto para ubicarlo en el producto real. Todos los nombres, montos y datos son ficticios.
@@ -377,7 +377,7 @@ Donde ya corre Kamai: la API y los workers en Cloud Run, MongoDB Atlas, las foto
 |---|---:|---|
 | Dominio | 132 | Fechas, dinero, medición (incluidas pruebas de propiedades con 1.000 casos: el orden de las facturas no cambia el resultado, ningún día se cuenta dos veces, la franja nunca es negativa), recomendación, privacidad y perfil. Cobertura de más del 98 % |
 | API | 99 | Contra MongoDB real (en memoria, modo réplica): contratos, errores, aislamiento por negocio, transacciones, recálculo, correos con reintentos y rebotes, informe para aliados, adaptadores HTTP contra las simulaciones |
-| Web | 33 | Componentes y pantallas: los tres estados del ahorro, errores del servidor, borrador sin conexión, perfil asistido, informe, navegación y contraste AA de cada par de colores |
+| Web | 34 | Componentes y pantallas: los tres estados del ahorro, errores del servidor, borrador sin conexión, perfil asistido, informe, navegación y contraste AA de cada par de colores |
 | Simulaciones y datos | 15 | Contratos de los servicios simulados, datos del caso y trazabilidad |
 | **e2e (Playwright)** | **10** | Recorrido completo en celular, pantalla de 360 px, controles de 44 px o más, control de accesibilidad con axe en 8 pantallas, foto de 4 MB que viaja en menos de 250 KB, corte de conexión, escritorio e informe para aliados |
 
@@ -393,7 +393,7 @@ La especificación es el entregable principal, y se puede construir y probar tal
 | [proposal.md](openspec/changes/primer-paso-ahorro-medido/proposal.md) | El problema, la meta con sus indicadores, el alcance, **dónde se profundizó y por qué**, y lo que queda fuera |
 | [design.md](openspec/changes/primer-paso-ahorro-medido/design.md) | 24 decisiones con sus alternativas descartadas; cuánta IA hace falta; 3 diagramas; fallas; modelo de datos; contratos de la API; parámetros; dirección visual; qué más se puede hacer con IA |
 | [specs/…/spec.md](openspec/changes/primer-paso-ahorro-medido/specs/primer-paso-ahorro-medido/spec.md) | 68 requisitos con 123 escenarios WHEN / THEN |
-| [tasks.md](openspec/changes/primer-paso-ahorro-medido/tasks.md) | 93 tareas en orden, cada una con su verificación |
+| [tasks.md](openspec/changes/primer-paso-ahorro-medido/tasks.md) | 94 tareas en orden, cada una con su verificación |
 
 Validación: `npx @fission-ai/openspec@1.14.1 validate primer-paso-ahorro-medido --strict`.
 

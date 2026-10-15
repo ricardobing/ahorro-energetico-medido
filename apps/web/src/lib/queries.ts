@@ -15,9 +15,10 @@ export const keys = {
 export const useMe = () => useQuery({ queryKey: keys.me, queryFn: () => api<Me>('/me') });
 export const useFirstStep = () =>
   useQuery({ queryKey: keys.firstStep, queryFn: () => api<FirstStep>('/first-step') });
-export const usePlans = () =>
+export const usePlans = (enabled = true) =>
   useQuery({
     queryKey: keys.plans,
+    enabled,
     queryFn: () => api<{ items: Plan[] }>('/user-eco-card').then((r) => r.items),
   });
 export const useSavings = () => useQuery({ queryKey: keys.savings, queryFn: () => api<Savings>('/savings') });

@@ -146,7 +146,7 @@ async function main(): Promise<void> {
     await ines.page.getByText('Sí: usas 6 % menos luz por día').first().waitFor();
     await shot(ines.page, 'escritorio-ahorro');
     await ines.page.goto(`${BASE}/`);
-    await ines.page.getByText(/Ya lo elegiste/).waitFor();
+    await ines.page.getByText(/Ya lo (elegiste|terminaste)/).waitFor();
     await ines.page.goto(`${BASE}/demo`);
     await ines.page.getByText('Simular el paso del tiempo').waitFor();
     await shot(ines.page, 'escritorio-demostracion');

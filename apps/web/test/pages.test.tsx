@@ -237,6 +237,27 @@ describe('«Tu primer paso»', () => {
     await user.click(screen.getByRole('button', { name: 'Elegir esta' }));
     await waitFor(() => expect(decision).toEqual({ action: 'choose', ecoId: 'eco_204' }));
   });
+
+  it('con el plan elegido terminado, lleva a «Tu ahorro»', async () => {
+    routes['GET /first-step'] = () => ({
+      status: 200,
+      body: {
+        ...FIRST_STEP,
+        decision: { type: 'accepted', ecoId: 'eco_118', planId: 'plan_1', at: '2026-07-10' },
+      },
+    });
+    routes['GET /user-eco-card'] = () => ({
+      status: 200,
+      body: { items: [{ ...PLAN, status: 'completed', implementedAt: '2026-07-08' }] },
+    });
+    renderPage(<FirstStepPage />);
+    expect(
+      await screen.findByText(
+        'Ya lo terminaste el 8 de julio de 2026. Ahora medimos cuánto bajó tu consumo con tus facturas.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Ver mi ahorro' })).toHaveAttribute('href', '/ahorro');
+  });
 });
 
 const PLAN = {

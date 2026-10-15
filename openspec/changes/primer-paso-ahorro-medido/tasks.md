@@ -159,6 +159,7 @@
 - [x] 21.1 Calcular la variación propia de la recomendación con el tramo más reciente de facturas sin un cambio de por medio, para que un ahorro real no se lea como variación normal; verificar con «Variación propia sin el salto de un cambio»
 - [x] 21.2 Hacer que el e2e espere a la API además de la web (su salud a través del proxy de la web); verificar que el primer recorrido ya no recibe un 502 al arrancar
 - [x] 21.3 Permitir el modo demostración solo con `NODE_ENV=development` o `test`, y que `npm start` no lea `.env.example`; verificar con los tests de configuración
+- [x] 21.4 En «Tu primer paso», con el plan elegido ya terminado, decir «Ya lo terminaste» con la fecha y llevar a «Tu ahorro»; verificar con un test de la pantalla y en el navegador
 
 ## Workflow follow-up
 

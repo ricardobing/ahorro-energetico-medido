@@ -1,11 +1,11 @@
 import { useState, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { EQUIPMENT_OPTIONS, formatMoney } from '@ppam/domain';
+import { EQUIPMENT_OPTIONS, formatDateLong, formatMoney } from '@ppam/domain';
 import { IconBolt, IconCheck, IconQuestion, IconStep } from '../components/Icons';
 import { Banner, Checkbox, LEVEL_TEXT, PageHead, Question, SkeletonCards, SourceTag } from '../components/ui';
 import { api, errorMessage } from '../lib/api';
-import { refreshBusinessData, useFirstStep, useMe } from '../lib/queries';
+import { refreshBusinessData, useFirstStep, useMe, usePlans } from '../lib/queries';
 import type { FirstStep } from '../lib/types';
 
 const plural = (n: number, one: string, many: string) => (n === 1 ? one : many);
@@ -60,6 +60,8 @@ function WhyThis(props: { why: NonNullable<FirstStep['why']>; currency: 'PEN' | 
 export function FirstStepPage(): ReactNode {
   const query = useFirstStep();
   const me = useMe();
+  // El plan elegido, para saber si ya lo terminó: entonces lo que sigue es ver el ahorro.
+  const plans = usePlans(Boolean(query.data?.decision));
   const client = useQueryClient();
   const navigate = useNavigate();
   const [pause, setPause] = useState(true);
@@ -87,6 +89,8 @@ export function FirstStepPage(): ReactNode {
       data.decision.ecoId === eco?.ecoId
         ? eco?.title
         : data.alternatives.find((a) => a.ecoId === data.decision!.ecoId)?.title;
+    const plan = plans.data?.find((p) => p.id === data.decision!.planId);
+    const done = plan?.status === 'completed';
     return (
       <>
         <PageHead title="Tu primer paso" sub={me.data?.business?.name} icon={IconStep} />
@@ -97,11 +101,21 @@ export function FirstStepPage(): ReactNode {
           question="¿Qué hago primero?"
           answer={chosen ?? 'Ya elegiste tu primer paso'}
         >
-          <p className="support">Ya lo elegiste. Ahora se trata de terminarlo: los pasos están en tu plan.</p>
+          <p className="support">
+            {done
+              ? `Ya lo terminaste${plan.implementedAt ? ` el ${formatDateLong(plan.implementedAt, 'es-PE')}` : ''}. Ahora medimos cuánto bajó tu consumo con tus facturas.`
+              : 'Ya lo elegiste. Ahora se trata de terminarlo: los pasos están en tu plan.'}
+          </p>
           <div className="actions">
-            <Link className="btn btn-primary" to="/plan">
-              Ver mi plan
-            </Link>
+            {done ? (
+              <Link className="btn btn-primary" to="/ahorro">
+                Ver mi ahorro
+              </Link>
+            ) : (
+              <Link className="btn btn-primary" to="/plan">
+                Ver mi plan
+              </Link>
+            )}
           </div>
         </Question>
       </>

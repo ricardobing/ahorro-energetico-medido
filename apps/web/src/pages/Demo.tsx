@@ -57,7 +57,7 @@ export function DemoPage(): ReactNode {
       <PageHead
         icon={IconDemo}
         title="Demostración"
-        sub="Solo existe con DEMO_MODE=true: la API se niega a usarlo en producción."
+        sub="Solo existe en desarrollo, con DEMO_MODE=true: la API no lo permite en ningún otro entorno."
       />
       {message ? (
         <Banner onClose={() => setMessage(null)}>

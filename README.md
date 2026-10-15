@@ -392,7 +392,7 @@ La especificación es el entregable principal, y se puede construir y probar tal
 |---|---|
 | [proposal.md](openspec/changes/primer-paso-ahorro-medido/proposal.md) | El problema, la meta con sus indicadores, el alcance, **dónde se profundizó y por qué**, y lo que queda fuera |
 | [design.md](openspec/changes/primer-paso-ahorro-medido/design.md) | 24 decisiones con sus alternativas descartadas; cuánta IA hace falta; 3 diagramas; fallas; modelo de datos; contratos de la API; parámetros; dirección visual; qué más se puede hacer con IA |
-| [specs/…/spec.md](openspec/changes/primer-paso-ahorro-medido/specs/primer-paso-ahorro-medido/spec.md) | 67 requisitos con 123 escenarios WHEN / THEN |
+| [specs/…/spec.md](openspec/changes/primer-paso-ahorro-medido/specs/primer-paso-ahorro-medido/spec.md) | 68 requisitos con 123 escenarios WHEN / THEN |
 | [tasks.md](openspec/changes/primer-paso-ahorro-medido/tasks.md) | 93 tareas en orden, cada una con su verificación |
 
 Validación: `npx @fission-ai/openspec@1.14.1 validate primer-paso-ahorro-medido --strict`.

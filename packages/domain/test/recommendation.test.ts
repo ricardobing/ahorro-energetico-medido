@@ -160,6 +160,19 @@ describe('Orden por probabilidad de completar y efecto contraído', () => {
     expect(led?.score).toBeCloseTo(led!.factors.pComplete * led!.factors.effectPct * 0.5 * 0.8, 10);
   });
 
+  it('Empate', () => {
+    const same = { chose: 5, completed: 3, measuredCount: 2, medianChangePct: -8 };
+    const r = recommend({
+      ...inesInput,
+      plans: [],
+      catalog: [eco('b_media', { complexity: 'MEDIA' }), eco('c_baja'), eco('a_baja')],
+      peers: ['b_media', 'c_baja', 'a_baja'].map((ecoId) => ({ ecoId, ...same })),
+    });
+    expect(r.ranked.map((x) => x.ecoId)).toEqual(['a_baja', 'c_baja', 'b_media']);
+  });
+});
+
+describe('Variación propia para la recomendación', () => {
   it('Variación propia sin el salto de un cambio', () => {
     const bills = [...inesBills(), ...simulatedBills(['jul', 'ago', 'sep'])];
     expect(ownVariationPct(bills, [INES_IMPLEMENTED_AT])).toBeCloseTo(2.57, 2);
@@ -185,17 +198,6 @@ describe('Orden por probabilidad de completar y efecto contraído', () => {
     const three = ['01', '02', '03'].map((m) => billWithDaily(`c${m}`, `2026-${m}`, 60));
     expect(ownVariationPct(three, [])).toBeNull();
     expect(ownVariationPct([...three, billWithDaily('c04', '2026-04', 60)], ['2026-03-15'])).toBeNull();
-  });
-
-  it('Empate', () => {
-    const same = { chose: 5, completed: 3, measuredCount: 2, medianChangePct: -8 };
-    const r = recommend({
-      ...inesInput,
-      plans: [],
-      catalog: [eco('b_media', { complexity: 'MEDIA' }), eco('c_baja'), eco('a_baja')],
-      peers: ['b_media', 'c_baja', 'a_baja'].map((ecoId) => ({ ecoId, ...same })),
-    });
-    expect(r.ranked.map((x) => x.ecoId)).toEqual(['a_baja', 'c_baja', 'b_media']);
   });
 });
 

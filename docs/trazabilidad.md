@@ -17,13 +17,13 @@ Generado por `npm run trace` a partir de `openspec/changes/primer-paso-ahorro-me
 | 9 | Orden por probabilidad de completar y efecto contraído | Orden para Inés con los datos del caso | `packages/domain/test/recommendation.test.ts:128` |
 | 10 | Orden por probabilidad de completar y efecto contraído | Un caso único no domina | `packages/domain/test/recommendation.test.ts:140` |
 | 11 | Orden por probabilidad de completar y efecto contraído | Efecto que no se vería en la factura | `packages/domain/test/recommendation.test.ts:156` |
-| 12 | Orden por probabilidad de completar y efecto contraído | Variación propia sin el salto de un cambio | `packages/domain/test/recommendation.test.ts:163` |
-| 13 | Orden por probabilidad de completar y efecto contraído | Empate | `packages/domain/test/recommendation.test.ts:190` |
-| 14 | Explicación con motivos verdaderos | Explicación para Inés | `packages/domain/test/recommendation.test.ts:206` |
-| 15 | Explicación con motivos verdaderos | Sin efecto de pares por debajo del umbral | `packages/domain/test/recommendation.test.ts:218` |
-| 16 | Explicación con motivos verdaderos | Sin dinero inventado | `packages/domain/test/recommendation.test.ts:224` |
-| 17 | Recomendación sin facturas | Negocio nuevo con respuestas (sintético) | `packages/domain/test/recommendation.test.ts:242` |
-| 18 | Recomendación sin facturas | Negocio nuevo sin respuestas | `packages/domain/test/recommendation.test.ts:253` |
+| 12 | Orden por probabilidad de completar y efecto contraído | Empate | `packages/domain/test/recommendation.test.ts:163` |
+| 13 | Variación propia para la recomendación | Variación propia sin el salto de un cambio | `packages/domain/test/recommendation.test.ts:176` |
+| 14 | Explicación con motivos verdaderos | Explicación para Inés | `packages/domain/test/recommendation.test.ts:208` |
+| 15 | Explicación con motivos verdaderos | Sin efecto de pares por debajo del umbral | `packages/domain/test/recommendation.test.ts:220` |
+| 16 | Explicación con motivos verdaderos | Sin dinero inventado | `packages/domain/test/recommendation.test.ts:226` |
+| 17 | Recomendación sin facturas | Negocio nuevo con respuestas (sintético) | `packages/domain/test/recommendation.test.ts:244` |
+| 18 | Recomendación sin facturas | Negocio nuevo sin respuestas | `packages/domain/test/recommendation.test.ts:255` |
 | 19 | Una sola recomendación en todas las superficies | Catálogo | `apps/api/test/recommendation.api.test.ts:44` |
 | 20 | Una sola recomendación en todas las superficies | Diagnóstico por etapas | `apps/api/test/recommendation.api.test.ts:51` |
 | 21 | Una sola recomendación en todas las superficies | Correo de bienvenida | `apps/api/test/recommendation.api.test.ts:56` |

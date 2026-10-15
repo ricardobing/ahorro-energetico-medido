@@ -69,7 +69,10 @@ export async function currentPeerStats(
  * Variación propia del negocio, sin el salto de los cambios que ya hizo (o `null` si no alcanza: se usa la
  * de por defecto). El dominio elige el tramo de facturas; aquí solo se redondea para la huella.
  */
-function ownSigma(bills: Awaited<ReturnType<typeof loadElectricityBills>>, plans: PlanRecord[]): number | null {
+function ownSigma(
+  bills: Awaited<ReturnType<typeof loadElectricityBills>>,
+  plans: PlanRecord[],
+): number | null {
   const changes = plans.flatMap((p) => (p.implementedAt ? [p.implementedAt] : []));
   const pct = ownVariationPct(bills, changes);
   return pct === null ? null : Math.round(pct * 10_000) / 10_000;

@@ -57,7 +57,7 @@ El sistema SHALL traducir los niveles BAJA, MEDIA y ALTA de inversión y de tiem
 - **THEN** BAJA y MEDIA son compatibles y ALTA se excluye
 
 ### Requirement: Orden por probabilidad de completar y efecto contraído
-El sistema SHALL ordenar las elegibles por la probabilidad estimada de que el negocio la complete multiplicada por su efecto esperado, ambos contraídos hacia una referencia conservadora (tasa general de 30 % con peso 5; efecto 0 con peso 3), de modo que pocos casos no dominen el orden. SHALL aplicar las penalizaciones de presupuesto (×0,8) y de efecto no detectable (×0,5). Para decidir si un efecto se vería, SHALL usar la variación propia del negocio en el tramo más reciente de facturas sin un cambio de por medio (al menos 4 facturas, de hasta 12 meses; la que contiene un día de cambio no cuenta), o 3 % si ningún tramo alcanza.
+El sistema SHALL ordenar las elegibles por la probabilidad estimada de que el negocio la complete multiplicada por su efecto esperado, ambos contraídos hacia una referencia conservadora (tasa general de 30 % con peso 5; efecto 0 con peso 3), de modo que pocos casos no dominen el orden. SHALL aplicar las penalizaciones de presupuesto (×0,8) y de efecto no detectable (×0,5).
 
 #### Scenario: Orden para Inés con los datos del caso
 - **WHEN** se ordenan las elegibles de Inés con la tabla de panaderías similares
@@ -72,14 +72,17 @@ El sistema SHALL ordenar las elegibles por la probabilidad estimada de que el ne
 - **WHEN** la mediana de una ecoinnovación (LED, −4 %) es menor que el cambio mínimo que se puede distinguir en el negocio con 3 facturas antes y 2 después (4,69 % para Inés)
 - **THEN** su puntaje se multiplica por 0,5
 
+#### Scenario: Empate
+- **WHEN** dos elegibles tienen el mismo puntaje
+- **THEN** queda primero la de menor complejidad, luego la de menor inversión, luego la de mayor probabilidad de completar y, por último, la de menor identificador
+
+### Requirement: Variación propia para la recomendación
+Para decidir si el efecto de una ecoinnovación se vería en la factura, el sistema SHALL usar la variación propia del negocio en el tramo más reciente de facturas sin un cambio de por medio: al menos 4 facturas, de hasta 12 meses, sin contar la que contiene un día de cambio. Si ningún tramo alcanza, SHALL usar 3 %.
+
 #### Scenario: Variación propia sin el salto de un cambio
 - **WHEN** Inés terminó un cambio el 8 de julio y ya tiene las facturas de julio, agosto y septiembre (sintéticas)
 - **THEN** la variación que usa la recomendación es la de enero a junio, 2,57 %, porque julio contiene el cambio y después hay solo 2 facturas
 - **AND** con todas las facturas del año, el ahorro de agosto y septiembre la habría subido a 4,24 %
-
-#### Scenario: Empate
-- **WHEN** dos elegibles tienen el mismo puntaje
-- **THEN** queda primero la de menor complejidad, luego la de menor inversión, luego la de mayor probabilidad de completar y, por último, la de menor identificador
 
 ### Requirement: Explicación con motivos verdaderos
 El sistema SHALL explicar la recomendación con hasta tres motivos, tomados de los factores que la eligieron, y una frase sobre lo que todavía no se sabe. SHALL NOT mostrar montos de inversión ni de ahorro en dinero que el catálogo no tiene, ni datos de otros negocios por debajo del umbral de privacidad.

@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { EQUIPMENT_OPTIONS, formatMoney } from '@ppam/domain';
-import { IconCheck } from '../components/Icons';
+import { IconBolt, IconCheck, IconQuestion, IconStep } from '../components/Icons';
 import { Banner, Checkbox, LEVEL_TEXT, PageHead, Question, SkeletonCards, SourceTag } from '../components/ui';
 import { api, errorMessage } from '../lib/api';
 import { refreshBusinessData, useFirstStep, useMe } from '../lib/queries';
@@ -89,8 +89,14 @@ export function FirstStepPage(): ReactNode {
         : data.alternatives.find((a) => a.ecoId === data.decision!.ecoId)?.title;
     return (
       <>
-        <PageHead title="Tu primer paso" sub={me.data?.business?.name} />
-        <Question n={1} question="¿Qué hago primero?" answer={chosen ?? 'Ya elegiste tu primer paso'}>
+        <PageHead title="Tu primer paso" sub={me.data?.business?.name} icon={IconStep} />
+        <Question
+          n={1}
+          icon={IconBolt}
+          tone="picked"
+          question="¿Qué hago primero?"
+          answer={chosen ?? 'Ya elegiste tu primer paso'}
+        >
           <p className="support">Ya lo elegiste. Ahora se trata de terminarlo: los pasos están en tu plan.</p>
           <div className="actions">
             <Link className="btn btn-primary" to="/plan">
@@ -105,17 +111,21 @@ export function FirstStepPage(): ReactNode {
   if (!eco)
     return (
       <>
-        <PageHead title="Tu primer paso" />
+        <PageHead title="Tu primer paso" icon={IconStep} />
         <Banner>
-          Por ahora no encontramos un paso que entre en tu presupuesto y en tus horas. Revisa tus datos en
-          «Más → Perfil del negocio».
+          Por ahora no encontramos un paso que entre en tu presupuesto y en tus horas. Revisa tus datos en «Mi
+          negocio → Perfil».
         </Banner>
       </>
     );
 
   return (
     <>
-      <PageHead title="Tu primer paso" sub={`${me.data?.business?.name ?? ''} · pagar menos luz`} />
+      <PageHead
+        title="Tu primer paso"
+        sub={`${me.data?.business?.name ?? ''} · pagar menos luz`}
+        icon={IconStep}
+      />
 
       {data.stalledPlan ? (
         <Banner>
@@ -133,7 +143,7 @@ export function FirstStepPage(): ReactNode {
       ) : null}
 
       <div className="stack">
-        <Question n={1} question="¿Qué hago primero?" answer={eco.title}>
+        <Question n={1} icon={IconBolt} tone="picked" question="¿Qué hago primero?" answer={eco.title}>
           <div className="chips">
             <span className="chip">{LEVEL_TEXT.investment[eco.investment]}</span>
             <span className="chip">{LEVEL_TEXT.time[eco.time]}</span>
@@ -143,18 +153,29 @@ export function FirstStepPage(): ReactNode {
           <p className="support">{eco.impact}.</p>
           <ol className="list-plain">
             {eco.steps.map((s, i) => (
-              <li className="support" key={s}>
-                {i + 1}. {s}
+              <li className="reason" key={s}>
+                <span className="tile sm white num" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <span>{s}</span>
               </li>
             ))}
           </ol>
         </Question>
 
-        <Question n={2} question="¿Por qué esto?" answer="Porque lo puedes terminar" answerSize="md">
+        <Question
+          n={2}
+          icon={IconCheck}
+          question="¿Por qué esto?"
+          answer="Porque lo puedes terminar"
+          answerSize="md"
+        >
           <ul className="list-plain">
             {data.explanation.reasons.map((r) => (
               <li className="reason" key={r}>
-                <IconCheck />
+                <span className="tile sm sage" aria-hidden="true">
+                  <IconCheck />
+                </span>
                 <span>{r}</span>
               </li>
             ))}
@@ -164,6 +185,7 @@ export function FirstStepPage(): ReactNode {
 
         <Question
           n={3}
+          icon={IconQuestion}
           question="¿Qué no sabemos todavía?"
           answer="Cuánto vas a ahorrar tú"
           answerSize="md"

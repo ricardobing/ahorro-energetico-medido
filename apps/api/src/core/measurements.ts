@@ -20,7 +20,7 @@ import {
   type BusinessRecord,
   type PlanRecord,
 } from './common.js';
-import { notify, trackFunnel } from './notifications.js';
+import { emailHtml, enqueueEmail, notify, trackFunnel } from './notifications.js';
 
 export interface StoredMeasurement {
   _id: unknown;
@@ -179,11 +179,42 @@ export async function recomputePlan(
     data: { status: result.status, version: next.version },
   });
 
-  if (current?.shownAt && cause) {
+  if (current && cause) {
     const phrase = await actionPhraseFor(deps, plan.ecoCardOrigin);
     const before = displayFor(current.result, business, phrase);
     const after = displayFor(result, business, phrase);
-    if (shortAmount(before) !== shortAmount(after) || before.status !== after.status)
+    if (current.status !== 'MEASURED' && result.status === 'MEASURED') {
+      // Un resultado nuevo: aviso en la app y copia por correo.
+      const body = `${after.headline}. ${after.money?.text ?? ''}.`.replace(/\.\s*\.$/, '.');
+      const created = await notify(deps, {
+        businessId: plan.businessId,
+        type: 'measurement_ready',
+        title: 'Ya sabemos si bajó tu consumo',
+        body,
+        link: '/ahorro',
+        dedupeKey: `measurement_ready:${plan._id}`,
+      });
+      if (created)
+        await enqueueEmail(deps, {
+          businessId: plan.businessId,
+          template: 'measurement_ready',
+          ref: plan._id,
+          subject: 'Ya sabemos si bajó tu consumo',
+          html: emailHtml(
+            'Ya sabemos si bajó tu consumo',
+            [after.summary, after.methodLine ?? ''].filter(Boolean),
+            {
+              label: 'Ver mi ahorro',
+              href: '/ahorro',
+            },
+          ),
+        });
+    } else if (
+      current.shownAt &&
+      current.status === 'MEASURED' &&
+      (shortAmount(before) !== shortAmount(after) || before.status !== after.status)
+    )
+      // Cambió una cifra que la usuaria ya vio: se lo decimos, con el motivo.
       await notify(deps, {
         businessId: plan.businessId,
         type: 'savings_recalculated',

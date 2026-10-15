@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { AxeBuilder } from '@axe-core/playwright';
 import { resetDemo, sharpNoise, simulateTime, syntheticBmp, viewAs } from './support.js';
 
-const ROUTES = ['/', '/plan', '/factura', '/ahorro', '/mas'];
+const ROUTES = ['/', '/plan', '/ahorro', '/perfil', '/factura', '/facturas', '/reporte', '/avisos'];
 
 test.beforeEach(async ({ page, request }) => {
   await resetDemo(request);
@@ -124,7 +124,7 @@ test.describe('recorridos de Inés', () => {
 
   test('perfil asistido sin IA y foto oscura guardada igual', async ({ page }) => {
     await viewAs(page, 'nuevo');
-    await page.goto('/mas/perfil');
+    await page.goto('/perfil');
     await page
       .getByLabel('Cuéntanos cómo es tu negocio')
       .fill(
@@ -154,5 +154,20 @@ test.describe('recorridos de Inés', () => {
     await expect(
       page.getByText('Factura guardada. Cuando puedas, súbela de nuevo con una foto más clara.'),
     ).toBeVisible();
+  });
+});
+
+test.describe('Navegación en tres secciones', () => {
+  test('en el celular, tres botones abajo y las páginas de la sección arriba', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/ahorro');
+    for (const id of ['nav-grupo-negocio', 'nav-grupo-facturas', 'nav-grupo-reportes'])
+      await expect(page.getByTestId(id)).toBeVisible();
+    await expect(page.getByTestId('nav-plan')).toBeVisible();
+    await expect(page.getByTestId('nav-factura')).toBeHidden();
+    await page.getByTestId('nav-grupo-facturas').click();
+    await expect(page).toHaveURL(/\/factura$/);
+    await expect(page.getByTestId('nav-facturas')).toBeVisible();
+    await expect(page.getByTestId('nav-plan')).toBeHidden();
   });
 });

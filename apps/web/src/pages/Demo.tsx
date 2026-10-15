@@ -1,7 +1,8 @@
 import { useState, type ReactNode } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { formatDateLong } from '@ppam/domain';
-import { Banner, PageHead } from '../components/ui';
+import { IconAlert, IconBell, IconCalendar, IconDemo, IconProfile } from '../components/Icons';
+import { Banner, PageHead, SectionTitle } from '../components/ui';
 import { api, currentDemoUser, errorMessage, setDemoUser, type DemoUser } from '../lib/api';
 
 const USERS: { key: DemoUser; label: string; note: string }[] = [
@@ -54,6 +55,7 @@ export function DemoPage(): ReactNode {
   return (
     <>
       <PageHead
+        icon={IconDemo}
         title="Demostración"
         sub="Solo existe con DEMO_MODE=true: la API se niega a usarlo en producción."
       />
@@ -65,9 +67,9 @@ export function DemoPage(): ReactNode {
       {run.isError ? <Banner tone="error">{errorMessage(run.error)}</Banner> : null}
 
       <section className="card" aria-labelledby="ver-como">
-        <h2 id="ver-como" className="answer md" style={{ marginTop: 0 }}>
+        <SectionTitle id="ver-como" icon={IconProfile}>
           Ver como
-        </h2>
+        </SectionTitle>
         <div className="card-rows">
           {USERS.map((u) => (
             <div className="bill-row" key={u.key}>
@@ -90,9 +92,9 @@ export function DemoPage(): ReactNode {
       </section>
 
       <section className="card" aria-labelledby="tiempo">
-        <h2 id="tiempo" className="answer md" style={{ marginTop: 0 }}>
+        <SectionTitle id="tiempo" icon={IconCalendar}>
           Simular el paso del tiempo
-        </h2>
+        </SectionTitle>
         <p className="support">
           Hoy en la demostración:{' '}
           <strong>{state.data ? formatDateLong(state.data.today, 'es-PE') : '…'}</strong>. Llegan las facturas
@@ -152,9 +154,9 @@ export function DemoPage(): ReactNode {
       </section>
 
       <section className="card" aria-labelledby="fallas">
-        <h2 id="fallas" className="answer md" style={{ marginTop: 0 }}>
+        <SectionTitle id="fallas" icon={IconAlert}>
           Modos de falla de los servicios simulados
-        </h2>
+        </SectionTitle>
         <p className="support">
           Para ver cómo responde la app cuando un servicio de Kamai falla. «Normal» vuelve todo atrás.
         </p>
@@ -194,9 +196,9 @@ export function DemoPage(): ReactNode {
       </section>
 
       <section className="card" aria-labelledby="bandeja">
-        <h2 id="bandeja" className="answer md" style={{ marginTop: 0 }}>
+        <SectionTitle id="bandeja" icon={IconBell}>
           Bandeja de correos
-        </h2>
+        </SectionTitle>
         {outbox.data?.items.length ? (
           <ul className="list-plain card-rows">
             {outbox.data.items.map((m) => (

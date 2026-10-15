@@ -2,7 +2,8 @@ import { useId, useState, type FormEvent, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CIIU_OPTIONS, EQUIPMENT_OPTIONS, OVEN_OPTIONS } from '@ppam/domain';
-import { Banner, Checkbox, Field, PageHead, SkeletonCards } from '../components/ui';
+import { IconBusiness, IconCalendar, IconListCheck, IconProfile } from '../components/Icons';
+import { Banner, Checkbox, Field, PageHead, SectionTitle, SkeletonCards } from '../components/ui';
 import { api, ApiError, errorMessage } from '../lib/api';
 import { keys, refreshBusinessData, useProfile } from '../lib/queries';
 import type { Profile, Suggestions } from '../lib/types';
@@ -96,9 +97,9 @@ function HistoryRows(props: { initial: { month: string; kwh: string }[] }) {
   };
   return (
     <form className="card" onSubmit={onSubmit} noValidate aria-labelledby="historial">
-      <h2 id="historial" className="answer md" style={{ marginTop: 0 }}>
+      <SectionTitle id="historial" icon={IconCalendar}>
         Historial del recibo (opcional)
-      </h2>
+      </SectionTitle>
       <p className="support">
         Tu recibo trae un gráfico con el consumo de meses anteriores. Si lo cargas, podemos comparar con los
         mismos meses del año pasado. Son datos aproximados y no se guardan como facturas.
@@ -210,7 +211,7 @@ export function ProfilePage(): ReactNode {
 
   return (
     <>
-      <PageHead title="Perfil del negocio" sub={p.name} />
+      <PageHead icon={IconProfile} title="Perfil del negocio" sub={p.name} />
       {saved ? (
         <Banner>
           <p>Guardamos tus datos. Tu primer paso se recalculó con ellos.</p>
@@ -223,9 +224,9 @@ export function ProfilePage(): ReactNode {
       ) : null}
 
       <section className="card" aria-labelledby={`${descriptionId}-titulo`}>
-        <h2 id={`${descriptionId}-titulo`} className="answer md" style={{ marginTop: 0 }}>
+        <SectionTitle id={`${descriptionId}-titulo`} icon={IconBusiness}>
           Tu negocio en tus palabras
-        </h2>
+        </SectionTitle>
         <div className="field">
           <label className="field-label" htmlFor={descriptionId}>
             Cuéntanos cómo es tu negocio
@@ -285,9 +286,9 @@ export function ProfilePage(): ReactNode {
 
       {draft ? (
         <section className="card" aria-labelledby="revisa">
-          <h2 id="revisa" className="answer md" style={{ marginTop: 0 }}>
+          <SectionTitle id="revisa" icon={IconListCheck}>
             {suggestions ? 'Revisa lo que entendimos' : 'Tus datos'}
-          </h2>
+          </SectionTitle>
           {suggestions ? (
             <p className="chips">
               <span className="chip">
@@ -443,9 +444,9 @@ export function ProfilePage(): ReactNode {
         </section>
       ) : (
         <section className="card" aria-labelledby="actuales">
-          <h2 id="actuales" className="answer md" style={{ marginTop: 0 }}>
+          <SectionTitle id="actuales" icon={IconProfile}>
             Lo que sabemos hoy
-          </h2>
+          </SectionTitle>
           <ul className="list-plain">
             <li className="support">Rubro: {p.ciiu?.label ?? 'sin elegir'}</li>
             <li className="support">

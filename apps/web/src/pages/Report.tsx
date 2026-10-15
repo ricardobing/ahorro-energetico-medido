@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { formatDateLong } from '@ppam/domain';
-import { IconPrint } from '../components/Icons';
+import { IconPrint, IconReport } from '../components/Icons';
 import { Banner, PageHead, SkeletonCards } from '../components/ui';
 import { api, errorMessage } from '../lib/api';
 import type { SavingsReport } from '../lib/types';
@@ -19,7 +19,11 @@ export function ReportPage(): ReactNode {
   const r = query.data;
   return (
     <article className="report">
-      <PageHead title={r.title} sub={`${r.business.name}${r.business.city ? ` · ${r.business.city}` : ''}`} />
+      <PageHead
+        icon={IconReport}
+        title={r.title}
+        sub={`${r.business.name}${r.business.city ? ` · ${r.business.city}` : ''}`}
+      />
       <section className="card">
         {r.changeText ? <p className="answer">{r.changeText}</p> : null}
         {r.moneyText ? <p className="answer md">{r.moneyText}</p> : null}

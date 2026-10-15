@@ -158,10 +158,22 @@ p {
   gap: 2px;
 }
 .nav-group-label {
+  display: block;
   padding: 0 12px 6px;
   font-size: 12px;
   font-weight: 600;
   color: var(--color-on-dark-soft);
+  text-decoration: none;
+}
+.nav-group-label:hover {
+  color: var(--color-card);
+}
+.nav-group-icon {
+  display: none;
+}
+.nav-items {
+  display: grid;
+  gap: 2px;
 }
 
 /* Ítem activo con tres señales: fondo, peso y barra (no solo color). */
@@ -228,9 +240,6 @@ p {
 .nav-text-short {
   display: none;
 }
-.nav-mobile-only {
-  display: none;
-}
 
 .sidebar-foot {
   margin-top: auto;
@@ -283,9 +292,27 @@ p {
 /* ── Piezas ── */
 
 .page-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.section-head h2 {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.page-head-text {
   display: grid;
   gap: 4px;
-  margin-bottom: 20px;
+  min-width: 0;
 }
 .page-title {
   font-size: 26px;
@@ -316,16 +343,51 @@ p {
 .card.outline {
   border-color: var(--color-primary);
 }
+/* Recuadro verde suave: lo principal de la pantalla (como la opción elegida en la app de Kamai). */
+.card.sage {
+  background: var(--color-sage);
+  border-color: var(--color-sage-line);
+}
+.card.sage.picked {
+  border-color: var(--color-primary);
+}
+/* Tarjeta oscura: el dato en soles, como «Tu negocio puede ahorrar» en Kamai. */
+.card.dark {
+  background: var(--color-surface-dark);
+  border-color: var(--color-surface-dark);
+  color: var(--color-card);
+}
+.card.dark .ask,
+.card.dark .support,
+.card.dark .range-ticks {
+  color: var(--color-on-dark-soft);
+}
+.card.dark .range-ticks strong {
+  color: var(--color-card);
+}
+.card.dark .range-line {
+  background: rgb(255 255 255 / 0.18);
+}
+.card.dark .range-span {
+  background: rgb(212 230 61 / 0.2);
+  border-color: var(--color-accent);
+}
+.card.dark .range-mark {
+  background: var(--color-accent);
+}
+.card.dark :focus-visible {
+  outline-color: var(--color-accent);
+}
 .card-rows > * + * {
   border-top: 1px solid var(--color-border);
 }
 
-/* Pregunta numerada: el número dice el orden en que ella se lo pregunta. */
+/* Pregunta con su baldosa de ícono, como las secciones de la app de Kamai. */
 .ask {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
+  gap: 10px;
+  font-size: 14px;
   font-weight: 650;
   color: var(--color-fg);
 }
@@ -333,17 +395,55 @@ p {
   font: inherit;
   color: inherit;
 }
-.ask-n {
+.tile {
   display: inline-grid;
   place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  flex: none;
+  background: var(--color-sand);
+  color: var(--color-primary);
+}
+.tile svg {
+  width: 20px;
+  height: 20px;
+}
+.tile.sm {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.tile.sm svg {
+  width: 16px;
+  height: 16px;
+}
+.tile.lg {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+}
+.tile.lg svg {
+  width: 26px;
+  height: 26px;
+}
+.tile.sage {
+  background: var(--color-sage);
+}
+.tile.dark {
   background: var(--color-primary);
   color: var(--color-card);
-  font-size: 12px;
-  font-weight: 700;
-  flex: none;
+}
+.tile.white {
+  background: var(--color-card);
+}
+.tile.ring {
+  background: transparent;
+  border: 1.5px solid var(--color-accent);
+  color: var(--color-accent);
+  border-radius: 50%;
 }
 .answer {
   margin-top: 6px;
@@ -420,9 +520,16 @@ p {
   background: transparent;
   color: var(--color-primary);
   min-height: 44px;
-  padding: 0 12px;
+  padding: 0 10px;
+  font-size: 15px;
+  font-weight: 600;
   text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.btn-quiet svg {
+  width: 18px;
+  height: 18px;
 }
 .btn-quiet:hover {
   background: var(--color-mist);
@@ -475,8 +582,8 @@ p {
   gap: 10px;
   padding: 12px 14px;
   border-radius: var(--radius-card);
-  border: 1px solid var(--color-primary);
-  background: var(--color-mist);
+  border: 1px solid var(--color-sage-line);
+  background: var(--color-sage);
   color: var(--color-ink);
   font-size: 14px;
   margin-bottom: 14px;
@@ -523,16 +630,31 @@ p {
 }
 .reason {
   display: grid;
-  grid-template-columns: 20px 1fr;
+  grid-template-columns: 28px 1fr;
+  align-items: start;
   gap: 10px;
   font-size: 15px;
   line-height: 1.45;
 }
-.reason svg {
-  width: 20px;
-  height: 20px;
-  margin-top: 1px;
-  color: var(--color-primary);
+.reason .tile {
+  margin-top: -2px;
+}
+.notice-row {
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: start;
+}
+.notice-row > :not(.tile) {
+  grid-column: 2;
+}
+.notice-row > .tile {
+  grid-row: 1 / span 3;
+}
+.tile-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
 }
 
 /* Formularios */
@@ -633,15 +755,24 @@ p {
 /* Pasos del plan */
 .step {
   display: grid;
-  gap: 6px;
-  padding: 10px 0;
+  gap: 0;
+  padding: 4px 0;
+}
+.list-plain .support {
+  margin-top: 0;
 }
 .step-ideas {
-  margin: 4px 0 0 34px;
+  margin: 0 0 6px 36px;
+  padding-left: 16px;
   display: grid;
   gap: 4px;
   font-size: 14px;
+  line-height: 1.4;
   color: var(--color-fg);
+  list-style: disc;
+}
+.step-ideas li::marker {
+  color: var(--color-primary);
 }
 
 /* El rango dibujado: la incertidumbre como un ancho, no como una fórmula. */
@@ -853,20 +984,24 @@ p {
   stroke: var(--color-primary);
   stroke-width: 1.5;
 }
-.chart-bar {
-  fill: var(--color-border);
+.chart-dot {
+  fill: var(--color-card);
+  stroke: var(--color-fg);
+  stroke-width: 1.8;
 }
-.chart-bar.baseline {
+.chart-dot.baseline {
   fill: var(--color-fg);
 }
-.chart-bar.after {
+.chart-dot.after {
   fill: var(--color-primary);
+  stroke: var(--color-primary);
 }
-.chart-bar.excluded {
-  fill: var(--color-peach-border);
+.chart-dot.excluded {
+  fill: var(--color-peach);
+  stroke: #b38a4e;
 }
 .chart-label {
-  font-size: 12px;
+  font-size: 11px;
   fill: var(--color-fg);
   font-family: var(--font-sans);
 }
@@ -894,6 +1029,20 @@ p {
 }
 .sw.after {
   background: var(--color-primary);
+}
+.sw.excluded {
+  background: var(--color-peach);
+  border: 1px solid #b38a4e;
+  border-radius: 50%;
+}
+.sw.before,
+.sw.after {
+  border-radius: 50%;
+}
+.sw.other {
+  background: var(--color-card);
+  border: 1.5px solid var(--color-fg);
+  border-radius: 50%;
 }
 .sw.band {
   background: var(--color-mist);
@@ -949,9 +1098,11 @@ p {
     grid-template-columns: minmax(0, 1fr);
   }
   /* La barra lateral se vuelve una barra superior compacta: marca y rótulo de prototipo. */
+  .prototype-tag {
+    white-space: nowrap;
+  }
   .sidebar {
-    height: auto;
-    min-height: 56px;
+    height: 56px;
     overflow: visible;
     flex-direction: row;
     align-items: center;
@@ -971,7 +1122,10 @@ p {
   .sidebar-foot {
     display: none;
   }
-  /* El mismo <nav> pasa a ser una barra de pestañas fija abajo, al alcance del pulgar. */
+  /*
+   * Tres secciones: el mismo <nav> pasa a ser una barra fija abajo con un botón por sección, al alcance del
+   * pulgar, y las páginas de la sección abierta se muestran como botones arriba, bajo la barra superior.
+   */
   .side-nav {
     position: fixed;
     left: 0;
@@ -987,46 +1141,112 @@ p {
   .nav-group {
     display: contents;
   }
-  .nav-group-label,
-  .nav-desktop-only {
-    display: none;
-  }
-  .nav-mobile-only {
-    display: flex;
-  }
-  .nav-link {
+  .nav-group-label {
+    position: relative;
     flex: 1 1 0;
     min-width: 0;
     min-height: var(--tabs);
+    display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
     gap: 3px;
     padding: 6px 2px;
-    font-size: 11px;
-    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
     color: var(--color-fg);
-    border-radius: 0;
+    transition:
+      color 150ms var(--ease),
+      background-color 150ms var(--ease);
   }
-  .nav-link:hover {
+  .nav-group-label:hover {
     color: var(--color-primary);
     background: var(--color-mist);
   }
-  .nav-link[aria-current='page'] {
-    background: var(--color-mist);
-    color: var(--color-primary);
+  .nav-group-icon {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
   }
-  .nav-link[aria-current='page']::before {
-    left: 22%;
-    right: 22%;
+  .nav-group-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  .nav-dot {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 2px var(--color-card);
+  }
+  .nav-group[data-active='true'] .nav-group-label {
+    color: var(--color-primary);
+    background: var(--color-mist);
+    font-weight: 700;
+  }
+  .nav-group[data-active='true'] .nav-group-label::before {
+    content: '';
+    position: absolute;
+    left: 26%;
+    right: 26%;
     top: 0;
-    bottom: auto;
-    width: auto;
     height: 3px;
+    border-radius: 0 0 3px 3px;
     background: var(--color-primary);
   }
   .side-nav :focus-visible {
     outline-color: var(--color-primary);
     outline-offset: -3px;
+  }
+  .nav-items {
+    display: none;
+  }
+  .nav-group[data-active='true'] .nav-items {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    z-index: 25;
+    display: flex;
+    gap: 8px;
+    padding: 8px 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: var(--color-page);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .nav-link {
+    flex: 0 0 auto;
+    min-height: 44px;
+    padding: 0 14px;
+    gap: 6px;
+    border-radius: var(--radius-button);
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    color: var(--color-primary);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .nav-link:hover {
+    color: var(--color-primary);
+    background: var(--color-sage);
+  }
+  .nav-link[aria-current='page'] {
+    background: var(--color-sage);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+  .nav-link[aria-current='page']::before {
+    display: none;
+  }
+  .nav-link .nav-icon {
+    display: none;
   }
   .nav-text {
     position: absolute;
@@ -1038,38 +1258,14 @@ p {
   }
   .nav-text-short {
     display: block;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
   }
   .nav-badge {
-    position: absolute;
-    top: -6px;
-    right: -12px;
-    min-width: 18px;
-    height: 18px;
-    line-height: 18px;
-    padding: 0 5px;
-  }
-  .nav-order-1 {
-    order: 1;
-  }
-  .nav-order-2 {
-    order: 2;
-  }
-  .nav-order-3 {
-    order: 3;
-  }
-  .nav-order-4 {
-    order: 4;
-  }
-  .nav-order-5 {
-    order: 5;
+    margin-left: 0;
   }
   .page,
   .page.wide {
-    padding: 20px 16px calc(var(--tabs) + 32px + env(safe-area-inset-bottom));
+    padding: 80px 16px calc(var(--tabs) + 32px + env(safe-area-inset-bottom));
   }
 }
 

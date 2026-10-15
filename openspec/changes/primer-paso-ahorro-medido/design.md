@@ -415,7 +415,7 @@ Definida con `impeccable shape`, en modo **Operate**: una app de producto donde 
 **1. A quién sirve y para qué.** Inés abre Kamai en el celular, con datos limitados, para saber **qué hacer y si funcionó**. No viene a analizar. Cada pantalla tiene que responder su pregunta en el primer vistazo y en su idioma.
 
 **2. Estructura elegida: «Tus tres preguntas».**
-- «Tu ahorro» responde, en tarjetas numeradas y en orden, las preguntas que ella se hace: **1. ¿Bajó tu consumo? · 2. ¿Cuánto es en soles? · 3. ¿Por qué tu factura no baja igual?**
+- «Tu ahorro» responde, en tarjetas en orden y cada una con su ícono, las preguntas que ella se hace: **¿Bajó tu consumo? · ¿Cuánto es en soles? · ¿Por qué tu factura no baja igual?**
 - Debajo va la línea del método y la acción principal, «Ver mi reporte».
 - El mismo lenguaje se extiende al resto: «Tu primer paso» responde «¿Qué hago primero? · ¿Por qué esto? · ¿Qué no sabemos todavía?», y «Tu plan» responde «¿Qué me falta? · ¿Cuándo lo sabré?».
 - Descartadas:
@@ -432,11 +432,14 @@ Definida con `impeccable shape`, en modo **Operate**: una app de producto donde 
 | Primario | `#143938` | Títulos fuertes, números de pregunta, ítem activo, botones secundarios |
 | Lima (acento) | `#D4E63D` | **Solo como fondo** con texto `#143938`: botón principal, resaltado del dato clave («6 % menos»), rótulo de prototipo |
 | Texto | `#102525` · secundario `#4B6665` | Contenido |
-| Fondo de página / tarjetas | `#F2F2F2` / `#FFFFFF` con borde `#D1DBDB` | Tarjetas planas, sin sombras |
+| Fondo de página / tarjetas | `#F4F3EE` (cálido, como la app clara de Kamai) / `#FFFFFF` con borde `#D1DBDB` | Tarjetas planas, sin sombras |
+| Verde suave | `#EEF3D8`, borde `#C5D38A` (o `#143938` si es lo elegido) | Recuadros de lo principal: la recomendación, «¿Bajó tu consumo?» con resultado, los avisos y la página abierta |
+| Beige | `#F4ECDF` | Baldosas de los íconos de cada sección y de los pasos numerados |
 | Durazno | `#F5E3C6`, borde `#EAD3AD` | La tarjeta de la tarifa: «esto no depende de ti», separado del ahorro |
 | Niebla verde agua | `#E8F0EF` | Ítem activo de la navegación y franja del rango |
 | Información | `#3DA3B8` (solo líneas y franjas, nunca texto chico) | Franja de «lo que varía normalmente» en el gráfico |
 
+- **Íconos por sección:** como en la app clara de Kamai, cada tarjeta lleva su ícono de trazo en una baldosa de 36 px (beige sobre blanco, verde oscuro sobre verde suave, blanca sobre durazno, aro lima sobre oscuro) y cada pantalla, una baldosa de 48 px junto al título. El dato en soles va en una tarjeta oscura `#1F3636` con el rango en lima, como «Tu negocio puede ahorrar» de Kamai. *(Ajuste de la etapa 3: la primera versión quedaba demasiado en blanco y negro.)*
 - **Estados:** medido usa lima en el dato clave; «todavía no» usa el primario en contorno con su motivo; «no vemos ahorro» va en tono neutro con el siguiente paso. El rojo `#E00000` queda solo para errores.
 - **Tipografía:** Mona Sans (Manrope de respaldo), servida desde el proyecto. Escala: 26 (título) · 21 (respuesta) · 18 · 16 (botón) · 14 (apoyo) · 13 (pregunta y método) · 11 (pestañas y rótulos). Pesos 800 para títulos y respuestas, 600-700 para preguntas y botones, 500 para el resto.
 - **Forma:** tarjetas de 12 px de radio con borde de 1 px y sin sombra; botones de 8 px y 48 px de alto; etiquetas de 4-6 px. Espaciado sobre una base de 4 (8, 10, 12, 16, 24).
@@ -452,8 +455,9 @@ Definida con `impeccable shape`, en modo **Operate**: una app de producto donde 
 - **Recalculado:** un aviso arriba («Recalculamos tu ahorro porque…»), que se cierra a mano.
 
 **6. Estructura y respuesta a cada ancho** (con los colores de Kamai):
-- **Celular (≤ 900 px):** barra superior compacta `#1F3636` con «Kamai» y el rótulo de prototipo; pestañas fijas abajo de 56 px más la zona segura: Primer paso · Plan · Factura · Ahorro · Más. El ítem activo lleva fondo de niebla, peso 700 y barra de 3 px arriba.
-- **Escritorio (> 900 px):** barra lateral fija `#1F3636` de 248 px con grupos «Mi negocio» (Primer paso, Mi plan, Mi ahorro), «Facturas» (Mis facturas, Subir factura) y «Reportes» (Mi reporte, Aliados), más Avisos. El ítem activo lleva fondo, peso y barra de 3 px a la izquierda; el pie muestra el negocio y «Ver como…» en la demo. Las pantallas de la usuaria tienen un ancho máximo de 720 px y el informe para aliados, 1240 px.
+- **Tres secciones** (ajuste de la etapa 3: con tres secciones, un menú «Más» sobraba): **Mi negocio** (Primer paso, Mi plan, Mi ahorro, Perfil), **Facturas** (Subir factura, Mis facturas) y **Reportes** (Mi reporte, Avisos y, en la demo, Demostración).
+- **Celular (≤ 900 px):** barra superior compacta `#1F3636` con «Kamai» y el rótulo de prototipo; tres botones fijos abajo, uno por sección, de 56 px más la zona segura; las páginas de la sección abierta, como botones de 44 px en una fila bajo la barra superior. La sección activa lleva fondo de niebla, peso 700 y barra de 3 px arriba; la página activa, verde suave con borde verde oscuro.
+- **Escritorio (> 900 px):** barra lateral fija `#1F3636` de 248 px con las tres secciones y sus páginas a la vista. El ítem activo lleva fondo, peso y barra de 3 px a la izquierda; el pie muestra el negocio y «Ver como…» en la demo. Las pantallas de la usuaria tienen un ancho máximo de 720 px y el informe para aliados, 1240 px.
 - **Cortes** en 1100, 900, 760 y 400 px. Hay un solo `<nav>` y enlace para saltar al contenido.
 
 **7. Restricciones para quien construya:**

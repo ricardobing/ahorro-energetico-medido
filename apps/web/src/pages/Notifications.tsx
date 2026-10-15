@@ -2,6 +2,7 @@ import { useEffect, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { formatDateLong } from '@ppam/domain';
+import { IconBell } from '../components/Icons';
 import { Banner, PageHead, SkeletonCards } from '../components/ui';
 import { api, errorMessage } from '../lib/api';
 import { keys, useNotifications } from '../lib/queries';
@@ -26,14 +27,17 @@ export function NotificationsPage(): ReactNode {
   const items = query.data.items;
   return (
     <>
-      <PageHead title="Avisos" sub="Lo importante queda acá aunque el correo no llegue." />
+      <PageHead icon={IconBell} title="Avisos" sub="Lo importante queda acá aunque el correo no llegue." />
       {items.length === 0 ? (
         <Banner>No tienes avisos por ahora.</Banner>
       ) : (
         <section className="card">
           <ul className="list-plain card-rows" style={{ marginTop: 0 }}>
             {items.map((n) => (
-              <li className="step" key={n.id}>
+              <li className="step notice-row" key={n.id}>
+                <span className={n.readAt ? 'tile' : 'tile sage'} aria-hidden="true">
+                  <IconBell />
+                </span>
                 <strong>{n.title}</strong>
                 <p className="support" style={{ marginTop: 0 }}>
                   {n.body}

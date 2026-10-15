@@ -128,7 +128,7 @@
 ## 17. Web: base, sistema visual y navegación
 
 - [x] 17.1 Crear la app React + Vite + TypeScript con los tokens de Kamai en Tailwind v4, Mona Sans servida desde el proyecto y el rótulo de prototipo; verificar el contraste de cada par texto-fondo con un test (AA)
-- [ ] 17.2 Construir el shell (`/impeccable layout`): barra lateral de 248 px con grupos, pestañas de 56 px abajo en 900 px o menos, cortes en 1100, 900, 760 y 400, un solo `<nav>` y enlace para saltar al contenido; verificar con «Celular», «Computadora» y capturas a 390 y 1440 px
+- [x] 17.2 Construir el shell (`/impeccable layout`): barra lateral de 248 px con las tres secciones (Mi negocio, Facturas, Reportes), en 900 px o menos un botón por sección abajo (56 px) y las páginas de la sección arriba, cortes en 1100, 900, 760 y 400, un solo `<nav>` y enlace para saltar al contenido; verificar con «Celular», «Computadora» y capturas a 390 y 1440 px
 - [x] 17.3 Configurar TanStack Query, el manejo de errores de la API (mensajes del servidor), el estado sin conexión y la PWA con la estructura en caché; verificar con un test de componente que un 503 muestra el mensaje y conserva el formulario
 - [x] 17.4 Configurar el chequeo del peso del bundle (120 KB o menos de JavaScript inicial comprimido) en CI; verificar con «Peso de la aplicación»
 

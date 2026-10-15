@@ -17,8 +17,18 @@ test.describe('Navegación según el ancho', () => {
     expect(box).toMatchObject({ x: 0, y: 0, width: 248, height: 800 });
     for (const group of ['Mi negocio', 'Facturas', 'Reportes'])
       await expect(page.getByText(group, { exact: true })).toBeVisible();
-    for (const id of ['nav-primer-paso', 'nav-plan', 'nav-factura', 'nav-ahorro', 'nav-mas'])
-      await expect(page.getByTestId(id)).toHaveCount(1);
+    for (const id of [
+      'nav-primer-paso',
+      'nav-plan',
+      'nav-ahorro',
+      'nav-perfil',
+      'nav-factura',
+      'nav-facturas',
+      'nav-reporte',
+      'nav-avisos',
+    ])
+      await expect(page.getByTestId(id)).toBeVisible();
+    await expect(page.getByTestId('nav-mas')).toHaveCount(0);
     await expect(page.getByTestId('nav-ahorro')).toHaveAttribute('aria-current', 'page');
   });
 });

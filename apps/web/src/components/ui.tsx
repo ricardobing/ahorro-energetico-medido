@@ -5,29 +5,68 @@ import { IconAlert, IconClose, IconInfo } from './Icons';
 const HARD_SPACES = new RegExp(`[${String.fromCharCode(0xa0, 0x202f)}]`, 'g');
 export const plainSpaces = (text: string): string => text.replace(HARD_SPACES, ' ');
 
-export function PageHead(props: { title: string; sub?: ReactNode; level?: 1 | 2 }) {
+type IconType = (p: { className?: string }) => ReactNode;
+
+/** Título de pantalla con su baldosa de ícono, como las secciones de la app de Kamai. */
+export function PageHead(props: { title: string; sub?: ReactNode; icon?: IconType }) {
   return (
     <header className="page-head">
-      <h1 className="page-title">{props.title}</h1>
-      {props.sub ? <p className="page-sub">{props.sub}</p> : null}
+      {props.icon ? (
+        <span className="tile lg sage" aria-hidden="true">
+          <props.icon />
+        </span>
+      ) : null}
+      <div className="page-head-text">
+        <h1 className="page-title">{props.title}</h1>
+        {props.sub ? <p className="page-sub">{props.sub}</p> : null}
+      </div>
     </header>
   );
 }
 
-/** Pregunta numerada de «Tus tres preguntas»: el número dice el orden en que ella se lo pregunta. */
+/** Título de una tarjeta con su baldosa de ícono. */
+export function SectionTitle(props: { id?: string; icon: IconType; children: ReactNode }) {
+  return (
+    <div className="section-head">
+      <span className="tile" aria-hidden="true">
+        <props.icon />
+      </span>
+      <h2 id={props.id}>{props.children}</h2>
+    </div>
+  );
+}
+
+export type QuestionTone = 'sage' | 'picked' | 'dark' | 'peach' | 'outline';
+
+/** La baldosa del ícono contrasta con el fondo de la tarjeta. */
+const TILE_FOR: Record<QuestionTone | 'plain', string> = {
+  plain: 'tile',
+  sage: 'tile dark',
+  picked: 'tile dark',
+  dark: 'tile ring',
+  peach: 'tile white',
+  outline: 'tile sage',
+};
+
+/**
+ * Una pregunta de «Tus tres preguntas», en el orden en que ella se la hace, con su ícono. El tono marca lo
+ * principal: verde suave para la respuesta clave, oscuro para el dato en soles y durazno para la tarifa.
+ */
 export function Question(props: {
   n: number;
+  icon: IconType;
   question: string;
   answer: ReactNode;
   children?: ReactNode;
-  tone?: 'peach' | 'outline';
+  tone?: QuestionTone;
   answerSize?: 'md';
 }) {
+  const tone = props.tone === 'picked' ? 'sage picked' : (props.tone ?? '');
   return (
-    <section className={['card', props.tone ?? ''].join(' ')} aria-labelledby={`pregunta-${props.n}`}>
+    <section className={['card', tone].join(' ')} aria-labelledby={`pregunta-${props.n}`}>
       <div className="ask">
-        <span className="ask-n" aria-hidden="true">
-          {props.n}
+        <span className={TILE_FOR[props.tone ?? 'plain']} aria-hidden="true">
+          <props.icon />
         </span>
         <h2 className="ask-q" id={`pregunta-${props.n}`}>
           {props.question}

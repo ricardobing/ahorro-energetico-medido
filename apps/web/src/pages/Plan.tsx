@@ -2,7 +2,7 @@ import { useState, type FormEvent, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { formatDateLong } from '@ppam/domain';
-import { IconSpark } from '../components/Icons';
+import { IconCalendar, IconListCheck, IconPlan, IconSpark } from '../components/Icons';
 import { Banner, Checkbox, Field, PageHead, Question, SkeletonCards, SourceTag } from '../components/ui';
 import { api, ApiError, errorMessage } from '../lib/api';
 import { refreshBusinessData, useFirstStep, useMe, usePlans } from '../lib/queries';
@@ -40,7 +40,7 @@ function StepRow(props: { plan: Plan; step: PlanStep }) {
           ))}
         </ul>
       ) : editable ? (
-        <div style={{ marginLeft: 26 }}>
+        <div style={{ marginLeft: 26, marginTop: -6 }}>
           <button
             type="button"
             className="btn btn-quiet"
@@ -48,6 +48,7 @@ function StepRow(props: { plan: Plan; step: PlanStep }) {
             onClick={() => ideas.mutate()}
           >
             <IconSpark /> {ideas.isPending ? 'Buscando ideas…' : 'Ideas para este paso'}
+            <span className="sr-only">: {props.step.title}</span>
           </button>
           {ideas.isError ? (
             <p className="field-hint" role="status">
@@ -170,7 +171,7 @@ export function PlanPage(): ReactNode {
   if (!plan)
     return (
       <>
-        <PageHead title="Tu plan" />
+        <PageHead title="Tu plan" icon={IconPlan} />
         <Banner>
           Todavía no elegiste tu primer paso.{' '}
           <Link to="/" className="btn btn-quiet">
@@ -188,6 +189,7 @@ export function PlanPage(): ReactNode {
     <>
       <PageHead
         title="Tu plan"
+        icon={IconPlan}
         sub={
           completed && plan.implementedAt
             ? `Terminado el ${formatDateLong(plan.implementedAt, 'es-PE')}`
@@ -205,32 +207,38 @@ export function PlanPage(): ReactNode {
       <div className="stack">
         <Question
           n={1}
+          icon={IconListCheck}
           question="¿Qué me falta?"
           answer={
             completed
               ? 'Nada: ya lo terminaste'
               : done === plan.steps.length && plan.steps.length > 0
                 ? 'Solo avisarnos que terminaste'
-                : `${plan.steps.length - done} de ${plan.steps.length} pasos`
+                : plan.steps.length - done === 1
+                  ? 'Te falta 1 paso'
+                  : `Te faltan ${plan.steps.length - done} de ${plan.steps.length} pasos`
           }
         >
-          <p className="support">{plan.title}</p>
           <SourceTag source={plan.dataSource} />
           <ul className="list-plain">
             {plan.steps.map((s) => (
               <StepRow key={s._id} plan={plan} step={s} />
             ))}
           </ul>
-          <p className="field-hint">
-            Las ideas son opcionales: tus pasos están siempre, aunque el servicio de ideas no responda.
-          </p>
+          {!completed ? (
+            <p className="field-hint">
+              Las ideas son opcionales: tus pasos están siempre, aunque el servicio de ideas no responda.
+            </p>
+          ) : null}
         </Question>
 
         <Question
           n={2}
+          icon={IconCalendar}
           question="¿Cuándo lo sabré?"
           answer={completed ? 'Con tus próximas facturas' : 'Cuando termines y lleguen tus facturas'}
           answerSize="md"
+          tone={completed ? 'sage' : undefined}
         >
           {completed && plan.measurementHint ? (
             <>

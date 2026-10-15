@@ -1,11 +1,10 @@
 import { lazy, Suspense, type ReactNode } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router';
+import { Navigate, Route, Routes, useLocation, useParams } from 'react-router';
 import { AppShell } from './components/AppShell';
 import { Banner, SkeletonCards } from './components/ui';
 import { errorMessage } from './lib/api';
 import { useMe, useNotifications } from './lib/queries';
 import { FirstStepPage } from './pages/FirstStep';
-import { MorePage } from './pages/More';
 import { PlanPage } from './pages/Plan';
 import { SavingsPage } from './pages/Savings';
 import { BillUploadPage } from './pages/BillUpload';
@@ -56,20 +55,21 @@ export function App(): ReactNode {
             <Route path="/plan" element={<PlanPage />} />
             <Route path="/factura" element={<BillUploadPage />} />
             <Route path="/ahorro" element={<SavingsPage />} />
-            <Route path="/mas" element={<MorePage demoMode={demoMode} role={user.role} />} />
-            <Route path="/mas/facturas" element={<BillsPage />} />
-            <Route path="/mas/avisos" element={<NotificationsPage />} />
-            <Route path="/mas/reporte" element={<ReportPage />} />
-            <Route path="/mas/perfil" element={<ProfilePage />} />
-            <Route path="/mas/demo" element={<DemoPage />} />
+            <Route path="/perfil" element={<ProfilePage />} />
+            <Route path="/facturas" element={<BillsPage />} />
+            <Route path="/reporte" element={<ReportPage />} />
+            <Route path="/avisos" element={<NotificationsPage />} />
+            <Route path="/demo" element={<DemoPage />} />
+            {/* Direcciones de la versión con «Más», para enlaces viejos (avisos y correos). */}
+            <Route path="/mas/:pagina" element={<OldMoreRedirect />} />
+            <Route path="/mas" element={<Navigate to="/" replace />} />
             <Route path="/aliados" element={<NotForOwner />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         ) : (
           <Routes>
             <Route path="/aliados" element={<PartnersPage staff={user.role === 'staff'} />} />
-            <Route path="/mas" element={<MorePage demoMode={demoMode} role={user.role} />} />
-            <Route path="/mas/demo" element={<DemoPage />} />
+            <Route path="/demo" element={<DemoPage />} />
             <Route path="*" element={<Navigate to="/aliados" replace />} />
           </Routes>
         )}
@@ -85,4 +85,9 @@ function NotForOwner() {
       → Aliado».
     </Banner>
   );
+}
+
+function OldMoreRedirect() {
+  const { pagina } = useParams();
+  return <Navigate to={`/${pagina ?? ''}`} replace />;
 }

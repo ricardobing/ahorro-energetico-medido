@@ -1,8 +1,8 @@
 import { useEffect, useId, useRef, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
-import { IconCamera } from '../components/Icons';
-import { Banner, Field, PageHead } from '../components/ui';
+import { IconBill, IconCamera, IconNumbers } from '../components/Icons';
+import { Banner, Field, PageHead, SectionTitle } from '../components/ui';
 import { api, ApiError, errorMessage, OfflineError, uploadPhoto } from '../lib/api';
 import { clearDraft, loadDraft, saveDraft, type BillDraft } from '../lib/drafts';
 import { preparePhoto, type PreparedPhoto } from '../lib/photo';
@@ -182,6 +182,7 @@ export function BillUploadPage(): ReactNode {
   return (
     <>
       <PageHead
+        icon={IconBill}
         title="Subir factura"
         sub="Tu factura de luz: los números del recibo y, si puedes, una foto."
       />
@@ -224,9 +225,9 @@ export function BillUploadPage(): ReactNode {
       ) : null}
 
       <section className="card" aria-labelledby="foto">
-        <h2 id="foto" className="answer md" style={{ marginTop: 0 }}>
+        <SectionTitle id="foto" icon={IconCamera}>
           La foto
-        </h2>
+        </SectionTitle>
         <p className="support">
           Se achica en tu teléfono antes de enviarse (menos de 250 KB) para cuidar tus datos.
         </p>
@@ -304,9 +305,9 @@ export function BillUploadPage(): ReactNode {
       </section>
 
       <form className="card" onSubmit={onSubmit} noValidate aria-labelledby="numeros">
-        <h2 id="numeros" className="answer md" style={{ marginTop: 0 }}>
+        <SectionTitle id="numeros" icon={IconNumbers}>
           Los números del recibo
-        </h2>
+        </SectionTitle>
         <div className="grid-2">
           <Field
             label="Consumo del periodo (kWh)"

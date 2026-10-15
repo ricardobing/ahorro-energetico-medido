@@ -222,6 +222,7 @@ export interface PartnerReport {
     currency: string;
     businesses: Hidden;
     amountPerMonthCents: number | null;
+    hiddenReason?: string | null;
     amountText: string | null;
   }[];
   usd: number | null;

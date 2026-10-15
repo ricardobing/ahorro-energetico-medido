@@ -55,6 +55,8 @@ export function previousPeriod(p: Period): string {
 
 type Category = 'measured' | 'notYet' | 'noSavings' | 'noData';
 const HIDDEN = 'menos de 5';
+/** Celda con 5 negocios o más que se oculta para que no se pueda deducir otra restando del total. */
+const COMPLEMENT = 'oculto';
 const HIDDEN_NOTE = 'menos de 5 negocios';
 
 function categoryOf(result: MeasurementResult): Category {
@@ -225,6 +227,8 @@ export interface PartnerReport {
     currency: Currency;
     businesses: number | string;
     amountPerMonthCents: number | null;
+    /** «menos de 5» (pocos negocios) u «oculto» (se podría deducir restando del total en USD). */
+    hiddenReason: string | null;
     amountText: string | null;
   }[];
   usd: number | null;
@@ -312,8 +316,17 @@ async function coreReport(deps: AppDeps, p: Period): Promise<Omit<PartnerReport,
     .lean<{ businessId: string; scale: number }[]>();
   const formsVisible = distinct(forms) >= PRIVACY_PARAMS.minBusinessesForNumber;
 
-  const shown = (n: number | null | undefined): number | string =>
-    n === null || n === undefined ? HIDDEN : n;
+  /** Valor visible, o el motivo por el que se oculta: pocos negocios o supresión complementaria. */
+  const shown = (
+    cells: { key: string; businesses: number }[],
+    values: Map<string, number | null>,
+    key: string,
+  ): number | string => {
+    const value = values.get(key);
+    if (value !== null && value !== undefined) return value;
+    const businesses = cells.find((c) => c.key === key)?.businesses ?? 0;
+    return businesses >= PRIVACY_PARAMS.minBusinessesForNumber ? COMPLEMENT : HIDDEN;
+  };
   const anyHidden = (map: Map<string, number | null>) => [...map.values()].some((v) => v === null);
 
   return {
@@ -330,16 +343,16 @@ async function coreReport(deps: AppDeps, p: Period): Promise<Omit<PartnerReport,
       })),
     countries: [...new Set(businesses.map((b) => b.country))].sort(),
     byStatus: {
-      measured: shown(status.get('measured')),
-      notYet: shown(status.get('notYet')),
-      noSavings: shown(status.get('noSavings')),
-      noData: shown(status.get('noData')),
+      measured: shown(statusCells, status, 'measured'),
+      notYet: shown(statusCells, status, 'notYet'),
+      noSavings: shown(statusCells, status, 'noSavings'),
+      noData: shown(statusCells, status, 'noData'),
     },
     byEco: aggregate.rows.map((r) => ({
       ecoId: r.ecoId,
       title: catalog.find((e) => e.id === r.ecoId)?.title ?? r.ecoId,
       businesses: r.visibility === 'NUMBER' ? r.businesses : HIDDEN,
-      medianChangePct: r.medianChangePct,
+      medianChangePct: r.medianChangePct === null ? null : Math.round(r.medianChangePct),
     })),
     combos:
       aggregate.combos === 0 || aggregate.combos >= PRIVACY_PARAMS.minBusinessesForNumber
@@ -364,7 +377,7 @@ async function coreReport(deps: AppDeps, p: Period): Promise<Omit<PartnerReport,
         declared: evidence.get('declared') ?? null,
         hiddenNote: anyHidden(evidence) ? HIDDEN_NOTE : null,
       },
-      method: Object.fromEntries([...method.entries()].map(([k, v]) => [k, shown(v)])),
+      method: Object.fromEntries([...method.keys()].map((k) => [k, shown(methodCells, method, k)])),
     },
     declared: {
       label: 'declarado por las usuarias, no medido',
@@ -378,6 +391,8 @@ async function coreReport(deps: AppDeps, p: Period): Promise<Omit<PartnerReport,
         currency: c.key as Currency,
         businesses: c.businesses >= PRIVACY_PARAMS.minBusinessesForNumber ? c.businesses : HIDDEN,
         amountPerMonthCents: value,
+        hiddenReason:
+          value !== null ? null : c.businesses >= PRIVACY_PARAMS.minBusinessesForNumber ? COMPLEMENT : HIDDEN,
         amountText:
           value === null ? null : formatMoney(value, c.key as Currency, c.key === 'BOB' ? 'es-BO' : 'es-PE'),
       };

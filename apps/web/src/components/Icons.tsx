@@ -138,3 +138,59 @@ export const IconPrint = (p: P) => (
     <path d="M7 14h10v7H7z" />
   </Icon>
 );
+export const IconBusiness = (p: P) => (
+  <Icon {...p}>
+    <path d="M4 10v10h16V10" />
+    <path d="M3 10l2-6h14l2 6c0 1.4-1.1 2.5-2.5 2.5S16 11.4 16 10c0 1.4-1.1 2.5-2.5 2.5S11 11.4 11 10c0 1.4-1.1 2.5-2.5 2.5S6 11.4 6 10c0 1.4-1.1 2.5-2.5 2.5" />
+    <path d="M10 20v-5h4v5" />
+  </Icon>
+);
+export const IconBolt = (p: P) => (
+  <Icon {...p}>
+    <path d="M13 3L5 13.5h6L10 21l8-10.5h-6z" />
+  </Icon>
+);
+export const IconTrendDown = (p: P) => (
+  <Icon {...p}>
+    <path d="M4 7l6 6 4-3 6 7" />
+    <path d="M20 12v5h-5" />
+  </Icon>
+);
+export const IconCoins = (p: P) => (
+  <Icon {...p}>
+    <ellipse cx="9" cy="7" rx="5" ry="2.5" />
+    <path d="M4 7v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V7" />
+    <path d="M10 15.4c.9.4 2.1.6 3.5.6 2.8 0 5-1.1 5-2.5v-4c0-1.2-1.6-2.2-3.8-2.4" />
+    <path d="M14 13.4v4.1c0 1.4 2.2 2.5 5 2.5" />
+  </Icon>
+);
+export const IconTariff = (p: P) => (
+  <Icon {...p}>
+    <path d="M3 12V4h8l10 10-8 8z" />
+    <circle cx="7.5" cy="8.5" r="1.3" />
+  </Icon>
+);
+export const IconCalendar = (p: P) => (
+  <Icon {...p}>
+    <rect x="4" y="5" width="16" height="15" rx="2" />
+    <path d="M4 10h16M9 3v4M15 3v4" />
+  </Icon>
+);
+export const IconQuestion = (p: P) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M9.6 9.4a2.5 2.5 0 1 1 3.6 2.3c-.8.4-1.2 1-1.2 1.8v.5M12 17v.5" />
+  </Icon>
+);
+export const IconListCheck = (p: P) => (
+  <Icon {...p}>
+    <path d="M11 6h9M11 12h9M11 18h9" />
+    <path d="M3.5 6l1.5 1.5L8 4.5M3.5 12l1.5 1.5L8 10.5M3.5 18l1.5 1.5L8 16.5" />
+  </Icon>
+);
+export const IconNumbers = (p: P) => (
+  <Icon {...p}>
+    <rect x="4" y="3" width="16" height="18" rx="2" />
+    <path d="M8 8h8M8 12h8M8 16h5" />
+  </Icon>
+);

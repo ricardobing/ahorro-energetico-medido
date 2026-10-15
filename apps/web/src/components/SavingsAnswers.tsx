@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { SavingsDisplay } from '@ppam/domain';
+import { IconCoins, IconTariff, IconTrendDown } from './Icons';
 import { plainSpaces, Question } from './ui';
 
 /** Lee los montos de los textos ya formateados («Entre S/ 20 y S/ 160» → 20 y 160). */
@@ -46,6 +47,15 @@ function explanationOf(display: SavingsDisplay): string | null {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+/** Bajo el título de la tarifa no se repite el porcentaje: solo la consecuencia («por eso tu factura…»). */
+function tariffSupport(display: SavingsDisplay): string {
+  if (!display.tariffNote) return 'Lo que cambie en tu factura viene sobre todo de cuánta luz usas.';
+  const colon = display.tariffNote.indexOf(': ');
+  if (!display.tariffHeadline || colon < 0) return display.tariffNote;
+  const rest = display.tariffNote.slice(colon + 2);
+  return rest.charAt(0).toUpperCase() + rest.slice(1);
+}
+
 export interface SavingsDetail {
   /** kWh por día antes y después del cambio, para la línea de apoyo de la primera respuesta. */
   baselineKwhPerDay: number | null;
@@ -70,9 +80,10 @@ export function SavingsAnswers(props: { display: SavingsDisplay; detail?: Saving
     <div className="stack">
       <Question
         n={1}
+        icon={IconTrendDown}
         question="¿Bajó tu consumo?"
         answer={display.headline}
-        tone={measured ? undefined : 'outline'}
+        tone={measured ? 'sage' : 'outline'}
       >
         {measured && detail?.changePct !== null && detail?.changePct !== undefined ? (
           <span className="key-fact num" aria-hidden="true">
@@ -89,6 +100,7 @@ export function SavingsAnswers(props: { display: SavingsDisplay; detail?: Saving
 
       <Question
         n={2}
+        icon={IconCoins}
         question="¿Cuánto es en soles?"
         answer={
           measured
@@ -98,6 +110,7 @@ export function SavingsAnswers(props: { display: SavingsDisplay; detail?: Saving
               : (display.nextStep ?? 'Lo sabremos con tu próxima factura.')
         }
         answerSize={measured ? undefined : 'md'}
+        tone={measured ? 'dark' : undefined}
       >
         {measured ? (
           <RangeTrack rangeText={display.money!.rangeText} mostLikelyText={display.money!.mostLikelyText} />
@@ -108,6 +121,7 @@ export function SavingsAnswers(props: { display: SavingsDisplay; detail?: Saving
 
       <Question
         n={3}
+        icon={IconTariff}
         question="¿Por qué tu factura no baja igual?"
         answer={
           display.tariffHeadline ??
@@ -116,9 +130,7 @@ export function SavingsAnswers(props: { display: SavingsDisplay; detail?: Saving
         answerSize="md"
         tone="peach"
       >
-        <p className="support">
-          {display.tariffNote ?? 'Lo que cambie en tu factura viene sobre todo de cuánta luz usas.'}
-        </p>
+        <p className="support">{tariffSupport(display)}</p>
       </Question>
 
       {display.methodLine ? <p className="method">{display.methodLine}</p> : null}

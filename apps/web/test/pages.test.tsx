@@ -401,7 +401,7 @@ describe('«Tu ahorro»: los tres estados', () => {
       screen.getByRole('img', { name: 'Entre S/ 20 y S/ 160, lo más probable S/ 90' }),
     ).toBeInTheDocument();
     expect(screen.getByText(/incluye el día del cambio/)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Ver mi reporte/ })).toHaveAttribute('href', '/mas/reporte');
+    expect(screen.getByRole('link', { name: /Ver mi reporte/ })).toHaveAttribute('href', '/reporte');
   });
 
   it('no vemos ahorro: lo dice con el siguiente paso, sin soles', async () => {
@@ -510,7 +510,7 @@ describe('«Mis facturas», «Avisos» y «Tu reporte»', () => {
       return { status: 204 };
     };
     const user = userEvent.setup();
-    renderPage(<BillsPage />, '/mas/facturas');
+    renderPage(<BillsPage />, '/facturas');
     expect(await screen.findByText(/1720 kWh/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Borrar' }));
     expect(screen.getByText(/Vamos a recalcular tu ahorro sin ella/)).toBeInTheDocument();
@@ -541,7 +541,7 @@ describe('«Mis facturas», «Avisos» y «Tu reporte»', () => {
       read.push('n1');
       return { status: 204 };
     };
-    renderPage(<NotificationsPage />, '/mas/avisos');
+    renderPage(<NotificationsPage />, '/avisos');
     expect(await screen.findByText('Sube tu factura de agosto')).toBeInTheDocument();
     await waitFor(() => expect(read).toEqual(['n1']));
   });
@@ -573,7 +573,7 @@ describe('«Mis facturas», «Avisos» y «Tu reporte»', () => {
     const print = vi.fn();
     vi.stubGlobal('print', print);
     const user = userEvent.setup();
-    renderPage(<ReportPage />, '/mas/reporte');
+    renderPage(<ReportPage />, '/reporte');
     expect(await screen.findByRole('heading', { name: 'Tu ahorro medido' })).toBeInTheDocument();
     expect(screen.getByText('periodos cercanos, sin corrección por temporada')).toBeInTheDocument();
     expect(screen.getByText('con comprobante')).toBeInTheDocument();
@@ -638,7 +638,7 @@ describe('«Perfil del negocio» con el perfil asistido', () => {
       routes['GET /savings'] = () => ({ status: 200, body: {} });
       routes['GET /user-bill'] = () => ({ status: 200, body: { items: [] } });
       const user = userEvent.setup();
-      renderPage(<ProfilePage />, '/mas/perfil');
+      renderPage(<ProfilePage />, '/perfil');
       await user.type(
         await screen.findByLabelText('Cuéntanos cómo es tu negocio'),
         'Panadería de barrio con horno eléctrico.',
@@ -723,7 +723,7 @@ describe('informe para aliados', () => {
     expect((await screen.findAllByText('menos de 5 negocios')).length).toBeGreaterThan(2);
     expect(screen.getByText('declarado por las usuarias, no medido')).toBeInTheDocument();
     const row = screen.getByText('Iluminación LED').closest('tr')!;
-    expect(within(row).getByText('-4 %')).toBeInTheDocument();
+    expect(within(row).getByText('−4 %')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Cerrar el periodo' })).not.toBeInTheDocument();
   });
 });

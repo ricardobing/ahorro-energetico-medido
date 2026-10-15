@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { useSearchParams } from 'react-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { formatDateLong } from '@ppam/domain';
+import { IconPartners } from '../components/Icons';
 import { Banner, PageHead, SkeletonCards } from '../components/ui';
 import { api, errorMessage } from '../lib/api';
 import type { Hidden, PartnerReport } from '../lib/types';
@@ -13,15 +14,23 @@ const METHOD: Record<string, string> = {
   YEAR_OVER_YEAR: 'Mismos meses del año anterior',
 };
 
-/** Una celda del informe: el número, o «menos de 5 negocios» si se ocultó para no identificar a nadie. */
+const COMPLEMENT_NOTE = 'oculto para que no se deduzca';
+const NBSP = String.fromCharCode(0xa0);
+
+/**
+ * Una celda del informe: el número o, si se ocultó, el motivo. «menos de 5 negocios» cuando vienen de
+ * pocos negocios; «oculto para que no se deduzca» cuando tiene 5 o más pero permitiría deducir otra restando.
+ */
 function Cell(props: { value: Hidden | null | undefined; suffix?: string }) {
-  if (props.value === null || props.value === undefined || typeof props.value === 'string')
-    return <span className="stat-value hidden-cell">{HIDDEN_NOTE}</span>;
+  if (typeof props.value === 'number')
+    return (
+      <span className="stat-value num">
+        {props.value}
+        {props.suffix ?? ''}
+      </span>
+    );
   return (
-    <span className="stat-value num">
-      {props.value}
-      {props.suffix ?? ''}
-    </span>
+    <span className="stat-value hidden-cell">{props.value === 'oculto' ? COMPLEMENT_NOTE : HIDDEN_NOTE}</span>
   );
 }
 
@@ -45,6 +54,7 @@ export function PartnersPage(props: { staff: boolean }): ReactNode {
   return (
     <>
       <PageHead
+        icon={IconPartners}
         title={`Informe de ahorro medido · ${period}`}
         sub={
           r
@@ -151,17 +161,23 @@ export function PartnersPage(props: { staff: boolean }): ReactNode {
                   <tr>
                     <td>Con comprobante (foto clara de cada factura)</td>
                     <td className="right">
-                      <Cell value={r.measured.evidence.withReceipt} />
+                      <Cell value={r.measured.evidence.withReceipt ?? 'oculto'} />
                     </td>
                   </tr>
                   <tr>
                     <td>Con números cargados a mano</td>
                     <td className="right">
-                      <Cell value={r.measured.evidence.declared} />
+                      <Cell value={r.measured.evidence.declared ?? 'oculto'} />
                     </td>
                   </tr>
                 </tbody>
               </table>
+              {r.measured.evidence.hiddenNote ? (
+                <p className="field-hint" style={{ marginTop: 8 }}>
+                  Una de las dos filas viene de menos de 5 negocios; la otra también se oculta para que no se
+                  pueda deducir restando del total.
+                </p>
+              ) : null}
             </section>
             <section className="card" aria-labelledby="metodo">
               <h3 id="metodo" className="stat-label">
@@ -205,7 +221,7 @@ export function PartnersPage(props: { staff: boolean }): ReactNode {
                     </td>
                     <td className="right">
                       {row.medianChangePct !== null ? (
-                        <span className="num">{row.medianChangePct} %</span>
+                        <span className="num">{`${row.medianChangePct}${NBSP}%`.replace('-', '−')}</span>
                       ) : (
                         <span className="field-hint">sin número</span>
                       )}
@@ -249,7 +265,7 @@ export function PartnersPage(props: { staff: boolean }): ReactNode {
                       <Cell value={a.businesses} />
                     </td>
                     <td className="right">
-                      {a.amountText ?? <span className="stat-value hidden-cell">{HIDDEN_NOTE}</span>}
+                      {a.amountText ?? <Cell value={a.hiddenReason ?? 'menos de 5'} />}
                     </td>
                   </tr>
                 ))}

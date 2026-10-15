@@ -109,6 +109,8 @@ export function planRoutes(deps: AppDeps): Router {
     if (body.status && body.status !== plan.status) {
       if (completing && implementedAt) {
         set.implementedAt = implementedAt;
+        // Si dice que terminó, sus pasos quedan hechos (los que ya estaban, igual).
+        set.steps = (set.steps ?? plan.steps).map((step) => ({ ...step, status: 'completed' as const }));
         measurementChanged = implementedAt !== plan.implementedAt;
         await addPlanEvent(deps, plan, {
           type: 'completed',

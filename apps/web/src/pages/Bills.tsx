@@ -2,6 +2,7 @@ import { useState, type FormEvent, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { formatDateLong } from '@ppam/domain';
+import { IconBill, IconBills } from '../components/Icons';
 import { Banner, Field, PageHead, SkeletonCards, SourceTag } from '../components/ui';
 import { api, errorMessage } from '../lib/api';
 import { refreshBusinessData, useBills } from '../lib/queries';
@@ -44,7 +45,10 @@ function BillItem(props: { bill: Bill }) {
 
   return (
     <li className="step">
-      <div className="bill-row">
+      <div className="bill-row tile-row">
+        <span className="tile" aria-hidden="true">
+          <IconBill />
+        </span>
         <span>
           <strong>{period(bill)}</strong>
           <br />
@@ -129,7 +133,7 @@ export function BillsPage(): ReactNode {
   if (bills.isError) return <Banner tone="error">{errorMessage(bills.error)}</Banner>;
   return (
     <>
-      <PageHead title="Mis facturas" sub={`${bills.data.length} facturas cargadas`} />
+      <PageHead icon={IconBills} title="Mis facturas" sub={`${bills.data.length} facturas cargadas`} />
       <div className="actions" style={{ marginTop: 0, marginBottom: 14 }}>
         <Link to="/factura" className="btn btn-primary">
           Subir factura

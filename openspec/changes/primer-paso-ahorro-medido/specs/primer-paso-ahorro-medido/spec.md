@@ -677,11 +677,11 @@ La interfaz SHALL funcionar desde 360 px de ancho sin desplazamiento horizontal 
 - **THEN** no hay desplazamiento horizontal y todos los controles miden al menos 44 × 44 px
 
 ### Requirement: Navegación según el ancho
-La interfaz SHALL ofrecer una barra lateral con grupos en pantallas de más de 900 px y una barra de pestañas fija abajo en pantallas de hasta 900 px, con una sola navegación en el documento y el destino activo marcado con más de una señal además del color.
+La interfaz SHALL organizar la navegación en tres secciones (Mi negocio, Facturas y Reportes): una barra lateral con las secciones y sus páginas en pantallas de más de 900 px y, hasta 900 px, un botón por sección fijo abajo con las páginas de la sección abierta como botones arriba. SHALL tener una sola navegación en el documento y marcar el destino activo con más de una señal además del color.
 
 #### Scenario: Celular
 - **WHEN** el ancho es de 390 px
-- **THEN** la navegación es una barra de pestañas fija abajo de 56 px de alto, que no tapa el contenido
+- **THEN** la navegación es una barra fija abajo de 56 px de alto con un botón por sección, que no tapa el contenido, y las páginas de la sección abierta están arriba como botones
 
 #### Scenario: Computadora
 - **WHEN** el ancho es de 1280 px

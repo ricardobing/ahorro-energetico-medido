@@ -70,7 +70,7 @@ export function notificationRoutes(deps: AppDeps): Router {
           type: 'email_bounced',
           title: 'Revisa tu correo',
           body: 'No pudimos escribirte a tu correo. Revisa que esté bien escrito.',
-          link: '/mas/perfil',
+          link: '/perfil',
           dedupeKey: `email_bounced:${owner._id}:${deps.clock.today()}`,
         });
     res.status(204).end();

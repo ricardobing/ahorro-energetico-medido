@@ -18,7 +18,12 @@ export type MeasurementLabel =
   | 'ESTIMATED_HISTORY';
 
 export type ExclusionReason =
-  'CONTAINS_IMPLEMENTATION_DATE' | 'PERIOD_TOO_SHORT' | 'PERIOD_TOO_LONG' | 'NOT_ELECTRICITY';
+  | 'CONTAINS_IMPLEMENTATION_DATE'
+  | 'PERIOD_TOO_SHORT'
+  | 'PERIOD_TOO_LONG'
+  | 'NOT_ELECTRICITY'
+  /** Periodos cercanos: la temporada alta del rubro no se compara con meses normales. */
+  | 'HIGH_SEASON';
 
 export interface MeasurementInput {
   /** Facturas vigentes (sin borradas) del negocio. Se usan solo las de luz. */

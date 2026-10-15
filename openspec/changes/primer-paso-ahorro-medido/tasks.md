@@ -15,46 +15,46 @@
 
 ## 2. Dominio: fechas, dinero y formatos
 
-- [ ] 2.1 Implementar fechas sin hora (`AAAA-MM-DD`): días inclusivos, comparación, superposición, desplazamiento de un año y meses calendario, con bisiestos; verificar con tests de los escenarios «Meses de distinta duración» y «Zona horaria»
-- [ ] 2.2 Implementar dinero en céntimos enteros (multiplicación por tarifa, redondeos a S/ 5 y S/ 10, porcentaje entero); verificar con tests que `1690 × 0.78` da 131820 céntimos exactos
-- [ ] 2.3 Implementar formatos por país con `Intl` (`es-PE`: «S/ 1,200», «31 de agosto de 2026»; `es-BO` para Bolivia); verificar con un test del escenario «Monto en Perú»
-- [ ] 2.4 Implementar la huella canónica (JSON con claves ordenadas → SHA-256); verificar con un test de propiedades que dos objetos iguales con claves en distinto orden dan la misma huella
+- [x] 2.1 Implementar fechas sin hora (`AAAA-MM-DD`): días inclusivos, comparación, superposición, desplazamiento de un año y meses calendario, con bisiestos; verificar con tests de los escenarios «Meses de distinta duración» y «Zona horaria»
+- [x] 2.2 Implementar dinero en céntimos enteros (multiplicación por tarifa, redondeos a S/ 5 y S/ 10, porcentaje entero); verificar con tests que `1690 × 0.78` da 131820 céntimos exactos
+- [x] 2.3 Implementar formatos por país: montos con `Intl` (`es-PE`: «S/ 1,200»; `es-BO` para Bolivia) y fechas con una tabla propia de meses («31 de agosto de 2026»), porque el ICU de cada versión de Node y de cada navegador no coincide (el de `es-PE` dice «setiembre»); verificar con un test del escenario «Monto en Perú»
+- [x] 2.4 Implementar la huella canónica (JSON con claves ordenadas → SHA-256); verificar con un test de propiedades que dos objetos iguales con claves en distinto orden dan la misma huella
 
 ## 3. Dominio: medición del ahorro
 
-- [ ] 3.1 Implementar la normalización por factura (días, kWh por día, validez de 20 a 40 días) y la clasificación antes, día del cambio y después; verificar con tests de «Exclusión de la factura del cambio» y «Periodo corto»
-- [ ] 3.2 Implementar la línea de base de periodos cercanos (últimas 3 completas, mínimo 2, ponderada por días); verificar que da 58,90 kWh por día para abril a junio de Inés («Periodos cercanos para Inés»)
-- [ ] 3.3 Implementar el método interanual (cobertura del 80 % por solapamiento de días, ajuste por tendencia con 2 pares o más, marca «sin ajuste por crecimiento», prioridad de la factura real sobre el historial estimado); verificar con los escenarios sintéticos «Interanual», «Negocio que ya venía creciendo», «Sin pares previos» e «Historial superpuesto con una factura»
-- [ ] 3.4 Implementar la variación propia (σ con 4 facturas o más, 3 % si no) y la banda; verificar que σ de Inés es 2,57 % y las bandas son ±5,94 % y ±4,69 % («Variación de Inés»)
-- [ ] 3.5 Implementar la clasificación en tres resultados con sus motivos (`NO_IMPLEMENTATION_DATE`, `NO_AFTER_BILL`, `NOT_ENOUGH_BASELINE`, `WITHIN_NOISE`, `HIGH_SEASON`); verificar con los escenarios «Inés hoy», «Sin factura posterior», «Línea de base insuficiente», «Solo agosto», «Agosto y septiembre», «Tres facturas sin cambio claro» y «Diciembre de una panadería»
-- [ ] 3.6 Implementar la valorización a la tarifa vigente, el rango y el efecto de la tarifa; verificar 3,66 kWh por día, 109,7 kWh y S/ 92,11 por mes, y una suba de tarifa del 7,7 % («Ahorro de Inés valorizado», «Efecto de la tarifa»)
-- [ ] 3.7 Implementar los textos para la usuaria (frase principal, rango, línea del método, nota de tarifa, «todavía no» por motivo, fecha estimada de la próxima factura); verificar con «Resultado medido de Inés», «Todavía no» y «Próxima factura»
-- [ ] 3.8 Escribir tests de propiedades: permutar facturas, cambiar tarifas (los kWh no cambian), no contar días dos veces, banda no negativa, misma huella con los mismos datos; verificar con `fast-check` y 1.000 casos por propiedad («Orden de carga», «Mismos datos»)
-- [ ] 3.9 Escribir el test de regresión «La resta simple ya no engaña» y «Febrero contra enero» con las seis facturas del caso; verificar que ningún resultado contiene «ahorraste» sin `MEASURED`
+- [x] 3.1 Implementar la normalización por factura (días, kWh por día, validez de 20 a 40 días) y la clasificación antes, día del cambio y después; verificar con tests de «Exclusión de la factura del cambio» y «Periodo corto»
+- [x] 3.2 Implementar la línea de base de periodos cercanos (últimas 3 completas, mínimo 2, ponderada por días); verificar que da 58,90 kWh por día para abril a junio de Inés («Periodos cercanos para Inés»)
+- [x] 3.3 Implementar el método interanual (cobertura del 80 % por solapamiento de días, ajuste por tendencia con 2 pares o más, marca «sin ajuste por crecimiento», prioridad de la factura real sobre el historial estimado); verificar con los escenarios sintéticos «Interanual», «Negocio que ya venía creciendo», «Sin pares previos» e «Historial superpuesto con una factura»
+- [x] 3.4 Implementar la variación propia (σ con 4 facturas o más, 3 % si no) y la banda; verificar que σ de Inés es 2,57 % y las bandas son ±5,94 % y ±4,69 % («Variación de Inés»)
+- [x] 3.5 Implementar la clasificación en tres resultados con sus motivos (`NO_IMPLEMENTATION_DATE`, `NO_AFTER_BILL`, `NOT_ENOUGH_BASELINE`, `WITHIN_NOISE`, `HIGH_SEASON`); verificar con los escenarios «Inés hoy», «Sin factura posterior», «Línea de base insuficiente», «Solo agosto», «Agosto y septiembre», «Tres facturas sin cambio claro» y «Diciembre de una panadería»
+- [x] 3.6 Implementar la valorización a la tarifa vigente, el rango y el efecto de la tarifa; verificar 3,66 kWh por día, 109,7 kWh y S/ 92,11 por mes, y una suba de tarifa del 7,7 % («Ahorro de Inés valorizado», «Efecto de la tarifa»)
+- [x] 3.7 Implementar los textos para la usuaria (frase principal, rango, línea del método, nota de tarifa, «todavía no» por motivo, fecha estimada de la próxima factura); verificar con «Resultado medido de Inés», «Todavía no» y «Próxima factura»
+- [x] 3.8 Escribir tests de propiedades: permutar facturas, cambiar tarifas (los kWh no cambian), no contar días dos veces, banda no negativa, misma huella con los mismos datos; verificar con `fast-check` y 1.000 casos por propiedad («Orden de carga», «Mismos datos»)
+- [x] 3.9 Escribir el test de regresión «La resta simple ya no engaña» y «Febrero contra enero» con las seis facturas del caso; verificar que ningún resultado contiene «ahorraste» sin `MEASURED`
 
 ## 4. Dominio: recomendación
 
-- [ ] 4.1 Implementar los filtros duros con motivos (objetivo, sector, equipo, presupuesto, horas, complejidad por nivel, plan existente); verificar con «El aislamiento térmico queda excluido para Inés», «Equipo que el negocio no tiene», «Sector del catálogo» y «Dato de equipo desconocido»
-- [ ] 4.2 Implementar los rangos por país (compatible, con penalización, excluido); verificar con «Inversión con los rangos de referencia de Perú (sintéticos)» y «Horas por semana»
-- [ ] 4.3 Implementar el puntaje con contracción, penalizaciones y desempate; verificar el orden y los puntajes 2,08, 1,80 y 0,66 («Orden para Inés con los datos del caso»), «Un caso único no domina», «Efecto que no se vería en la factura» y «Empate»
-- [ ] 4.4 Implementar la explicación por motivos con las reglas de privacidad; verificar con «Explicación para Inés», «Sin efecto de pares por debajo del umbral» y «Sin dinero inventado»
-- [ ] 4.5 Implementar la recomendación sin facturas (σ por defecto, sin el motivo de equipo si falta el dato); verificar con «Negocio nuevo con respuestas (sintético)» y «Negocio nuevo sin respuestas»
+- [x] 4.1 Implementar los filtros duros con motivos (objetivo, sector, equipo, presupuesto, horas, complejidad por nivel, plan existente); verificar con «El aislamiento térmico queda excluido para Inés», «Equipo que el negocio no tiene», «Sector del catálogo» y «Dato de equipo desconocido»
+- [x] 4.2 Implementar los rangos por país (compatible, con penalización, excluido); verificar con «Inversión con los rangos de referencia de Perú (sintéticos)» y «Horas por semana»
+- [x] 4.3 Implementar el puntaje con contracción, penalizaciones y desempate; verificar el orden y los puntajes 2,08, 1,80 y 0,66 («Orden para Inés con los datos del caso»), «Un caso único no domina», «Efecto que no se vería en la factura» y «Empate»
+- [x] 4.4 Implementar la explicación por motivos con las reglas de privacidad; verificar con «Explicación para Inés», «Sin efecto de pares por debajo del umbral» y «Sin dinero inventado»
+- [x] 4.5 Implementar la recomendación sin facturas (σ por defecto, sin el motivo de equipo si falta el dato); verificar con «Negocio nuevo con respuestas (sintético)» y «Negocio nuevo sin respuestas»
 
 ## 5. Dominio: agregados con privacidad
 
-- [ ] 5.1 Implementar los agregados con umbral (5 negocios con número, 3 o 4 con texto, menos de 3 nada) y la supresión complementaria; verificar con «Panaderías por ecoinnovación» y «Supresión complementaria»
+- [x] 5.1 Implementar los agregados con umbral (5 negocios con número, 3 o 4 con texto, menos de 3 nada) y la supresión complementaria; verificar con «Panaderías por ecoinnovación» y «Supresión complementaria»
 - [ ] 5.2 Implementar la exclusión de combinaciones y el desglose por evidencia, método y moneda; verificar con «Dos ecoinnovaciones a la vez (sintético)» y «Informe con ambos tipos de dato (sintético)»
-- [ ] 5.3 Implementar las frases para la usuaria sobre otros negocios; verificar con «El caso único nunca se muestra» y «Frase cualitativa»
+- [x] 5.3 Implementar las frases para la usuaria sobre otros negocios; verificar con «El caso único nunca se muestra» y «Frase cualitativa»
 
 ## 6. Dominio: validación del perfil asistido
 
-- [ ] 6.1 Definir las listas cerradas (subconjunto de CIIU para mipymes con su etiqueta, equipos, tipos de horno) y el esquema JSON estricto de la respuesta del modelo; verificar que el esquema rechaza propiedades extra
-- [ ] 6.2 Implementar la verificación de sugerencias: solo valores de las listas, y montos y horas solo si aparecen en el texto (normalizando «1200», «1.200», «mil doscientos» no cuenta); verificar con «Monto que no está en el texto», «Descripción sin montos» y «Código fuera de la lista»
-- [ ] 6.3 Implementar el extractor por palabras clave (rubros, equipos y sinónimos regionales como refrigeradora, congeladora o heladera; montos y horas con unidades); verificar con «Sin IA» usando la descripción de Inés
+- [x] 6.1 Definir las listas cerradas (subconjunto de CIIU para mipymes con su etiqueta, equipos, tipos de horno) y el esquema JSON estricto de la respuesta del modelo; verificar que el esquema rechaza propiedades extra
+- [x] 6.2 Implementar la verificación de sugerencias: solo valores de las listas, y montos y horas solo si aparecen en el texto (normalizando «1200», «1.200», «mil doscientos» no cuenta); verificar con «Monto que no está en el texto», «Descripción sin montos» y «Código fuera de la lista»
+- [x] 6.3 Implementar el extractor por palabras clave (rubros, equipos y sinónimos regionales como refrigeradora, congeladora o heladera; montos y horas con unidades); verificar con «Sin IA» usando la descripción de Inés
 
 ## 7. Servicios simulados
 
-- [ ] 7.1 Crear `apps/mocks` en el puerto 4010 con mensajería (`POST /v1/email/send` con `x-api-key`), subtareas (`POST /ia/ecoinnovation/sub-tasks`) y conversión de moneda; verificar con tests que cada contrato del anexo responde como describe el reto
+- [ ] 7.1 Crear `apps/mocks` en el puerto 4110 con mensajería (`POST /v1/email/send` con `x-api-key`), subtareas (`POST /ia/ecoinnovation/sub-tasks`) y conversión de moneda; verificar con tests que cada contrato del anexo responde como describe el reto
 - [ ] 7.2 Agregar los modos de falla controlables (`POST /__control`: 500, demora, 402, 400, rebote con llamada al webhook, conversión caída) y su reinicio; verificar con tests que cada modo se activa y se desactiva
 
 ## 8. API: base

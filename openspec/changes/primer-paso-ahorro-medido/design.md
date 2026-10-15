@@ -167,7 +167,7 @@ Cada decisión tiene su porqué y las alternativas descartadas. Los parámetros 
 **Descartado:** reutilizar `delayed` o `to_define`.
 
 ### D22. Servicios simulados detrás de HTTP real
-**Decisión:** un servidor de simulación aparte (puerto 4010) implementa los contratos del anexo: mensajería, subtareas con IA y conversión de moneda. Tiene modos de falla (error, demora, 402, rebote) que se cambian desde el panel de demostración y desde los tests.
+**Decisión:** un servidor de simulación aparte (puerto 4110) implementa los contratos del anexo: mensajería, subtareas con IA y conversión de moneda. Tiene modos de falla (error, demora, 402, rebote) que se cambian desde el panel de demostración y desde los tests.
 **Por qué:** los adaptadores de la API hablan HTTP como en producción, y las fallas del punto 4 del reto se pueden mostrar en el video.
 **Descartado:** dobles en memoria dentro de la API (no prueban timeouts ni errores de red).
 
@@ -383,7 +383,7 @@ La medición devuelve `display` con los textos ya armados para la usuaria (frase
 - **API:** Node.js 22 o más (probado en 22 y 24), TypeScript estricto, Express 5, Mongoose, zod, pino (registros JSON con id de pedido), helmet, multer (subidas en memoria con límites), SDK `openai`. Las versiones exactas se fijan en la etapa 2.
 - **Dominio:** TypeScript puro, sin dependencias de ejecución.
 - **Web:** React 19, Vite, TypeScript, React Router, TanStack Query, Tailwind CSS v4, `vite-plugin-pwa`, IndexedDB para borradores, SVG propio para gráficos y Mona Sans servida desde el proyecto.
-- **Simulaciones:** Express en el puerto 4010, con los contratos del anexo y modos de falla.
+- **Simulaciones:** Express en el puerto 4110, con los contratos del anexo y modos de falla.
 - **Pruebas:**
   - Vitest para unitarias e integración, más `fast-check` para propiedades;
   - `supertest` y `mongodb-memory-server` en modo réplica;

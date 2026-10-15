@@ -8,7 +8,8 @@ on:
 jobs:
   verificar:
     name: Verificar (Node ${{ matrix.node }})
-    runs-on: ubuntu-latest
+    # Fijo: ubuntu-latest pasa a Ubuntu 26 desde el 19/10/2026 y MongoDB embebido necesita un binario conocido.
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:

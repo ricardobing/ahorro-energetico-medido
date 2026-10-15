@@ -40,23 +40,23 @@ Generado por `npm run trace` a partir de `openspec/changes/primer-paso-ahorro-me
 | 32 | Subtareas con IA opcionales y sin bloqueo | Sin cupo | `apps/api/test/plans.api.test.ts:101` |
 | 33 | Subtareas con IA opcionales y sin bloqueo | Servicio caído o lento | `apps/api/test/plans.api.test.ts:117` |
 | 34 | Subtareas con IA opcionales y sin bloqueo | Sin consumo automático | `apps/api/test/plans.api.test.ts:131` |
-| 35 | Alta de factura con el contrato existente | Factura de febrero del anexo | `apps/api/test/bills.api.test.ts:34` |
+| 35 | Alta de factura con el contrato existente | Factura de febrero del anexo | `apps/api/test/bills.api.test.ts:35` |
 | 36 | Días inclusivos y fechas sin hora | Meses de distinta duración | `packages/domain/test/dates-money-format.test.ts:30` |
 | 37 | Días inclusivos y fechas sin hora | Zona horaria | `packages/domain/test/dates-money-format.test.ts:37` |
-| 38 | Sin superposición por servicio | Superposición de luz | `apps/api/test/bills.api.test.ts:59` |
-| 39 | Sin superposición por servicio | Luz y agua del mismo mes | `apps/api/test/bills.api.test.ts:71` |
-| 40 | Validación de valores de factura | Fechas invertidas | `apps/api/test/bills.api.test.ts:87` |
-| 41 | Validación de valores de factura | Tarifa fuera de rango | `apps/api/test/bills.api.test.ts:97` |
-| 42 | Confirmación de valores atípicos | Un cero de más | `apps/api/test/bills.api.test.ts:115` |
-| 43 | Moneda por país | Moneda de Inés | `apps/api/test/bills.api.test.ts:138` |
-| 44 | Edición y borrado con historial | Editar | `apps/api/test/bills.api.test.ts:147` |
-| 45 | Edición y borrado con historial | Borrar | `apps/api/test/bills.api.test.ts:154` |
-| 46 | Origen y evidencia de cada factura | Factura con foto correcta | `apps/api/test/bills.api.test.ts:164` |
-| 47 | Origen y evidencia de cada factura | Factura sin foto | `apps/api/test/bills.api.test.ts:170` |
+| 38 | Sin superposición por servicio | Superposición de luz | `apps/api/test/bills.api.test.ts:60` |
+| 39 | Sin superposición por servicio | Luz y agua del mismo mes | `apps/api/test/bills.api.test.ts:72` |
+| 40 | Validación de valores de factura | Fechas invertidas | `apps/api/test/bills.api.test.ts:88` |
+| 41 | Validación de valores de factura | Tarifa fuera de rango | `apps/api/test/bills.api.test.ts:98` |
+| 42 | Confirmación de valores atípicos | Un cero de más | `apps/api/test/bills.api.test.ts:116` |
+| 43 | Moneda por país | Moneda de Inés | `apps/api/test/bills.api.test.ts:139` |
+| 44 | Edición y borrado con historial | Editar | `apps/api/test/bills.api.test.ts:148` |
+| 45 | Edición y borrado con historial | Borrar | `apps/api/test/bills.api.test.ts:155` |
+| 46 | Origen y evidencia de cada factura | Factura con foto correcta | `apps/api/test/bills.api.test.ts:165` |
+| 47 | Origen y evidencia de cada factura | Factura sin foto | `apps/api/test/bills.api.test.ts:171` |
 | 48 | Revisión de calidad de la foto en el dispositivo | Foto oscura o movida | `apps/web/test/photo-quality.test.ts:25` |
 | 49 | Revisión de calidad de la foto en el dispositivo | Foto chica | `apps/web/test/photo-quality.test.ts:36` |
-| 50 | Revisión de calidad de la foto en el dispositivo | Reemplazar la foto después | `apps/api/test/bills.api.test.ts:187` |
-| 51 | Historial de consumo del recibo | Historial cargado (sintético) | `apps/api/test/bills.api.test.ts:218` |
+| 50 | Revisión de calidad de la foto en el dispositivo | Reemplazar la foto después | `apps/api/test/bills.api.test.ts:188` |
+| 51 | Historial de consumo del recibo | Historial cargado (sintético) | `apps/api/test/bills.api.test.ts:221` |
 | 52 | Historial de consumo del recibo | Historial superpuesto con una factura | `packages/domain/test/measurement.test.ts:238` |
 | 53 | Perfil asistido desde una descripción libre | Descripción de Inés | `apps/api/test/profile.api.test.ts:24` |
 | 54 | Perfil asistido desde una descripción libre | Corrección antes de confirmar | `apps/api/test/profile.api.test.ts:39` |
@@ -113,11 +113,11 @@ Generado por `npm run trace` a partir de `openspec/changes/primer-paso-ahorro-me
 | 105 | Cierre de periodo del informe | Corrección después del cierre (sintético) | `apps/api/test/reports.api.test.ts:101` |
 | 106 | Combinaciones de ecoinnovaciones | Dos ecoinnovaciones a la vez (sintético) | `packages/domain/test/privacy-profile.test.ts:100` |
 | 107 | Cada negocio ve solo lo suyo | Factura de otro negocio | `apps/api/test/security.api.test.ts:25` |
-| 108 | Rol de aliado | Aliado que pide una factura | `apps/api/test/security.api.test.ts:59` |
-| 109 | Errores con formato uniforme | Error inesperado | `apps/api/test/security.api.test.ts:66` |
-| 110 | Límites de las fotos de factura | Archivo no permitido | `apps/api/test/bills.api.test.ts:247` |
-| 111 | Límites de las fotos de factura | Tercera foto | `apps/api/test/bills.api.test.ts:253` |
-| 112 | Base de datos no disponible | Guardar una factura sin base de datos | `apps/api/test/security.api.test.ts:77` |
+| 108 | Rol de aliado | Aliado que pide una factura | `apps/api/test/security.api.test.ts:57` |
+| 109 | Errores con formato uniforme | Error inesperado | `apps/api/test/security.api.test.ts:64` |
+| 110 | Límites de las fotos de factura | Archivo no permitido | `apps/api/test/bills.api.test.ts:250` |
+| 111 | Límites de las fotos de factura | Tercera foto | `apps/api/test/bills.api.test.ts:256` |
+| 112 | Base de datos no disponible | Guardar una factura sin base de datos | `apps/api/test/security.api.test.ts:75` |
 | 113 | Uso en celular | Pantalla chica | `e2e/tests/ines.spec.ts:13` |
 | 114 | Navegación según el ancho | Celular | `e2e/tests/ines.spec.ts:35` |
 | 115 | Navegación según el ancho | Computadora | `e2e/tests/escritorio.spec.ts:10` |

@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { INES_RECEIPT_HISTORY_2025 } from '@ppam/fixtures';
 import {
   acceptAndCompleteBurletes,
+  advanceClockTo,
   createTestContext,
   uploadSimulatedBills,
   type TestContext,
@@ -187,6 +188,8 @@ describe('Revisión de calidad de la foto en el dispositivo', () => {
   it('Reemplazar la foto después', async () => {
     const planId = await acceptAndCompleteBurletes(ctx);
     await uploadSimulatedBills(ctx, ['jul', 'ago']);
+    // La factura de septiembre llega después de su cierre.
+    advanceClockTo(ctx, '2026-10-05');
     const dark = await uploadPhoto();
     const sep = await ctx.ines
       .post('/user-bill')

@@ -46,28 +46,41 @@ function medianDays(bills: Bill[]): number {
   return days.length % 2 ? days[mid]! : Math.round((days[mid - 1]! + days[mid]!) / 2);
 }
 
+/** Periodo de facturación (inclusivo). */
+export interface BillPeriod {
+  start: IsoDate;
+  end: IsoDate;
+}
+
+/**
+ * Próximos periodos proyectados desde la última factura de luz: meses calendario si las facturas lo son;
+ * si no, periodos de la mediana de días. Tope de cinco años: más allá no tiene sentido estimar.
+ */
+function* projectedPeriods(bills: Bill[]): Generator<BillPeriod> {
+  const electricity = bills.filter((b) => b.serviceType === 'electricity');
+  if (electricity.length === 0) return;
+  const last = electricity.reduce((a, b) => (compareDates(b.billingEndDate, a.billingEndDate) > 0 ? b : a));
+  const calendar = electricity.every((b) => isCalendarMonth(b.billingStartDate, b.billingEndDate));
+  const length = medianDays(electricity);
+  let end = last.billingEndDate;
+  for (let i = 0; i < 60; i++) {
+    const start = addDays(end, 1);
+    end = calendar ? lastDayOfMonth(monthOf(start)) : addDays(start, length - 1);
+    yield { start, end };
+  }
+}
+
 /**
  * Proyecta las próximas facturas a partir de la última y devuelve el cierre de la primera que empieza
- * después de `startsAfter` y que `skip` no descarta. Si los periodos son meses calendario, cada una cierra
- * a fin de mes; si no, dura la mediana de días de los periodos. `null` si no hay facturas.
+ * después de `startsAfter` y que `skip` no descarta. `null` si no hay facturas.
  */
 export function projectBillEnd(
   bills: Bill[],
   startsAfter: IsoDate,
   skip: (start: IsoDate, end: IsoDate) => boolean = () => false,
 ): IsoDate | null {
-  const electricity = bills.filter((b) => b.serviceType === 'electricity');
-  if (electricity.length === 0) return null;
-  const last = electricity.reduce((a, b) => (compareDates(b.billingEndDate, a.billingEndDate) > 0 ? b : a));
-  const calendar = electricity.every((b) => isCalendarMonth(b.billingStartDate, b.billingEndDate));
-  const length = medianDays(electricity);
-  let end = last.billingEndDate;
-  // Tope de cinco años de periodos proyectados: más allá no tiene sentido estimar.
-  for (let i = 0; i < 60; i++) {
-    const start = addDays(end, 1);
-    end = calendar ? lastDayOfMonth(monthOf(start)) : addDays(start, length - 1);
+  for (const { start, end } of projectedPeriods(bills))
     if (compareDates(start, startsAfter) > 0 && !skip(start, end)) return end;
-  }
   return null;
 }
 
@@ -82,4 +95,22 @@ export function firstMeasurableBillEta(bills: Bill[], implementedAt: IsoDate): I
     .sort((a, b) => compareDates(a.billingStartDate, b.billingStartDate));
   if (existing[0]) return existing[0].billingEndDate;
   return projectBillEnd(bills, implementedAt);
+}
+
+/**
+ * Periodo de facturación que contiene `date`: la factura que ya existe o, si todavía no llegó, la
+ * proyectada desde la última. `null` si no hay facturas de luz o si la fecha cae antes de la última sin
+ * que ninguna la contenga.
+ */
+export function billPeriodContaining(bills: Bill[], date: IsoDate): BillPeriod | null {
+  const electricity = bills.filter((b) => b.serviceType === 'electricity');
+  const existing = electricity.find(
+    (b) => compareDates(b.billingStartDate, date) <= 0 && compareDates(date, b.billingEndDate) <= 0,
+  );
+  if (existing) return { start: existing.billingStartDate, end: existing.billingEndDate };
+  for (const period of projectedPeriods(electricity)) {
+    if (compareDates(date, period.start) < 0) return null;
+    if (compareDates(date, period.end) <= 0) return period;
+  }
+  return null;
 }

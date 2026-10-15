@@ -7,7 +7,7 @@
 - [x] 1.1 Crear el monorepo con workspaces de npm (`apps/api`, `apps/web`, `apps/mocks`, `packages/domain`, `e2e`) y `engines.node >= 22`; verificar que `npm install` termina sin errores desde un clon limpio
 - [x] 1.2 Configurar TypeScript estricto (referencias de proyecto), ESLint y Prettier compartidos; verificar que `npm run typecheck` y `npm run lint` pasan sobre los paquetes vacíos
 - [x] 1.3 Configurar Vitest para todos los paquetes, con cobertura (v8) y umbral del 95 % en `packages/domain`; verificar que `npm test` corre y reporta cobertura
-- [ ] 1.4 Crear el lanzador de MongoDB local (`mongodb-memory-server` en modo réplica, persistente en `./.data`, o `MONGODB_URI` si existe); verificar con un test que una transacción confirma y otra se revierte
+- [x] 1.4 Crear el lanzador de MongoDB local (`mongodb-memory-server` en modo réplica, persistente en `./.data`, o `MONGODB_URI` si existe); verificar con un test que una transacción confirma y otra se revierte
 - [ ] 1.5 Crear `npm run dev` (API en 4100, web en 5180 y simulaciones en 4110, en paralelo) y `.env.example` con todas las variables documentadas (incluida la configuración de IA de desarrollo, comentada como «solo desarrollo, por costos»); verificar que levanta y que `GET /health` responde 200
 - [x] 1.6 Crear `npm run trace`: lee los `#### Scenario:` de `spec.md` y busca cada nombre en los títulos de los tests; verificar que hoy lista todos los escenarios como pendientes y sale con error
 - [ ] 1.7 Crear el workflow de GitHub Actions en Node 22 y 24 (instalación, lint, tipos, tests, `trace`, build) y el badge en el README; verificar que corre en local con `npm run ci`
@@ -43,7 +43,7 @@
 ## 5. Dominio: agregados con privacidad
 
 - [x] 5.1 Implementar los agregados con umbral (5 negocios con número, 3 o 4 con texto, menos de 3 nada) y la supresión complementaria; verificar con «Panaderías por ecoinnovación» y «Supresión complementaria»
-- [ ] 5.2 Implementar la exclusión de combinaciones y el desglose por evidencia, método y moneda; verificar con «Dos ecoinnovaciones a la vez (sintético)» y «Informe con ambos tipos de dato (sintético)»
+- [x] 5.2 Implementar la exclusión de combinaciones y el desglose por evidencia, método y moneda; verificar con «Dos ecoinnovaciones a la vez (sintético)» y «Informe con ambos tipos de dato (sintético)»
 - [x] 5.3 Implementar las frases para la usuaria sobre otros negocios; verificar con «El caso único nunca se muestra» y «Frase cualitativa»
 
 ## 6. Dominio: validación del perfil asistido
@@ -54,72 +54,74 @@
 
 ## 7. Servicios simulados
 
-- [ ] 7.1 Crear `apps/mocks` en el puerto 4110 con mensajería (`POST /v1/email/send` con `x-api-key`), subtareas (`POST /ia/ecoinnovation/sub-tasks`) y conversión de moneda; verificar con tests que cada contrato del anexo responde como describe el reto
-- [ ] 7.2 Agregar los modos de falla controlables (`POST /__control`: 500, demora, 402, 400, rebote con llamada al webhook, conversión caída) y su reinicio; verificar con tests que cada modo se activa y se desactiva
+- [x] 7.1 Crear `apps/mocks` en el puerto 4110 con mensajería (`POST /v1/email/send` con `x-api-key`), subtareas (`POST /ia/ecoinnovation/sub-tasks`) y conversión de moneda; verificar con tests que cada contrato del anexo responde como describe el reto
+- [x] 7.2 Agregar los modos de falla controlables (`POST /__control`: 500, demora, 402, 400, rebote con llamada al webhook, conversión caída) y su reinicio; verificar con tests que cada modo se activa y se desactiva
 
 ## 8. API: base
 
-- [ ] 8.1 Crear la app Express 5 con id de pedido, registros pino sin datos personales, helmet, validación zod y manejador de errores uniforme; verificar con «Error inesperado» que no se filtran detalles internos
-- [ ] 8.2 Crear el adaptador de autenticación (Firebase en Kamai; `X-Demo-User` solo con `DEMO_MODE=true`) con el guardián que impide arrancar en producción con demo; verificar con tests de los dos casos
-- [ ] 8.3 Definir los modelos de Mongoose y los índices del diseño; verificar con un test que los índices únicos existen después de arrancar
-- [ ] 8.4 Implementar el aislamiento por negocio y los roles; verificar con «Factura de otro negocio» (404) y «Aliado que pide una factura» (403)
-- [ ] 8.5 Implementar la respuesta 503 ante MongoDB caído; verificar con «Guardar una factura sin base de datos» deteniendo el servidor en memoria
+- [x] 8.1 Crear la app Express 5 con id de pedido, registros pino sin datos personales, helmet, validación zod y manejador de errores uniforme; verificar con «Error inesperado» que no se filtran detalles internos
+- [x] 8.2 Crear el adaptador de autenticación (Firebase en Kamai; `X-Demo-User` solo con `DEMO_MODE=true`) con el guardián que impide arrancar en producción con demo; verificar con tests de los dos casos
+- [x] 8.3 Definir los modelos de Mongoose y los índices del diseño; verificar con un test que los índices únicos existen después de arrancar
+- [x] 8.4 Implementar el aislamiento por negocio y los roles; verificar con «Factura de otro negocio» (404) y «Aliado que pide una factura» (403)
+- [x] 8.5 Implementar la respuesta 503 ante MongoDB caído; verificar con «Guardar una factura sin base de datos» deteniendo el servidor en memoria
 
 ## 9. API: facturas, fotos e historial
 
-- [ ] 9.1 Implementar `POST /uploads` con límites de tipo, tamaño y cantidad; verificar con «Archivo no permitido» y «Tercera foto»
-- [ ] 9.2 Implementar `POST /user-bill` con los campos del anexo, `totalCost` y `co2Equivalent` calculados, moneda por país y evidencia; verificar con «Factura de febrero del anexo», «Moneda de Inés», «Factura con foto correcta» y «Factura sin foto»
-- [ ] 9.3 Implementar el chequeo de superposición por servicio dentro de una transacción; verificar con «Superposición de luz», «Luz y agua del mismo mes» y un test de dos envíos simultáneos donde solo uno se guarda
-- [ ] 9.4 Implementar las validaciones de valores y la confirmación de atípicos; verificar con «Fechas invertidas», «Tarifa fuera de rango» y «Un cero de más»
-- [ ] 9.5 Implementar `PATCH` y `DELETE` con versiones y borrado lógico, y el reemplazo de foto sin recalcular; verificar con «Editar», «Borrar» y «Reemplazar la foto después»
-- [ ] 9.6 Implementar `PUT /consumption-history` (12 meses como máximo, estimados, sin crear facturas); verificar con «Historial cargado (sintético)»
+- [x] 9.1 Implementar `POST /uploads` con límites de tipo, tamaño y cantidad; verificar con «Archivo no permitido» y «Tercera foto»
+- [x] 9.2 Implementar `POST /user-bill` con los campos del anexo, `totalCost` y `co2Equivalent` calculados, moneda por país y evidencia; verificar con «Factura de febrero del anexo», «Moneda de Inés», «Factura con foto correcta» y «Factura sin foto»
+- [x] 9.3 Implementar el chequeo de superposición por servicio dentro de una transacción; verificar con «Superposición de luz», «Luz y agua del mismo mes» y un test de dos envíos simultáneos donde solo uno se guarda
+- [x] 9.4 Implementar las validaciones de valores y la confirmación de atípicos; verificar con «Fechas invertidas», «Tarifa fuera de rango» y «Un cero de más»
+- [x] 9.5 Implementar `PATCH` y `DELETE` con versiones y borrado lógico, y el reemplazo de foto sin recalcular; verificar con «Editar», «Borrar» y «Reemplazar la foto después»
+- [x] 9.6 Implementar `PUT /consumption-history` (12 meses como máximo, estimados, sin crear facturas); verificar con «Historial cargado (sintético)»
 
 ## 10. API: planes y subtareas
 
-- [ ] 10.1 Implementar `GET /user-eco-card/:id` con `stalled`, `implementedAt` y eventos; verificar con «Plan de Inés estancado» con la fecha 2026-07-10
-- [ ] 10.2 Implementar `PATCH` con pausa, reanudación, completado con `implementedAt` y registro de eventos; verificar con «Pausar y reanudar», «Reabrir no borra la implementación», «Completar sin fecha», «Fecha futura» y «Completar con fecha»
-- [ ] 10.3 Implementar las ideas por paso con el servicio de subtareas (10 s, 402, error) y su guardado; verificar contra las simulaciones con «Sin cupo», «Servicio caído o lento» y «Sin consumo automático»
+- [x] 10.1 Implementar `GET /user-eco-card/:id` con `stalled`, `implementedAt` y eventos; verificar con «Plan de Inés estancado» con la fecha 2026-07-10
+- [x] 10.2 Implementar `PATCH` con pausa, reanudación, completado con `implementedAt` y registro de eventos; verificar con «Pausar y reanudar», «Reabrir no borra la implementación», «Completar sin fecha», «Fecha futura» y «Completar con fecha»
+- [x] 10.3 Implementar las ideas por paso con el servicio de subtareas (10 s, 402, error) y su guardado; verificar contra las simulaciones con «Sin cupo», «Servicio caído o lento» y «Sin consumo automático»
 
 ## 11. API: medición y recálculo
 
-- [ ] 11.1 Implementar `GET /user-eco-card/:id/savings` sobre el dominio, con `display` incluido; verificar de punta a punta con las facturas del caso y las sintéticas de agosto y septiembre que el resultado coincide con los escenarios del grupo 3
-- [ ] 11.2 Implementar el recálculo ante cambios de facturas, historial o `implementedAt`, con versión y huella; verificar con «Factura editada» y «Borrar una factura posterior (sintético)»
-- [ ] 11.3 Implementar el aviso de recálculo cuando cambia una cifra ya mostrada; verificar con «Corrección de una factura»
+- [x] 11.1 Implementar `GET /user-eco-card/:id/savings` sobre el dominio, con `display` incluido; verificar de punta a punta con las facturas del caso y las sintéticas de agosto y septiembre que el resultado coincide con los escenarios del grupo 3
+- [x] 11.2 Implementar el recálculo ante cambios de facturas, historial o `implementedAt`, con versión y huella; verificar con «Factura editada» y «Borrar una factura posterior (sintético)»
+- [x] 11.3 Implementar el aviso de recálculo cuando cambia una cifra ya mostrada; verificar con «Corrección de una factura»
 
 ## 12. API: recomendación y superficies
 
-- [ ] 12.1 Cargar `peerStats` desde la tabla del caso (rotulada `case_table`) y el catálogo con `targetEquipment`; verificar que los totales coinciden con la tabla (29 elecciones, 20 completadas, 12 con facturas)
-- [ ] 12.2 Implementar `GET /first-step` y la persistencia con estados vigente y reemplazada; verificar con «Consulta repetida sin cambios» y «Registro auditable»
-- [ ] 12.3 Implementar `POST /first-step/decision`; verificar con «Aceptar», «Elegir otra» y «¿Por qué esto?»
-- [ ] 12.4 Implementar los disparadores de recálculo; verificar con «Cambio de presupuesto» y «Sin cambios en el resultado»
-- [ ] 12.5 Implementar `GET /catalog` con la recomendación fijada, los tres primeros para el diagnóstico y `GET /welcome-email/preview`; verificar con «Catálogo», «Diagnóstico por etapas» y «Correo de bienvenida»
+- [x] 12.1 Cargar `peerStats` desde la tabla del caso (rotulada `case_table`) y el catálogo con `targetEquipment`; verificar que los totales coinciden con la tabla (29 elecciones, 20 completadas, 12 con facturas)
+- [x] 12.2 Implementar `GET /first-step` y la persistencia con estados vigente y reemplazada; verificar con «Consulta repetida sin cambios» y «Registro auditable»
+- [x] 12.3 Implementar `POST /first-step/decision`; verificar con «Aceptar», «Elegir otra» y «¿Por qué esto?»
+- [x] 12.4 Implementar los disparadores de recálculo; verificar con «Cambio de presupuesto» y «Sin cambios en el resultado»
+- [x] 12.5 Implementar `GET /catalog` con la recomendación fijada, los tres primeros para el diagnóstico y `GET /welcome-email/preview`; verificar con «Catálogo», «Diagnóstico por etapas» y «Correo de bienvenida»
 
 ## 13. API: perfil asistido con IA
 
-- [ ] 13.1 Crear el adaptador de IA con el SDK `openai` (URL base y modelo por variables de entorno, `response_format` con esquema JSON estricto, preferencias de OpenRouter `require_parameters` y `data_collection: "deny"`, espera de 10 s); verificar con un servidor HTTP falso que el pedido sale con el esquema y las preferencias
-- [ ] 13.2 Implementar `POST /profile/assist` con la verificación del dominio, la alternativa por palabras clave, el aviso de primer uso y el límite de 20 por día; verificar con respuestas grabadas «Descripción de Inés», «Modelo lento» y «Límite superado»
-- [ ] 13.3 Implementar `PATCH /profile` con la confirmación y el recálculo de la recomendación; verificar con «Corrección antes de confirmar»
-- [ ] 13.4 Verificar la privacidad con «Primer uso» y «Registros»: el texto de la descripción no aparece en ningún registro
-- [ ] 13.5 Crear `npm run eval:profile` (necesita clave, fuera de CI): 40 descripciones sintéticas con su respuesta correcta; mide aciertos por campo, costo y demora, y guarda el informe en `eval/`. Verificar que sin clave termina con un mensaje claro
+> **Decisión pendiente:** el adaptador está hecho y probado con un modelo falso, pero queda **apagado por defecto** (sin clave sugiere por palabras clave). Falta decidir si se mantiene así o se quita y queda solo documentado. El eval no se corrió.
+
+- [x] 13.1 Crear el adaptador de IA con el SDK `openai` (URL base y modelo por variables de entorno, `response_format` con esquema JSON estricto, preferencias de OpenRouter `require_parameters` y `data_collection: "deny"`, espera de 10 s); verificar con un servidor HTTP falso que el pedido sale con el esquema y las preferencias
+- [x] 13.2 Implementar `POST /profile/assist` con la verificación del dominio, la alternativa por palabras clave, el aviso de primer uso y el límite de 20 por día; verificar con respuestas grabadas «Descripción de Inés», «Modelo lento» y «Límite superado»
+- [x] 13.3 Implementar `PATCH /profile` con la confirmación y el recálculo de la recomendación; verificar con «Corrección antes de confirmar»
+- [x] 13.4 Verificar la privacidad con «Primer uso» y «Registros»: el texto de la descripción no aparece en ningún registro
+- [x] 13.5 Crear `npm run eval:profile` (necesita clave, fuera de CI): 40 descripciones sintéticas con su respuesta correcta; mide aciertos por campo, costo y demora, y guarda el informe en `eval/`. Verificar que sin clave termina con un mensaje claro
 
 ## 14. Avisos, correos y workers
 
-- [ ] 14.1 Implementar `notifications` y sus rutas; verificar con «Correo caído» (el aviso existe aunque la mensajería falle)
-- [ ] 14.2 Implementar la bandeja de salida con clave por persona, plantilla y referencia, y el worker con reintentos; verificar contra las simulaciones con «Error temporal», «Recordatorios de meses distintos», «Mismo recordatorio dos veces» y «Error permanente»
-- [ ] 14.3 Implementar el webhook de rebote y la supresión; verificar con «Correo rebotado»
-- [ ] 14.4 Implementar el recordatorio por ciclo (sin repetir periodo); verificar con «Factura de agosto que no llega»
-- [ ] 14.5 Implementar el job de estadísticas de pares (excluye combinaciones) y los eventos del embudo; verificar con «Recorrido completo (sintético)»
+- [x] 14.1 Implementar `notifications` y sus rutas; verificar con «Correo caído» (el aviso existe aunque la mensajería falle)
+- [x] 14.2 Implementar la bandeja de salida con clave por persona, plantilla y referencia, y el worker con reintentos; verificar contra las simulaciones con «Error temporal», «Recordatorios de meses distintos», «Mismo recordatorio dos veces» y «Error permanente»
+- [x] 14.3 Implementar el webhook de rebote y la supresión; verificar con «Correo rebotado»
+- [x] 14.4 Implementar el recordatorio por ciclo (sin repetir periodo); verificar con «Factura de agosto que no llega»
+- [x] 14.5 Implementar el job de estadísticas de pares (excluye combinaciones) y los eventos del embudo; verificar con «Recorrido completo (sintético)»
 
 ## 15. Reportes
 
-- [ ] 15.1 Implementar `GET /savings/report`; verificar con «Reporte con resultado medido (sintético)» y «Reporte sin resultado»
-- [ ] 15.2 Implementar `GET /partners/report` con agregados, evidencia, método, monedas y USD con alternativa; verificar con «Informe del trimestre (sintético)» y «Conversión caída»
-- [ ] 15.3 Implementar el cierre de periodo y los ajustes; verificar con «Corrección después del cierre (sintético)»
+- [x] 15.1 Implementar `GET /savings/report`; verificar con «Reporte con resultado medido (sintético)» y «Reporte sin resultado»
+- [x] 15.2 Implementar `GET /partners/report` con agregados, evidencia, método, monedas y USD con alternativa; verificar con «Informe del trimestre (sintético)» y «Conversión caída»
+- [x] 15.3 Implementar el cierre de periodo y los ajustes; verificar con «Corrección después del cierre (sintético)»
 
 ## 16. Datos de prueba y modo demostración
 
-- [ ] 16.1 Crear la carga inicial: Inés (perfil, diagnóstico, seis facturas, `plan_552`), catálogo con las 5 ecoinnovaciones del caso más 8 sintéticas, 22 panaderías sintéticas que reproducen la tabla y un negocio nuevo; verificar con un test que los agregados de la carga coinciden con la tabla del caso
-- [ ] 16.2 Implementar el reloj de demostración (2026-07-10) y «Simular el paso del tiempo» (julio, agosto y septiembre sintéticos); verificar que el resultado pasa de `NO_IMPLEMENTATION_DATE` a `WITHIN_NOISE` y después a `MEASURED`
+- [x] 16.1 Crear la carga inicial: Inés (perfil, diagnóstico, seis facturas, `plan_552`), catálogo con las 5 ecoinnovaciones del caso más 8 sintéticas, 22 panaderías sintéticas que reproducen la tabla y un negocio nuevo; verificar con un test que los agregados de la carga coinciden con la tabla del caso
+- [x] 16.2 Implementar el reloj de demostración (2026-07-10) y «Simular el paso del tiempo» (julio, agosto y septiembre sintéticos); verificar que el resultado pasa de `NO_IMPLEMENTATION_DATE` a `WITHIN_NOISE` y después a `MEASURED`
 - [ ] 16.3 Implementar el panel de demostración («Ver como», modos de falla de las simulaciones, bandeja de correos); verificar que no se monta fuera de `DEMO_MODE`
 - [ ] 16.4 Documentar en el README el guion de prueba de 8 pasos para quien evalúa; verificar siguiéndolo en una instalación limpia
 

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   addDays,
+  billPeriodContaining,
   aggregateByEco,
   buildSavingsDisplay,
   canonicalJson,
@@ -438,5 +439,21 @@ describe('esquema de la respuesta del modelo', () => {
     expect([...schema.required].sort()).toEqual(Object.keys(schema.properties).sort());
     expect(schema.properties.ciiu.enum).toContain('1071');
     expect(schema.properties.equipment.items.enum).toContain('refrigeration');
+  });
+});
+
+describe('periodo que contiene una fecha', () => {
+  it('usa la factura existente o la proyectada', () => {
+    expect(billPeriodContaining(inesBills(), '2026-03-10')).toEqual({
+      start: '2026-03-01',
+      end: '2026-03-31',
+    });
+    expect(billPeriodContaining(inesBills(), INES_IMPLEMENTED_AT)).toEqual({
+      start: '2026-07-01',
+      end: '2026-07-31',
+    });
+    expect(billPeriodContaining(inesBills(), '2025-12-15')).toBeNull();
+    expect(billPeriodContaining([], '2026-07-08')).toBeNull();
+    expect(billPeriodContaining(inesBills(), '2040-01-01')).toBeNull();
   });
 });

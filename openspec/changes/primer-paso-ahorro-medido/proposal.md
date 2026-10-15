@@ -57,13 +57,21 @@ Con menos profundidad, a propósito:
 - **Informe para aliados:** agregados trimestrales con umbral de privacidad. El formato final se define con Agora y sus aliados.
 - **Integraciones:** simuladas con los contratos del anexo y sus modos de falla.
 - **Temporada en negocios nuevos:** se compara contra los meses cercanos y se rotula así. El grupo de comparación queda como evolución.
-- **Interfaz:** sigue el sistema visual de Kamai. Su objetivo es que Inés entienda el resultado en el celular, no explorar el diseño.
+
+**La interfaz salió más completa de lo que el reto pedía.** El reto no esperaba una interfaz pulida, y el razonamiento no está ahí: se construyó con el sistema visual de Kamai para probar la medición y la recomendación como las vería Inés en el celular, con datos móviles.
+
+**Si hay que recortar.** Lo esencial, y lo que alcanza para responder el reto, es:
+1. esta especificación;
+2. la medición y la recomendación en el paquete de dominio, con sus tests sobre los datos del anexo;
+3. una pantalla, «Tu ahorro», con sus tres estados.
+
+El resto se puede sacar sin tocar esas piezas, empezando por lo que más se aleja de la pregunta de Inés: el informe para aliados, la bandeja de correos y los recordatorios, el perfil asistido, la app instalable con borrador sin conexión, las facturas de agua, la conversión a USD y el CO₂e, el panel de demostración y las demás pantallas.
 
 ## Out of Scope
 
 - Integrar los servicios reales de Kamai (correo, subtareas con IA, conversión de moneda, almacenamiento): van simulados con sus mismos contratos y modos de falla.
 - Reescribir o corregir el código existente (por ejemplo, migrar de MongoDB). Las superficies existentes solo pasan a leer la recomendación nueva.
-- **Lectura de fotos de factura con IA:** queda diseñada como evolución en `design.md`, pero no se implementa en esta instancia, porque no se puede probar ni verificar sin facturas reales. La foto se guarda como comprobante y los números los escribe la usuaria.
+- **Más usos de IA:** la lectura de la factura (PDF o foto), las respuestas a preguntas sobre el ahorro, la búsqueda en el catálogo con las palabras de la usuaria y un modelo que ordena quedan diseñados en `design.md` («Evolución: qué más se puede hacer con IA»), con la condición para encender cada uno. No se implementan en esta instancia, porque no se pueden probar ni verificar sin datos reales. La foto se guarda como comprobante y los números los escribe la usuaria.
 - Entrenar modelos o un modelo que aprenda a ordenar: no hay datos suficientes (29 elecciones, 12 resultados). Se guardan los registros que lo harían posible.
 - Corregir por clima con regresión (grados-día): con 6 a 12 puntos por negocio no se sostiene.
 - Montos de inversión o de ahorro esperado en el catálogo: Kamai no los tiene y no se inventan.
@@ -80,4 +88,4 @@ Con menos profundidad, a propósito:
   - campos opcionales nuevos en catálogo (`targetEquipment`) y perfil (equipos, tipo de horno, restricciones, consentimiento de IA).
 - **Frontend (React + Vite):** pantallas para celular de primer paso, plan, subir factura, ahorro, facturas, reporte y avisos; informe para aliados.
 - **Dependencias:** SDK de OpenAI (compatible con OpenRouter) para el perfil asistido; sin otras integraciones externas nuevas.
-- **Privacidad y gobierno de IA:** el perfil asistido es un uso nuevo de IA y necesita la evaluación de impacto (DPIA) que exige la política POL-IT-003 de Agora antes de activarse en producción. Por eso viene apagado por defecto fuera de desarrollo.
+- **Privacidad y gobierno de IA:** el perfil asistido es un uso nuevo de IA y necesita la evaluación de impacto (DPIA) que exige la política [POL-IT-003](https://docs.google.com/document/d/1X2oA3M6yCOnjSBFxJoP7cDsV7mdDlNh2l7J1FfKeuoc/preview) de Agora antes de activarse en producción. Por eso viene apagado por defecto fuera de desarrollo.

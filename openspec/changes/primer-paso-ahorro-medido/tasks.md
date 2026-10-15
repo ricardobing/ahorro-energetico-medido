@@ -10,7 +10,7 @@
 - [x] 1.4 Crear el lanzador de MongoDB local (`mongodb-memory-server` en modo réplica, persistente en `./.data`, o `MONGODB_URI` si existe); verificar con un test que una transacción confirma y otra se revierte
 - [x] 1.5 Crear `npm run dev` (API en 4100, web en 5180 y simulaciones en 4110, en paralelo) y `.env.example` con todas las variables documentadas (incluida la configuración de IA de desarrollo, comentada como «solo desarrollo, por costos»); verificar que levanta y que `GET /health` responde 200
 - [x] 1.6 Crear `npm run trace`: lee los `#### Scenario:` de `spec.md` y busca cada nombre en los títulos de los tests; verificar que hoy lista todos los escenarios como pendientes y sale con error
-- [ ] 1.7 Crear el workflow de GitHub Actions en Node 22 y 24 (instalación, lint, tipos, tests, `trace`, build) y el badge en el README; verificar que corre en local con `npm run ci`
+- [x] 1.7 Crear el workflow de GitHub Actions en Node 22 y 24 (instalación, lint, tipos, tests, `trace`, build) y el badge en el README; verificar que corre en local con `npm run ci`
 - [x] 1.8 Escribir el README inicial (requisito Node 22 o más, `npm install`, `npm run dev`, `npm test`, qué es real, simulado o sintético) y verificar que los comandos documentados funcionan tal cual
 
 ## 2. Dominio: fechas, dinero y formatos
@@ -60,7 +60,7 @@
 ## 8. API: base
 
 - [x] 8.1 Crear la app Express 5 con id de pedido, registros pino sin datos personales, helmet, validación zod y manejador de errores uniforme; verificar con «Error inesperado» que no se filtran detalles internos
-- [x] 8.2 Crear el adaptador de autenticación (Firebase en Kamai; `X-Demo-User` solo con `DEMO_MODE=true`) con el guardián que impide arrancar en producción con demo; verificar con tests de los dos casos
+- [x] 8.2 Crear el adaptador de autenticación con el modo demo (`X-Demo-User` solo con `DEMO_MODE=true`) y el guardián que impide arrancar en producción con demo; verificar con tests de los dos casos. La verificación del token de Firebase de Kamai es el otro camino del mismo middleware y no se implementa: necesita su configuración real (D20)
 - [x] 8.3 Definir los modelos de Mongoose y los índices del diseño; verificar con un test que los índices únicos existen después de arrancar
 - [x] 8.4 Implementar el aislamiento por negocio y los roles; verificar con «Factura de otro negocio» (404) y «Aliado que pide una factura» (403)
 - [x] 8.5 Implementar la respuesta 503 ante MongoDB caído; verificar con «Guardar una factura sin base de datos» deteniendo el servidor en memoria
@@ -96,7 +96,7 @@
 
 ## 13. API: perfil asistido con IA
 
-> **Decisión pendiente:** el adaptador está hecho y probado con un modelo falso, pero queda **apagado por defecto** (sin clave sugiere por palabras clave). Falta decidir si se mantiene así o se quita y queda solo documentado. El eval no se corrió.
+> **Decisión (15/10): queda apagado.** El reto pide decidir cuánta IA hace falta, no implementarla. El adaptador está hecho y probado con un modelo falso, y sin clave el perfil sugiere por palabras clave. Se enciende solo con la regla de D13: el eval (`npm run eval:profile`) le gana a las palabras clave y la DPIA aprueba el proveedor. El eval no se corrió: con la IA apagada, no cambia nada de lo que se entrega.
 
 - [x] 13.1 Crear el adaptador de IA con el SDK `openai` (URL base y modelo por variables de entorno, `response_format` con esquema JSON estricto, preferencias de OpenRouter `require_parameters` y `data_collection: "deny"`, espera de 10 s); verificar con un servidor HTTP falso que el pedido sale con el esquema y las preferencias
 - [x] 13.2 Implementar `POST /profile/assist` con la verificación del dominio, la alternativa por palabras clave, el aviso de primer uso y el límite de 20 por día; verificar con respuestas grabadas «Descripción de Inés», «Modelo lento» y «Límite superado»
@@ -123,7 +123,7 @@
 - [x] 16.1 Crear la carga inicial: Inés (perfil, diagnóstico, seis facturas, `plan_552`), catálogo con las 5 ecoinnovaciones del caso más 8 sintéticas, 22 panaderías sintéticas que reproducen la tabla y un negocio nuevo; verificar con un test que los agregados de la carga coinciden con la tabla del caso
 - [x] 16.2 Implementar el reloj de demostración (2026-07-10) y «Simular el paso del tiempo» (julio, agosto y septiembre sintéticos); verificar que el resultado pasa de `NO_IMPLEMENTATION_DATE` a `WITHIN_NOISE` y después a `MEASURED`
 - [x] 16.3 Implementar el panel de demostración («Ver como», modos de falla de las simulaciones, bandeja de correos); verificar que no se monta fuera de `DEMO_MODE`
-- [ ] 16.4 Documentar en el README el guion de prueba de 8 pasos para quien evalúa; verificar siguiéndolo en una instalación limpia
+- [x] 16.4 Documentar en el README el guion de prueba de 8 pasos para quien evalúa; verificar siguiéndolo en una instalación limpia
 
 ## 17. Web: base, sistema visual y navegación
 
@@ -157,5 +157,5 @@
 ## Workflow follow-up
 
 - Revisión de código y aprobación antes de publicar.
-- Crear el repositorio público en GitHub, subir la rama y verificar los enlaces en una ventana de incógnito.
+- Repositorio público en GitHub con la CI en verde: hecho. Falta verificar sin sesión el enlace del video.
 - Archivar el cambio con `openspec archive primer-paso-ahorro-medido` después de la revisión y verificar que la spec queda en `openspec/specs/`.

@@ -18,7 +18,7 @@
   - seis meses de facturas para el caso de referencia;
   - tarifas que cambian casi todos los meses;
   - uso desde el celular con datos limitados;
-  - políticas de Agora: POL-IT-003 de IA (explicabilidad, supervisión humana, evaluación de impacto o DPIA) y POL-IT-001 de datos (agregados para financiadores, minimización).
+  - las políticas de Agora que Kamai enlaza junto a sus términos y condiciones: [POL-IT-003, uso responsable de IA](https://docs.google.com/document/d/1X2oA3M6yCOnjSBFxJoP7cDsV7mdDlNh2l7J1FfKeuoc/preview) (explicabilidad, supervisión humana, evaluación de impacto o DPIA antes de cada uso nuevo de IA) y [POL-IT-001, seguridad y protección de datos](https://docs.google.com/document/d/1lN5ivuxABis3fQc4NWjV3Cyg-3xEOczQFYgnhLwYzr4/preview) (datos agregados o anonimizados para financiadores y aliados, minimización).
 - **Dónde profundizamos:** en la medición del ahorro y en la recomendación; el porqué y lo que queda con menos profundidad están en «Where We Go Deep», en `proposal.md`.
 - **Este repositorio** es un prototipo ejecutable del módulo. Corre solo en local, con los servicios existentes simulados con sus contratos. La lógica de negocio vive en un paquete puro, sin dependencias, para que pueda llevarse tal cual a la API real de Kamai.
 
@@ -109,6 +109,9 @@ Cada decisión tiene su porqué y las alternativas descartadas. Los parámetros 
 - Salida estructurada con esquema JSON estricto. El modelo **elige** de listas cerradas (CIIU, equipos, tipo de horno) y extrae montos y horas que **se verifican contra el texto**.
 - Alternativa por palabras clave y bandera de activación.
 - Modelo de desarrollo: `deepseek/deepseek-v4.1-flash`, por costo y solo con datos ficticios. En producción, un modelo de OpenAI elegido con un eval y la DPIA.
+- **En esta entrega queda apagado.** Sin clave, el perfil sugiere por palabras clave y la app funciona entera. Se enciende solo si se cumplen las dos condiciones:
+  1. **El eval** (`npm run eval:profile`, 40 descripciones sintéticas) le gana a las palabras clave, con esta regla escrita antes de medir: al menos 10 puntos más de aciertos en rubro y en equipos, una demora p95 menor a 10 s y ningún monto u hora inventados en las 40 descripciones (el código ya los descarta antes de mostrarlos; el eval los cuenta).
+  2. **La DPIA** que pide la POL-IT-003 aprueba el proveedor y el tratamiento del texto.
 
 **Por qué:**
 - Kamai no guarda los equipos ni un rubro fiable, y la recomendación los necesita.
@@ -117,7 +120,7 @@ Cada decisión tiene su porqué y las alternativas descartadas. Los parámetros 
 - La IA interpreta y el código decide.
 
 **Descartado:**
-- *Leer fotos de factura con IA:* diseñado (ver Evolución), pero no se implementa en esta instancia porque no se puede verificar sin facturas reales.
+- *Leer fotos de factura con IA:* diseñado (ver «Evolución: qué más se puede hacer con IA»), pero no se implementa en esta instancia porque no se puede verificar sin facturas reales.
 - *Solo palabras clave:* es la alternativa, pero entiende peor las descripciones reales.
 - *SDK de Anthropic:* decisión del autor (costo y libertad de proveedor).
 
@@ -151,7 +154,7 @@ Cada decisión tiene su porqué y las alternativas descartadas. Los parámetros 
 
 ### D18. Express 5 con Mongoose y zod
 **Decisión:** Express 5 (errores asíncronos nativos), esquemas de Mongoose para las colecciones y zod para validar las entradas.
-**Por qué:** es lo más probable en un stack React + Node + Mongo como el de Kamai (S11), así que el módulo encaja sin cambiar de framework. zod da mensajes de error controlados y tipos compartidos con el frontend.
+**Por qué:** es lo más probable en un stack React + Node + Mongo como el de Kamai (S11), así que el módulo encaja sin cambiar de framework. zod da mensajes de error controlados. La web importa del dominio los tipos de la medición y repite a mano la forma de las demás respuestas (`apps/web/src/lib/types.ts`); generarlas desde los esquemas de zod queda como mejora.
 **Descartado:** Fastify (más rápido, pero obligaría a adaptar el módulo si Kamai usa Express); el driver nativo sin esquemas (más código de validación propio).
 
 ### D19. Fechas sin hora y dinero en céntimos
@@ -161,6 +164,7 @@ Cada decisión tiene su porqué y las alternativas descartadas. Los parámetros 
 ### D20. Autenticación con un adaptador
 **Decisión:** en Kamai, un middleware que verifica el token de Firebase existente y resuelve el negocio. En local, el encabezado `X-Demo-User` (Inés, negocio nuevo, aliado o equipo), activo solo con `DEMO_MODE=true`. La API **se niega a arrancar** con `DEMO_MODE` en producción.
 **Por qué:** el reto no pide autenticación, pero cada negocio tiene que ver solo lo suyo y eso tiene que poder probarse.
+**En este prototipo** está implementada solo la rama de demostración (`apps/api/src/http/auth.ts`). Verificar el token de Firebase es el otro camino del mismo middleware y no se implementa, porque necesita la configuración real de Kamai. Todo lo que viene después del middleware (aislamiento por negocio, roles, 401, 403 y 404) sí está probado.
 
 ### D21. Estado `paused` en el plan
 **Decisión:** se agrega `paused` a los estados del plan y se crea la colección de eventos `planEvents`. El cambio es compatible: las lecturas que no conocen `paused` lo pueden tratar como `delayed`.
@@ -192,6 +196,8 @@ Cada decisión tiene su porqué y las alternativas descartadas. Los parámetros 
 
 Responde el punto 2 del reto en un solo lugar: qué técnica usamos en cada parte, dónde no y por qué, con los datos que hay hoy (29 elecciones, 12 resultados medidos y de 6 a 12 facturas por negocio). Los detalles están en las decisiones que se citan.
 
+El reto no pide implementar IA: pide decidir cuánta hace falta y para qué. Por eso lo que decide y lo que mide se resuelve sin IA, y el único uso construido (el perfil asistido) queda apagado hasta cumplir su regla (D13). Lo que se podría sumar después, con sus condiciones, está en «Evolución: qué más se puede hacer con IA».
+
 | Técnica | La usamos para | No la usamos para | Por qué, con los datos de hoy |
 |---|---|---|---|
 | **Reglas explícitas** | Elegibilidad: objetivo, sector, equipos, presupuesto, horas, nivel de diagnóstico y plan existente (D2, D4). Los textos que ve la usuaria. | — | Son deterministas, explicables y auditables, como pide la política de IA de Agora (POL-IT-003). Los textos los arma el código para que la web, el correo y el reporte digan lo mismo. |
@@ -200,6 +206,7 @@ Responde el punto 2 del reto en un solo lugar: qué técnica usamos en cada part
 | **Comparación con línea de base** (IPMVP, opción C) | Medir el ahorro en kWh por día, contra el año anterior o los meses cercanos (D5, D6). | Regresión por clima (grados-día). | Con 6 a 12 puntos por negocio la regresión no se sostiene, y en Arequipa la temporada la marca el calendario de la panadería, no el clima. |
 | **Modelo de lenguaje** (SDK de OpenAI) | Perfil asistido: interpretar la descripción libre y elegir rubro, equipos y tipo de horno de listas cerradas, con montos y horas solo si están escritos (D13). Apagado por defecto hasta la DPIA. | Elegir la recomendación, calcular el ahorro, redactar los resultados y leer fotos de factura. | Para decidir o calcular no es reproducible ni auditable y puede inventar números. Leer fotos queda como evolución porque sin facturas reales no se puede verificar. |
 | **IA existente de Kamai** (subtareas) | Ideas para cada paso, solo cuando la usuaria las pide. | Abrir el plan (no consume cupo). | Ya existe, con su cupo y su error 402. Se usa sin bloquear: los pasos del catálogo siempre están. |
+| **IA existente de Kamai** (asistente de consultas y búsqueda en el catálogo) | Nada en esta instancia. | Recomendar o medir. | Existen, pero el módulo no los necesita para recomendar ni para medir, y no conocemos sus contratos. Cómo podrían responder preguntas sobre el ahorro y buscar en el catálogo está en «Evolución». |
 | **Modelo que aprende a ordenar** (aprendizaje supervisado) | Nada, por ahora. | Ordenar las ecoinnovaciones. | 29 elecciones y 12 resultados no alcanzan ni para entrenar ni para evaluar. Se guardan las recomendaciones con sus entradas y los eventos del embudo para entrenarlo cuando haya datos. |
 
 **Criterio:** una técnica más compleja reemplaza a una más simple solo si le gana en un eval con datos reales, con la regla de decisión escrita antes de medir.
@@ -302,11 +309,11 @@ flowchart TD
   P -- no --> N2[[INSUFFICIENT_DATA · NO_AFTER_BILL]]
   P -- sí --> Y{¿El año anterior cubre al menos<br/>el 80 % de los días de cada periodo posterior?}
   Y -- sí --> YY[YEAR_OVER_YEAR<br/>ajuste por tendencia si hay al menos 2 pares previos]
-  Y -- no --> B{¿Al menos 2 facturas completas antes?}
+  Y -- no --> B{¿Al menos 2 facturas completas antes,<br/>fuera de la temporada alta del rubro?}
   B -- no --> N3[[INSUFFICIENT_DATA · NOT_ENOUGH_BASELINE]]
-  B -- sí --> H{¿El periodo posterior cae en la temporada alta<br/>del rubro y la línea de base no?}
+  B -- sí --> H{¿Todas las facturas posteriores caen<br/>en la temporada alta del rubro?}
   H -- sí --> N4[[INSUFFICIENT_DATA · HIGH_SEASON]]
-  H -- no --> RP[RECENT_PERIODS<br/>últimas 3 antes · «sin corrección por temporada»]
+  H -- no --> RP[RECENT_PERIODS<br/>últimas 3 antes y las posteriores, sin temporada alta<br/>«sin corrección por temporada»]
   YY & RP --> C[cambio = después / referencia − 1<br/>banda = 2σ√(1/n_ref + 1/n_después)]
   C --> M{¿Cambio ≤ −banda?}
   M -- sí --> R1[[MEASURED · ahorro a la tarifa vigente + rango]]
@@ -519,14 +526,63 @@ No cambian la spec ni las tareas:
 - Los rangos reales de inversión por país (se configuran).
 - Si la API de Kamai usa Express y Mongoose (el módulo se adapta; el dominio no cambia).
 
-## Evolución: lectura de fotos de factura con IA (fuera de esta instancia)
+## Evolución: qué más se puede hacer con IA
 
-Queda diseñada para la etapa siguiente:
-- un modelo con visión por la misma API compatible con OpenAI, con salida estructurada (`kwhConsumed`, `costPerKwh`, fechas, total, historial de 12 meses) y confianza por campo;
-- validación en código con las mismas reglas de una carga manual, más la coherencia entre total, consumo y tarifa;
-- confirmación de cada número por la usuaria;
-- sin datos personales;
-- consentimiento, bandera apagada hasta la DPIA, 20 lecturas por día y alternativa manual;
-- un eval con fotos reales consentidas (Kamai ya guarda fotos) y umbral de 95 % de aciertos en kWh y fechas antes de encenderla.
+Nada de esto se implementa en esta instancia. Vale el mismo principio que en el resto del diseño: la IA interpreta lenguaje e imágenes; los números, la recomendación y la medición los calcula el código, y la usuaria confirma lo que se guarda. Cada uso nuevo:
+- tiene un camino sin IA con el que la tarea se termina igual;
+- se mide con un eval contra esa alternativa simple, con la regla escrita antes de medir;
+- pasa por la DPIA de la POL-IT-003 antes de encenderse, y llega con bandera apagada, cupo por negocio y registros sin el texto ni la imagen;
+- no envía datos personales que no hagan falta (POL-IT-001).
 
-No se implementa ahora porque no se puede verificar sin facturas reales.
+Lo que ya existe: el **perfil asistido** (construido y apagado, D13) y las **ideas para cada paso** (el servicio de subtareas de Kamai, que ya se usa).
+
+### 1. Leer la factura: primero el PDF, después la foto
+
+**Qué resuelve:** hoy Inés escribe los kWh, la tarifa y las fechas. Es el paso con más fricción del recorrido y donde aparecen los errores de tipeo. Muchos recibos traen además el historial de 12 meses, que le daría a un negocio nuevo la comparación interanual desde su primera factura.
+
+**Cómo:**
+- **Recibo en PDF digital** (el que la distribuidora manda por correo): si tiene capa de texto, se lee **sin IA**, con extracción de texto y una plantilla por distribuidora. El modelo queda como respaldo para los formatos que no se conocen. Hoy la API rechaza un PDF como foto (415); aceptarlo es parte de esta evolución.
+- **Foto:** un modelo con visión por la misma API compatible con OpenAI, con salida estructurada (`kwhConsumed`, `costPerKwh`, fechas, total e historial) y confianza por campo. Si un valor no se lee, lo devuelve vacío y no adivina.
+- **Validación en código:** las mismas reglas de la carga manual, más la coherencia entre total, consumo y tarifa (con tolerancia por cargo fijo e IGV) y kWh entre 0,3 y 3 veces su historial. Lo que no pasa queda resaltado para revisar.
+- **Confirmación:** Inés ve los números precargados y confirma o corrige cada uno. La factura guarda su origen («leída y confirmada» o «escrita a mano»), y el historial leído entra como «estimado», igual que hoy.
+- **Minimización:** no se piden nombre, dirección ni número de suministro, y la foto ya viaja reducida.
+- **Fallas:** 20 s de espera y un solo reintento ante 429 o 5xx. Si falla o no valida, queda el formulario manual con «No pudimos leer la foto; escribe los números». Nunca bloquea.
+
+**Para encenderla:** un eval con recibos reales consentidos (Kamai ya guarda las fotos) y la regla de 95 % de aciertos exactos en kWh y fechas; la DPIA aprueba el proveedor y dónde se procesan las imágenes; consentimiento la primera vez y 20 lecturas por día por negocio.
+
+### 2. Responder preguntas sobre su ahorro y sus pasos
+
+**Qué resuelve:** Kamai ya tiene un asistente de consultas, y las preguntas que este módulo va a generar son previsibles: «¿por qué mi factura no bajó si dice que ahorré?», «¿cuándo voy a saber si funcionó?», «¿cómo cambio los burletes?».
+
+**Cómo:**
+- **Preguntas sobre sus números:** el modelo recibe la medición ya calculada (resultado, método, motivo, cifras y versión) y los textos aprobados de «Tu ahorro», con herramientas solo de lectura (medición, facturas y plan). Explica; no calcula ni promete. Si le piden un número que no está en esos datos, lo dice y la lleva a «Cómo lo medimos».
+- **Preguntas sobre cómo hacer un paso:** búsqueda en el contenido del catálogo y sus guías (RAG), con la cita del paso de donde sale la respuesta. Es contenido revisado por Agora; el modelo no suma recomendaciones propias.
+- **Control en código:** cada número de la respuesta tiene que aparecer en los datos que recibió. Si no, la respuesta se descarta y se muestra el texto fijo de la pantalla.
+
+**Para encenderlo:** un banco de preguntas reales y anonimizadas, con su respuesta esperada, y la regla de cero cifras que no estén en los datos y derivación correcta de lo que está fuera de alcance. Antes hay que conocer el contrato del asistente actual. Hasta entonces, las pantallas ya responden sin IA las tres preguntas de Inés.
+
+### 3. Buscar en el catálogo con sus palabras
+
+**Qué resuelve:** en «Prefiero otra», Inés puede querer escribir «algo para la congeladora» o «que el horno gaste menos», y las palabras cambian por país («heladera», «conservadora», «refri»).
+
+**Cómo:** búsqueda híbrida: palabras clave con sinónimos y, si hace falta, *embeddings* del catálogo. Con 40 o más ecoinnovaciones no hace falta una base vectorial aparte: los vectores caben en memoria o en el mismo MongoDB (Atlas Vector Search). Los resultados pasan siempre por los mismos filtros de elegibilidad y no cambian el primer paso recomendado.
+
+**Para encenderla:** consultas reales con la ecoinnovación correcta; los *embeddings* entran solo si mejoran sobre las palabras clave.
+
+### 4. Un modelo que ordena, cuando haya datos
+
+Las reglas de hoy son la línea de base. Con cientos de planes con resultado (hoy hay 29 elecciones y 12 mediciones), un modelo simple y explicable, por ejemplo una regresión logística para la probabilidad de completar, se compara fuera de línea contra las reglas. Entra solo si las mejora y si sus factores se pueden mostrar como motivos, como pide la POL-IT-003. Las recomendaciones ya se guardan con sus entradas, junto con los eventos del embudo, para poder entrenarlo.
+
+### 5. Otro uso posible
+
+**Borrador del informe para aliados:** un texto que resume el trimestre a partir de los agregados ya calculados, con las cifras insertadas por código, que una persona revisa antes de enviarlo. El modelo nunca ve datos de un negocio.
+
+### Orden sugerido
+
+1. El PDF digital sin IA: es lo que más carga le saca a la usuaria y no envía la factura a un proveedor de IA.
+2. La foto con visión, después del eval y la DPIA.
+3. Las respuestas sobre el ahorro, cuando se conozca el asistente actual.
+4. La búsqueda con sus palabras.
+5. El modelo que ordena, cuando haya datos.
+
+**Lo que no se hace con IA, ni siquiera después:** elegir la recomendación, calcular el ahorro, redactar las cifras que ve la usuaria o mostrar datos de otros negocios.

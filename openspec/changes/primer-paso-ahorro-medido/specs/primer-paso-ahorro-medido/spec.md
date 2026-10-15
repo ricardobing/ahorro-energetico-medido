@@ -420,7 +420,7 @@ En el método interanual, el sistema SHALL ajustar la referencia por la tendenci
 - **THEN** el resultado lleva la marca «sin ajuste por crecimiento»
 
 ### Requirement: Temporada alta del rubro
-En el método de periodos cercanos, el sistema SHALL NOT comparar periodos posteriores que se superpongan 7 días o más con la temporada alta configurada para el rubro (panaderías: noviembre y diciembre) si la línea de base no la incluye. En ese caso SHALL informar «todavía no podemos saberlo» con motivo `HIGH_SEASON`.
+En el método de periodos cercanos, el sistema SHALL NOT usar las facturas que se superpongan 7 días o más con la temporada alta configurada para el rubro (panaderías: noviembre y diciembre): no entran en la línea de base ni se comparan después del cambio, porque las demás facturas del método son de meses normales. Si después del cambio solo hay facturas de temporada alta, SHALL informar «todavía no podemos saberlo» con motivo `HIGH_SEASON`.
 
 #### Scenario: Diciembre de una panadería (sintético)
 - **WHEN** una panadería implementa en octubre, no tiene datos del año anterior y su única factura posterior es de noviembre

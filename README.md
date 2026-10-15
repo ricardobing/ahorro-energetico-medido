@@ -12,6 +12,15 @@
 
 ![Tres pantallas del celular: el primer paso recomendado, el ahorro medido y cómo se midió](docs/img/portada.png)
 
+## Si tienes 10 minutos
+
+| Minutos | Qué mirar | Dónde |
+|---:|---|---|
+| 3 | **Cómo se mide el ahorro**, en requisitos con sus números exactos, desde «Comparación en kWh por día» hasta «Periodos atípicos» | [spec.md](openspec/changes/primer-paso-ahorro-medido/specs/primer-paso-ahorro-medido/spec.md#requirement-comparación-en-kwh-por-día) |
+| 3 | **La misma medición en código:** una función pura con los tres resultados y la factura del cambio excluida | [measure.ts](packages/domain/src/measurement/measure.ts) y [sus tests](packages/domain/test/measurement.test.ts) |
+| 2 | **Las decisiones**, con lo que se descartó y cuánta IA hace falta | [design.md](openspec/changes/primer-paso-ahorro-medido/design.md#decisions) |
+| 2 | **Lo que ve Inés** en el celular | [El recorrido, pantalla por pantalla](#el-recorrido-pantalla-por-pantalla) |
+
 ## Contenido
 
 - [El problema que resuelve](#el-problema-que-resuelve)
@@ -24,6 +33,7 @@
 - [Cómo se prueba](#cómo-se-prueba)
 - [La especificación (OpenSpec)](#la-especificación-openspec)
 - [Qué es real, simulado y sintético](#qué-es-real-simulado-y-sintético)
+- [Lo esencial y lo que se puede recortar](#lo-esencial-y-lo-que-se-puede-recortar)
 - [Límites y próximos pasos](#límites-y-próximos-pasos)
 - [Cómo se construyó](#cómo-se-construyó)
 
@@ -165,11 +175,11 @@ Con las facturas de Inés y las de la simulación:
 - **Agosto y septiembre:** 55,2 kWh por día, −6,2 %. La franja es ±4,7 %, así que el resultado es **medido**: 3,66 kWh por día menos, unos 110 kWh por mes, **S/ 92,11 a la tarifa de hoy**, que se muestran como «unos S/ 90, entre S/ 20 y S/ 160».
 - **Aparte:** la tarifa subió 7,7 % desde enero, y eso no depende de ella.
 
-En una panadería, la temporada alta es la campaña de fin de año. Si se compara contra meses cercanos y el periodo cae en noviembre o diciembre, el resultado es «todavía no» y explica por qué.
+En una panadería, la temporada alta es la campaña de fin de año. Cuando se compara contra meses cercanos, las facturas de noviembre y diciembre no se mezclan con las de meses normales; si después del cambio solo hay de esas, el resultado es «todavía no» y explica por qué.
 
 ### Cuánta IA hace falta
 
-Con 29 elecciones y 12 resultados medidos no hay nada que entrenar. Cada técnica se usa donde corresponde a los datos que hay:
+El reto no pide implementar IA: pide decidir cuánta hace falta y para qué. Con 29 elecciones y 12 resultados medidos no hay nada que entrenar, así que lo que decide y lo que mide se resuelve sin IA. Cada técnica se usa donde corresponde a los datos que hay:
 
 | Técnica | Para qué sí | Para qué no |
 |---|---|---|
@@ -178,7 +188,18 @@ Con 29 elecciones y 12 resultados medidos no hay nada que entrenar. Cada técnic
 | Modelo de lenguaje | **Perfil asistido**: interpretar la descripción libre y elegir de listas cerradas, con montos verificados contra el texto | Elegir la recomendación, calcular el ahorro o leer fotos de facturas sin poder verificarlo |
 | Modelo que aprende a ordenar | Nada, por ahora | No hay datos para entrenarlo ni evaluarlo; se guardan los registros para el futuro |
 
-La IA interpreta, el código calcula y la usuaria confirma. El perfil asistido usa el SDK oficial de OpenAI con URL base configurable y **viene apagado**: sin clave, sugiere por palabras clave. La tabla completa está en [design.md › Cuánta IA hace falta](openspec/changes/primer-paso-ahorro-medido/design.md#cuánta-ia-hace-falta).
+La IA interpreta, el código calcula y la usuaria confirma. El perfil asistido usa el SDK oficial de OpenAI con URL base configurable y **viene apagado**: sin clave, sugiere por palabras clave. Se enciende solo si su eval le gana a las palabras clave y si pasa la evaluación de impacto que pide la [política de IA de Agora](https://docs.google.com/document/d/1X2oA3M6yCOnjSBFxJoP7cDsV7mdDlNh2l7J1FfKeuoc/preview). La tabla completa está en [design.md › Cuánta IA hace falta](openspec/changes/primer-paso-ahorro-medido/design.md#cuánta-ia-hace-falta).
+
+**Lo que se podría sumar con IA.** Está diseñado y no implementado. Cada uso tiene su eval, su evaluación de impacto y un camino sin IA:
+
+| Uso | Qué resuelve | Cómo | Cuándo encenderlo |
+|---|---|---|---|
+| **Leer la factura** | Que Inés no tenga que escribir los números | PDF digital: se lee sin IA, con una plantilla por distribuidora. Foto: un modelo con visión y salida estructurada. En los dos casos, el código valida y ella confirma cada número | Con 95 % de aciertos exactos en kWh y fechas sobre recibos reales consentidos |
+| **Responder sus preguntas** | «¿Por qué mi factura no bajó si ahorré?», «¿cómo cambio los burletes?» | El asistente de consultas que Kamai ya tiene, con la medición ya calculada y búsqueda en las guías del catálogo (RAG). Explica y no calcula: cada número de la respuesta tiene que estar en sus datos | Con un banco de preguntas reales y cero cifras que no estén en sus datos |
+| **Buscar con sus palabras** | Escribir «algo para la congeladora» en «Prefiero otra» | Palabras clave con sinónimos y, si hace falta, *embeddings* del catálogo, siempre con los mismos filtros de elegibilidad | Si mejora sobre las palabras clave con consultas reales |
+| **Ordenar con un modelo** | Mejorar el orden de la recomendación | Un modelo simple y explicable, comparado contra las reglas de hoy | Cuando haya cientos de planes con resultado |
+
+El detalle y el orden sugerido están en [design.md › Evolución](openspec/changes/primer-paso-ahorro-medido/design.md#evolución-qué-más-se-puede-hacer-con-ia).
 
 ### Qué pasa cuando algo falla
 
@@ -306,7 +327,7 @@ flowchart LR
 - **Todo lo que decide está en `packages/domain`:** TypeScript puro, sin dependencias, determinista. La API y la web solo lo usan, así que se puede llevar tal cual a otra API.
 - **Facturas en una transacción:** el chequeo de superposición, la escritura y su versión van juntos. Dos envíos simultáneos del mismo periodo (reintentos con mala conexión) no pueden guardar dos facturas.
 - **Mediciones versionadas:** cada resultado guarda la huella SHA-256 de sus datos. Con los mismos datos no se crea una versión nueva, y cualquier cifra mostrada se puede reproducir.
-- **Sesión con adaptador:** en Kamai, el token que ya existe; en local, «Ver como». Cada negocio ve solo lo suyo, y otro negocio recibe 404.
+- **Sesión:** en local, «Ver como», que solo funciona en modo demostración. En Kamai, el mismo middleware verificaría el token de Firebase que ya existe; esa parte no está implementada porque necesita su configuración real. Cada negocio ve solo lo suyo, y otro negocio recibe 404.
 
 | Parte | Tecnologías |
 |---|---|
@@ -357,7 +378,7 @@ La especificación es el entregable principal, y se puede construir y probar tal
 | Archivo | Qué tiene |
 |---|---|
 | [proposal.md](openspec/changes/primer-paso-ahorro-medido/proposal.md) | El problema, la meta con sus indicadores, el alcance, **dónde se profundizó y por qué**, y lo que queda fuera |
-| [design.md](openspec/changes/primer-paso-ahorro-medido/design.md) | 24 decisiones con sus alternativas descartadas; cuánta IA hace falta; 3 diagramas; fallas; modelo de datos; contratos de la API; parámetros; dirección visual; evolución |
+| [design.md](openspec/changes/primer-paso-ahorro-medido/design.md) | 24 decisiones con sus alternativas descartadas; cuánta IA hace falta; 3 diagramas; fallas; modelo de datos; contratos de la API; parámetros; dirección visual; qué más se puede hacer con IA |
 | [specs/…/spec.md](openspec/changes/primer-paso-ahorro-medido/specs/primer-paso-ahorro-medido/spec.md) | 67 requisitos con 122 escenarios WHEN / THEN |
 | [tasks.md](openspec/changes/primer-paso-ahorro-medido/tasks.md) | 90 tareas en orden, cada una con su verificación |
 
@@ -371,10 +392,20 @@ Validación: `npx @fission-ai/openspec@1.14.1 validate primer-paso-ahorro-medido
 | **Simulado** | Los servicios existentes de Kamai (correo, ideas con IA, tipo de cambio). Responden con los contratos del anexo y se pueden hacer fallar |
 | **Sintético y rotulado** | Las facturas de julio a septiembre de la simulación, las otras 22 panaderías (reproducen la tabla del caso, verificado por un test), el negocio nuevo, el catálogo ampliado, los rangos de inversión por país, los tipos de cambio y el factor de CO₂e |
 
+## Lo esencial y lo que se puede recortar
+
+El reto pedía una especificación y una pieza construida con profundidad, y aquí hay bastante más. Lo esencial es:
+
+1. [la especificación](#la-especificación-openspec);
+2. la medición y la recomendación en `packages/domain`, con sus tests sobre los datos del caso;
+3. la pantalla «Tu ahorro», con sus tres estados.
+
+El resto se puede sacar sin tocar esas piezas, empezando por lo que más se aleja de la pregunta de Inés: el informe para aliados, los correos y recordatorios, el perfil asistido, la app instalable con borrador sin conexión, las facturas de agua, la conversión a USD y el CO₂e, el panel de demostración y las demás pantallas.
+
 ## Límites y próximos pasos
 
 - **Temporada en negocios nuevos.** Sin un año de facturas se compara contra los meses cercanos y se rotula así. El paso siguiente es un grupo de comparación: negocios parecidos que no cambiaron nada en los mismos meses.
-- **Lectura de la foto de factura con IA.** Está diseñada como evolución, pero no se implementó porque sin facturas reales no se puede verificar. Se haría con un eval sobre facturas reales y con la evaluación de impacto aprobada.
+- **Más IA, cuando se pueda medir.** Leer la factura (PDF o foto), responder preguntas sobre el ahorro y buscar en el catálogo con sus palabras están diseñados con su condición para encenderse (ver [Cuánta IA hace falta](#cuánta-ia-hace-falta)). No se implementaron porque sin datos reales no se pueden verificar.
 - **Parámetros por calibrar con Agora:** rangos de inversión por país, factor de CO₂e por país y los pesos de la contracción.
 - **Un modelo que ordena**, cuando haya resultados suficientes. Se guardan las recomendaciones con sus entradas y los eventos del embudo para entrenarlo y compararlo contra las reglas.
 - **Fuera de este prototipo:** integración real con los servicios de Kamai, WhatsApp, autenticación propia y despliegue.

@@ -58,14 +58,17 @@ Con menos profundidad, a propósito:
 - **Integraciones:** simuladas con los contratos del anexo y sus modos de falla.
 - **Temporada en negocios nuevos:** se compara contra los meses cercanos y se rotula así. El grupo de comparación queda como evolución.
 
-**La interfaz salió más completa de lo que el reto pedía.** El reto no esperaba una interfaz pulida, y el razonamiento no está ahí: se construyó con el sistema visual de Kamai para probar la medición y la recomendación como las vería Inés en el celular, con datos móviles.
+## What We Deliver Beyond the Brief
 
-**Si hay que recortar.** Lo esencial, y lo que alcanza para responder el reto, es:
-1. esta especificación;
-2. la medición y la recomendación en el paquete de dominio, con sus tests sobre los datos del anexo;
-3. una pantalla, «Tu ahorro», con sus tres estados.
+Además de la especificación, entregamos el módulo completo y casi listo para producción. Es una decisión: así se demuestra que esta especificación se puede construir y probar tal cual, y es la forma de trabajo que se usaría en Kamai (la spec primero, los tests antes que el código y cada entrega verificable de punta a punta). Aporta lo que una pieza suelta no muestra:
+- **La spec se cumple a sí misma:** la app salió de ella, y cada escenario tiene un test con su nombre.
+- **Las fallas del punto 4 se ven en vivo:** IA sin cupo, correo caído, foto oscura o una factura corregida, desde el panel de demostración.
+- **Inés en su celular:** las pantallas usan el sistema visual de Kamai y cuidan los datos móviles, así que el resultado se prueba como lo vería ella.
+- **Se lleva a Kamai sin reescribir:** la lógica vive en un paquete puro, el resto son adaptadores finos, y el plan de migración la enciende por superficie, con vuelta atrás.
 
-El resto se puede sacar sin tocar esas piezas, empezando por lo que más se aleja de la pregunta de Inés: el informe para aliados, la bandeja de correos y los recordatorios, el perfil asistido, la app instalable con borrador sin conexión, las facturas de agua, la conversión a USD y el CO₂e, el panel de demostración y las demás pantallas.
+Lo que falta para producción depende de Kamai: conectar su autenticación y sus servicios reales, desplegar y aprobar la evaluación de impacto de la IA.
+
+**Construido por capas.** El núcleo es esta especificación, la medición y la recomendación en el paquete de dominio con sus tests sobre los datos del anexo, y la pantalla «Tu ahorro». Lo demás se suma encima y se puede sacar sin tocar el núcleo: el informe para aliados, los correos y recordatorios, el perfil asistido, la app instalable con borrador sin conexión, las facturas de agua, la conversión a USD y el CO₂e, y el panel de demostración. Así se puede salir a producción por partes, empezando por el núcleo.
 
 ## Out of Scope
 

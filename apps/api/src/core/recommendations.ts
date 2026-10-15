@@ -2,11 +2,8 @@ import {
   daysWithoutChange,
   explainRecommendation,
   isStalled,
-  normalizeBill,
+  ownVariationPct,
   recommend,
-  relativeSigmaPct,
-  shiftYears,
-  compareDates,
   RULESET_VERSION,
   type PeerStat,
   type RankedEco,
@@ -68,12 +65,14 @@ export async function currentPeerStats(
   };
 }
 
-/** Variación propia de los últimos 12 meses (o `null` con menos de 4 facturas: se usa la de por defecto). */
-function ownSigma(bills: Awaited<ReturnType<typeof loadElectricityBills>>, today: string): number | null {
-  const since = shiftYears(today, -1);
-  const recent = bills.filter((b) => compareDates(b.billingStartDate, since) >= 0);
-  if (recent.length < 4) return null;
-  return Math.round(relativeSigmaPct(recent.map((b) => normalizeBill(b).kwhPerDay)) * 10_000) / 10_000;
+/**
+ * Variación propia del negocio, sin el salto de los cambios que ya hizo (o `null` si no alcanza: se usa la
+ * de por defecto). El dominio elige el tramo de facturas; aquí solo se redondea para la huella.
+ */
+function ownSigma(bills: Awaited<ReturnType<typeof loadElectricityBills>>, plans: PlanRecord[]): number | null {
+  const changes = plans.flatMap((p) => (p.implementedAt ? [p.implementedAt] : []));
+  const pct = ownVariationPct(bills, changes);
+  return pct === null ? null : Math.round(pct * 10_000) / 10_000;
 }
 
 interface Snapshot {
@@ -97,7 +96,7 @@ async function snapshot(deps: AppDeps, businessId: string): Promise<Snapshot> {
   const inputs = {
     ...businessForRecommendation(business),
     plans: plans.map((p) => ({ ecoId: p.ecoCardOrigin, status: p.status })),
-    sigmaPct: ownSigma(bills, deps.clock.today()),
+    sigmaPct: ownSigma(bills, plans),
     billsCount: bills.length,
     peerStatsVersion: peerStats.version,
     catalog: catalog.map((e) => e.id),

@@ -5,10 +5,10 @@
 [![CI](https://github.com/ricardobing/ahorro-energetico-medido/actions/workflows/ci.yml/badge.svg)](https://github.com/ricardobing/ahorro-energetico-medido/actions/workflows/ci.yml)
 ![Node 22 o más](https://img.shields.io/badge/node-%E2%89%A5%2022-3c873a)
 ![TypeScript estricto](https://img.shields.io/badge/TypeScript-estricto-3178c6)
-![274 tests + 10 e2e](https://img.shields.io/badge/tests-274%20%2B%2010%20e2e-44841a)
-![122 de 122 escenarios con test](https://img.shields.io/badge/escenarios%20con%20test-122%2F122-143938)
+![279 tests + 10 e2e](https://img.shields.io/badge/tests-279%20%2B%2010%20e2e-44841a)
+![123 de 123 escenarios con test](https://img.shields.io/badge/escenarios%20con%20test-123%2F123-143938)
 
-> Prototipo hecho para el reto técnico de **Agora Partnerships** sobre su plataforma **Kamai**. No es un producto oficial: la marca aparece como texto para ubicar el prototipo en el producto real. Todos los nombres, montos y datos son ficticios.
+> Hecho para el reto técnico de **Agora Partnerships** sobre su plataforma **Kamai**: la especificación que pide el reto y, además, el módulo completo, casi listo para producción. No es un producto oficial: la marca aparece como texto para ubicarlo en el producto real. Todos los nombres, montos y datos son ficticios.
 
 ![Tres pantallas del celular: el primer paso recomendado, el ahorro medido y cómo se midió](docs/img/portada.png)
 
@@ -25,6 +25,7 @@
 
 - [El problema que resuelve](#el-problema-que-resuelve)
 - [Qué hace](#qué-hace)
+- [Una entrega completa, por capas](#una-entrega-completa-por-capas)
 - [El recorrido, pantalla por pantalla](#el-recorrido-pantalla-por-pantalla)
 - [Cómo funciona por dentro](#cómo-funciona-por-dentro)
 - [Instalación y uso](#instalación-y-uso)
@@ -33,7 +34,6 @@
 - [Cómo se prueba](#cómo-se-prueba)
 - [La especificación (OpenSpec)](#la-especificación-openspec)
 - [Qué es real, simulado y sintético](#qué-es-real-simulado-y-sintético)
-- [Lo esencial y lo que se puede recortar](#lo-esencial-y-lo-que-se-puede-recortar)
 - [Límites y próximos pasos](#límites-y-próximos-pasos)
 - [Cómo se construyó](#cómo-se-construyó)
 
@@ -90,6 +90,19 @@ Para el programa, el problema es el mismo a escala. Hoy, de cada 10 negocios que
 <p align="center">
   <img src="docs/img/recorrido.gif" width="300" alt="Animación: del primer paso recomendado al ahorro medido en cinco pantallas">
 </p>
+
+## Una entrega completa, por capas
+
+El reto pide la especificación y una pieza construida. Esta entrega trae además el **módulo completo, casi listo para producción**, porque es la mejor prueba de que la especificación funciona y porque es la forma de trabajo que llevaría a Kamai: la spec primero, los tests antes que el código y cada entrega verificable de punta a punta.
+
+- **La spec se cumple a sí misma:** la app salió de ella, y cada uno de sus 123 escenarios tiene un test con su nombre.
+- **Las fallas se ven en vivo:** IA sin cupo, correo caído, foto oscura o una factura corregida se prueban desde el panel de demostración.
+- **Se prueba como la vería Inés:** en el celular, con el sistema visual de Kamai y cuidando los datos móviles.
+- **Se lleva a Kamai sin reescribir:** la lógica vive en un paquete puro, el resto son adaptadores finos, y el plan de migración la enciende por superficie, con vuelta atrás.
+
+**Por capas.** El núcleo es la [especificación](#la-especificación-openspec), la medición y la recomendación en `packages/domain` con sus tests, y la pantalla «Tu ahorro». Lo demás se suma encima y se puede sacar sin tocar el núcleo: el informe para aliados, los correos y recordatorios, el perfil asistido, la app instalable con borrador sin conexión, las facturas de agua, la conversión a USD y el CO₂e, y el panel de demostración. Así se puede salir a producción por partes, empezando por el núcleo.
+
+Lo que falta para producción depende de Kamai: conectar su autenticación y sus servicios reales, desplegar y aprobar la evaluación de impacto de la IA.
 
 ## El recorrido, pantalla por pantalla
 
@@ -266,7 +279,7 @@ En **Reportes → Demostración**:
 
 | Variable | Para qué |
 |---|---|
-| `DEMO_MODE` | Habilita «Ver como», el reloj de la demostración y el panel. **La API se niega a arrancar con `DEMO_MODE=true` y `NODE_ENV=production`.** |
+| `DEMO_MODE` | Habilita «Ver como», el reloj de la demostración y el panel. **Solo arranca con `NODE_ENV=development` o `test`**: en cualquier otro entorno la API se niega a arrancar, y `npm start` no lee `.env.example`. |
 | `MONGODB_URI` | Usa un MongoDB propio (con conjunto de réplicas) en lugar del embebido |
 | `AI_PROFILE_ASSIST_ENABLED`, `AI_API_KEY`, `AI_BASE_URL`, `AI_MODEL_TEXT` | Enciende el perfil asistido con IA. Sin clave queda apagado y sugiere por palabras clave. En desarrollo se probó con OpenRouter y un modelo económico, siempre con datos ficticios |
 | `MESSAGING_SERVICE_URL`, `SUBTASKS_SERVICE_URL`, `CURRENCY_SERVICE_URL` | Dónde están los servicios (por defecto, las simulaciones) |
@@ -362,13 +375,13 @@ Donde ya corre Kamai: la API y los workers en Cloud Run, MongoDB Atlas, las foto
 
 | Suite | Tests | Qué cubre |
 |---|---:|---|
-| Dominio | 129 | Fechas, dinero, medición (incluidas pruebas de propiedades con 1.000 casos: el orden de las facturas no cambia el resultado, ningún día se cuenta dos veces, la franja nunca es negativa), recomendación, privacidad y perfil. Cobertura de más del 98 % |
-| API | 97 | Contra MongoDB real (en memoria, modo réplica): contratos, errores, aislamiento por negocio, transacciones, recálculo, correos con reintentos y rebotes, informe para aliados, adaptadores HTTP contra las simulaciones |
+| Dominio | 132 | Fechas, dinero, medición (incluidas pruebas de propiedades con 1.000 casos: el orden de las facturas no cambia el resultado, ningún día se cuenta dos veces, la franja nunca es negativa), recomendación, privacidad y perfil. Cobertura de más del 98 % |
+| API | 99 | Contra MongoDB real (en memoria, modo réplica): contratos, errores, aislamiento por negocio, transacciones, recálculo, correos con reintentos y rebotes, informe para aliados, adaptadores HTTP contra las simulaciones |
 | Web | 33 | Componentes y pantallas: los tres estados del ahorro, errores del servidor, borrador sin conexión, perfil asistido, informe, navegación y contraste AA de cada par de colores |
 | Simulaciones y datos | 15 | Contratos de los servicios simulados, datos del caso y trazabilidad |
 | **e2e (Playwright)** | **10** | Recorrido completo en celular, pantalla de 360 px, controles de 44 px o más, control de accesibilidad con axe en 8 pantallas, foto de 4 MB que viaja en menos de 250 KB, corte de conexión, escritorio e informe para aliados |
 
-- **Cada escenario de la spec tiene su test.** `npm run trace` lee los 122 escenarios de `spec.md`, los busca en los nombres de los tests y falla si alguno no tiene: [docs/trazabilidad.md](docs/trazabilidad.md).
+- **Cada escenario de la spec tiene su test.** `npm run trace` lee los 123 escenarios de `spec.md`, los busca en los nombres de los tests y falla si alguno no tiene: [docs/trazabilidad.md](docs/trazabilidad.md).
 - **Los números de los escenarios** (2,08 · 58,90 · ±5,94 % · S/ 92,11…) se calcularon con un script antes de escribirlos, para que la spec y los tests digan lo mismo.
 
 ## La especificación (OpenSpec)
@@ -379,8 +392,8 @@ La especificación es el entregable principal, y se puede construir y probar tal
 |---|---|
 | [proposal.md](openspec/changes/primer-paso-ahorro-medido/proposal.md) | El problema, la meta con sus indicadores, el alcance, **dónde se profundizó y por qué**, y lo que queda fuera |
 | [design.md](openspec/changes/primer-paso-ahorro-medido/design.md) | 24 decisiones con sus alternativas descartadas; cuánta IA hace falta; 3 diagramas; fallas; modelo de datos; contratos de la API; parámetros; dirección visual; qué más se puede hacer con IA |
-| [specs/…/spec.md](openspec/changes/primer-paso-ahorro-medido/specs/primer-paso-ahorro-medido/spec.md) | 67 requisitos con 122 escenarios WHEN / THEN |
-| [tasks.md](openspec/changes/primer-paso-ahorro-medido/tasks.md) | 90 tareas en orden, cada una con su verificación |
+| [specs/…/spec.md](openspec/changes/primer-paso-ahorro-medido/specs/primer-paso-ahorro-medido/spec.md) | 67 requisitos con 123 escenarios WHEN / THEN |
+| [tasks.md](openspec/changes/primer-paso-ahorro-medido/tasks.md) | 93 tareas en orden, cada una con su verificación |
 
 Validación: `npx @fission-ai/openspec@1.14.1 validate primer-paso-ahorro-medido --strict`.
 
@@ -392,23 +405,13 @@ Validación: `npx @fission-ai/openspec@1.14.1 validate primer-paso-ahorro-medido
 | **Simulado** | Los servicios existentes de Kamai (correo, ideas con IA, tipo de cambio). Responden con los contratos del anexo y se pueden hacer fallar |
 | **Sintético y rotulado** | Las facturas de julio a septiembre de la simulación, las otras 22 panaderías (reproducen la tabla del caso, verificado por un test), el negocio nuevo, el catálogo ampliado, los rangos de inversión por país, los tipos de cambio y el factor de CO₂e |
 
-## Lo esencial y lo que se puede recortar
-
-El reto pedía una especificación y una pieza construida con profundidad, y aquí hay bastante más. Lo esencial es:
-
-1. [la especificación](#la-especificación-openspec);
-2. la medición y la recomendación en `packages/domain`, con sus tests sobre los datos del caso;
-3. la pantalla «Tu ahorro», con sus tres estados.
-
-El resto se puede sacar sin tocar esas piezas, empezando por lo que más se aleja de la pregunta de Inés: el informe para aliados, los correos y recordatorios, el perfil asistido, la app instalable con borrador sin conexión, las facturas de agua, la conversión a USD y el CO₂e, el panel de demostración y las demás pantallas.
-
 ## Límites y próximos pasos
 
 - **Temporada en negocios nuevos.** Sin un año de facturas se compara contra los meses cercanos y se rotula así. El paso siguiente es un grupo de comparación: negocios parecidos que no cambiaron nada en los mismos meses.
 - **Más IA, cuando se pueda medir.** Leer la factura (PDF o foto), responder preguntas sobre el ahorro y buscar en el catálogo con sus palabras están diseñados con su condición para encenderse (ver [Cuánta IA hace falta](#cuánta-ia-hace-falta)). No se implementaron porque sin datos reales no se pueden verificar.
 - **Parámetros por calibrar con Agora:** rangos de inversión por país, factor de CO₂e por país y los pesos de la contracción.
 - **Un modelo que ordena**, cuando haya resultados suficientes. Se guardan las recomendaciones con sus entradas y los eventos del embudo para entrenarlo y compararlo contra las reglas.
-- **Fuera de este prototipo:** integración real con los servicios de Kamai, WhatsApp, autenticación propia y despliegue.
+- **Fuera de esta entrega:** integración real con los servicios de Kamai, WhatsApp, autenticación propia y despliegue.
 
 ## Cómo se construyó
 

@@ -52,15 +52,20 @@ function positiveInt(value: string | undefined, fallback: number, name: string):
   return n;
 }
 
+/** Entornos donde se permite el modo demostración, porque «Ver como» entra sin autenticación. */
+const DEMO_ENVIRONMENTS = new Set(['development', 'test']);
+
 /**
- * Lee la configuración de las variables de entorno. Se niega a arrancar con `DEMO_MODE=true` y
- * `NODE_ENV=production` (decisión D20).
+ * Lee la configuración de las variables de entorno. El modo demostración arranca solo con
+ * `NODE_ENV=development` o `test` (decisión D20): en cualquier otro entorno, incluido uno sin
+ * `NODE_ENV`, la API se niega a arrancar. Así un despliegue descuidado no queda con «Ver como» abierto.
  */
 export function loadConfig(env: NodeJS.ProcessEnv): AppConfig {
   const demoMode = truthy(env.DEMO_MODE);
-  if (demoMode && env.NODE_ENV === 'production')
+  if (demoMode && !DEMO_ENVIRONMENTS.has(env.NODE_ENV ?? ''))
     throw new Error(
-      'DEMO_MODE=true no se permite con NODE_ENV=production: habilitaría «Ver como» sin autenticación.',
+      `DEMO_MODE=true solo se permite con NODE_ENV=development o test (vino «${env.NODE_ENV ?? 'sin definir'}»): ` +
+        'habilitaría «Ver como» sin autenticación.',
     );
   const hasKey = Boolean(env.AI_API_KEY && env.AI_API_KEY.trim());
   return {

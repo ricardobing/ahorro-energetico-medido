@@ -5,13 +5,24 @@ import {
   explainRecommendation,
   levelFit,
   noiseBandPct,
+  normalizeBill,
+  ownVariationPct,
   recommend,
+  relativeSigmaPct,
   type BusinessForRecommendation,
   type CatalogEco,
   type PeerStat,
   type RecommendationInput,
 } from '../src/index.js';
-import { CATALOG_CASE, CATALOG_SYNTHETIC, INES, NEW_BUSINESS, PEER_STATS_CASE } from '@ppam/fixtures';
+import {
+  CATALOG_CASE,
+  CATALOG_SYNTHETIC,
+  INES,
+  INES_IMPLEMENTED_AT,
+  NEW_BUSINESS,
+  PEER_STATS_CASE,
+} from '@ppam/fixtures';
+import { billWithDaily, inesBills, simulatedBills } from './helpers.js';
 
 const strip = <T extends { fuente?: unknown; sinteticos?: unknown }>({
   fuente: _f,
@@ -147,6 +158,33 @@ describe('Orden por probabilidad de completar y efecto contraído', () => {
     expect(led?.factors.detectable).toBe(false);
     expect(led?.factors.budgetFit).toBe('PARTIAL');
     expect(led?.score).toBeCloseTo(led!.factors.pComplete * led!.factors.effectPct * 0.5 * 0.8, 10);
+  });
+
+  it('Variación propia sin el salto de un cambio', () => {
+    const bills = [...inesBills(), ...simulatedBills(['jul', 'ago', 'sep'])];
+    expect(ownVariationPct(bills, [INES_IMPLEMENTED_AT])).toBeCloseTo(2.57, 2);
+    // Con todas las facturas del año, el ahorro real se habría leído como variación normal.
+    expect(relativeSigmaPct(bills.map((b) => normalizeBill(b).kwhPerDay))).toBeCloseTo(4.24, 2);
+  });
+
+  it('usa el tramo posterior al cambio cuando ya tiene cuatro facturas', () => {
+    const before = ['01', '02', '03', '04', '05', '06'].map((m, i) =>
+      billWithDaily(`b${m}`, `2026-${m}`, [60, 61, 59, 60, 62, 58][i]!),
+    );
+    const after = ['08', '09', '10', '11'].map((m, i) =>
+      billWithDaily(`a${m}`, `2026-${m}`, [50, 51, 49, 50][i]!),
+    );
+    const withChange = billWithDaily('b07', '2026-07', 57);
+    expect(ownVariationPct([...after, withChange, ...before], ['2026-07-08'])).toBeCloseTo(
+      relativeSigmaPct([50, 51, 49, 50]),
+      10,
+    );
+  });
+
+  it('sin un tramo de cuatro facturas no hay variación propia', () => {
+    const three = ['01', '02', '03'].map((m) => billWithDaily(`c${m}`, `2026-${m}`, 60));
+    expect(ownVariationPct(three, [])).toBeNull();
+    expect(ownVariationPct([...three, billWithDaily('c04', '2026-04', 60)], ['2026-03-15'])).toBeNull();
   });
 
   it('Empate', () => {

@@ -48,6 +48,33 @@ export function relativeSigmaPct(
   return (Math.sqrt(variance) / mean) * 100;
 }
 
+/**
+ * Variación propia (%) para la recomendación: la del tramo más reciente de facturas sin un cambio de por
+ * medio, con al menos 4 facturas y hasta 12 meses. La factura que contiene un día de cambio no cuenta,
+ * porque mezcla el antes y el después; un salto de consumo por un ahorro real no es variación normal.
+ * `null` si ningún tramo alcanza: se usa la variación por defecto.
+ */
+export function ownVariationPct(bills: Bill[], changeDates: IsoDate[]): number | null {
+  const segments = new Map<number, Bill[]>();
+  for (const bill of [...bills].sort(byPeriod)) {
+    const containsChange = changeDates.some(
+      (d) => compareDates(d, bill.billingStartDate) >= 0 && compareDates(d, bill.billingEndDate) <= 0,
+    );
+    if (containsChange) continue;
+    // El tramo de una factura es la cantidad de cambios anteriores a su inicio.
+    const segment = changeDates.filter((d) => compareDates(d, bill.billingStartDate) < 0).length;
+    segments.set(segment, [...(segments.get(segment) ?? []), bill]);
+  }
+  for (const segment of [...segments.keys()].sort((a, b) => b - a)) {
+    const list = segments.get(segment)!;
+    const since = shiftYears(list[list.length - 1]!.billingEndDate, -1);
+    const recent = list.filter((b) => compareDates(b.billingStartDate, since) >= 0);
+    if (recent.length >= MEASUREMENT_PARAMS.minBillsForOwnSigma)
+      return relativeSigmaPct(recent.map((b) => normalizeBill(b).kwhPerDay));
+  }
+  return null;
+}
+
 /** Banda de ruido en %: 2 × σ × √(1/nAntes + 1/nDespués). */
 export function noiseBandPct(sigmaPct: number, nReference: number, nAfter: number): number {
   return MEASUREMENT_PARAMS.bandMultiplier * Math.abs(sigmaPct) * Math.sqrt(1 / nReference + 1 / nAfter);

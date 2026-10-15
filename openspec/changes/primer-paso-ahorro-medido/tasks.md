@@ -60,7 +60,7 @@
 ## 8. API: base
 
 - [x] 8.1 Crear la app Express 5 con id de pedido, registros pino sin datos personales, helmet, validación zod y manejador de errores uniforme; verificar con «Error inesperado» que no se filtran detalles internos
-- [x] 8.2 Crear el adaptador de autenticación con el modo demo (`X-Demo-User` solo con `DEMO_MODE=true`) y el guardián que impide arrancar en producción con demo; verificar con tests de los dos casos. La verificación del token de Firebase de Kamai es el otro camino del mismo middleware y no se implementa: necesita su configuración real (D20)
+- [x] 8.2 Crear el adaptador de autenticación con el modo demo (`X-Demo-User` solo con `DEMO_MODE=true`) y el guardián que impide arrancar con demo fuera de desarrollo y pruebas; verificar con tests de los dos casos. La verificación del token de Firebase de Kamai es el otro camino del mismo middleware y no se implementa: necesita su configuración real (D20)
 - [x] 8.3 Definir los modelos de Mongoose y los índices del diseño; verificar con un test que los índices únicos existen después de arrancar
 - [x] 8.4 Implementar el aislamiento por negocio y los roles; verificar con «Factura de otro negocio» (404) y «Aliado que pide una factura» (403)
 - [x] 8.5 Implementar la respuesta 503 ante MongoDB caído; verificar con «Guardar una factura sin base de datos» deteniendo el servidor en memoria
@@ -153,6 +153,12 @@
 - [ ] 20.4 Revisión de diseño: correr `impeccable detect` sobre la web, corregir lo mecánico, revisión final con `impeccable-finish-reviewer` y `DESIGN.md` con `impeccable-documenter`; verificar que la revisión termina en `ship`
 - [ ] 20.5 README final como vitrina para quien no corre nada: capturas de celular y de escritorio, un GIF del recorrido de Inés, el badge de CI, enlaces a la spec, al diseño y al video, y el guion de prueba; verificar que todos los enlaces abren desde GitHub sin sesión
 - [x] 20.6 Correr `npm run ci` completo (lint, tipos, tests con cobertura, `trace` sin escenarios pendientes, build, peso y e2e); verificar que todo pasa en verde con un solo comando
+
+## 21. Ajustes de la revisión externa
+
+- [x] 21.1 Calcular la variación propia de la recomendación con el tramo más reciente de facturas sin un cambio de por medio, para que un ahorro real no se lea como variación normal; verificar con «Variación propia sin el salto de un cambio»
+- [x] 21.2 Hacer que el e2e espere a la API además de la web (su salud a través del proxy de la web); verificar que el primer recorrido ya no recibe un 502 al arrancar
+- [x] 21.3 Permitir el modo demostración solo con `NODE_ENV=development` o `test`, y que `npm start` no lea `.env.example`; verificar con los tests de configuración
 
 ## Workflow follow-up
 

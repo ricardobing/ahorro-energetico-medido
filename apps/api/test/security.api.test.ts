@@ -87,6 +87,17 @@ describe('configuración', () => {
     expect(() => loadConfig({ NODE_ENV: 'production', DEMO_MODE: 'true' })).toThrow(/DEMO_MODE/);
   });
 
+  it('sin NODE_ENV tampoco arranca con el modo demostración', () => {
+    expect(() => loadConfig({ DEMO_MODE: 'true' })).toThrow(/sin definir/);
+    expect(() => loadConfig({ NODE_ENV: 'staging', DEMO_MODE: 'true' })).toThrow(/staging/);
+  });
+
+  it('el modo demostración arranca en desarrollo y en pruebas', () => {
+    expect(loadConfig({ NODE_ENV: 'development', DEMO_MODE: 'true' }).demoMode).toBe(true);
+    expect(loadConfig({ NODE_ENV: 'test', DEMO_MODE: 'true' }).demoMode).toBe(true);
+    expect(loadConfig({ NODE_ENV: 'production' }).demoMode).toBe(false);
+  });
+
   it('lee la configuración de IA de las variables de entorno', () => {
     const config = loadConfig({
       AI_PROFILE_ASSIST_ENABLED: 'true',

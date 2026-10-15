@@ -20,7 +20,7 @@
   - uso desde el celular con datos limitados;
   - las políticas de Agora que Kamai enlaza junto a sus términos y condiciones: [POL-IT-003, uso responsable de IA](https://docs.google.com/document/d/1X2oA3M6yCOnjSBFxJoP7cDsV7mdDlNh2l7J1FfKeuoc/preview) (explicabilidad, supervisión humana, evaluación de impacto o DPIA antes de cada uso nuevo de IA) y [POL-IT-001, seguridad y protección de datos](https://docs.google.com/document/d/1lN5ivuxABis3fQc4NWjV3Cyg-3xEOczQFYgnhLwYzr4/preview) (datos agregados o anonimizados para financiadores y aliados, minimización).
 - **Dónde profundizamos:** en la medición del ahorro y en la recomendación; el porqué y lo que queda con menos profundidad están en «Where We Go Deep», en `proposal.md`.
-- **Este repositorio** es un prototipo ejecutable del módulo. Corre solo en local, con los servicios existentes simulados con sus contratos. La lógica de negocio vive en un paquete puro, sin dependencias, para que pueda llevarse tal cual a la API real de Kamai.
+- **Este repositorio** trae, además de la especificación, el módulo completo y casi listo para producción: es la prueba de que este diseño se construye y se verifica tal cual. Corre en local con los servicios existentes simulados con sus contratos, y la lógica de negocio vive en un paquete puro, sin dependencias, para llevarla tal cual a la API real de Kamai. Lo que falta para producción depende de Kamai: su autenticación, sus servicios reales, el despliegue y la DPIA. Está construido por capas: el núcleo (medición, recomendación y «Tu ahorro») funciona solo, y lo demás se suma encima (ver «What We Deliver Beyond the Brief» en `proposal.md`).
 
 ## Goals / Non-Goals
 
@@ -162,9 +162,9 @@ Cada decisión tiene su porqué y las alternativas descartadas. Los parámetros 
 **Por qué:** evita que el 28 de febrero se muestre como 27 en UTC−5, y que `1690 × 0.78` dé `1318.2000000000003`.
 
 ### D20. Autenticación con un adaptador
-**Decisión:** en Kamai, un middleware que verifica el token de Firebase existente y resuelve el negocio. En local, el encabezado `X-Demo-User` (Inés, negocio nuevo, aliado o equipo), activo solo con `DEMO_MODE=true`. La API **se niega a arrancar** con `DEMO_MODE` en producción.
+**Decisión:** en Kamai, un middleware que verifica el token de Firebase existente y resuelve el negocio. En local, el encabezado `X-Demo-User` (Inés, negocio nuevo, aliado o equipo), activo solo con `DEMO_MODE=true`. Como «Ver como» entra sin autenticación, la API **se niega a arrancar** con `DEMO_MODE` fuera de `NODE_ENV=development` o `test`, aunque falte `NODE_ENV`. `npm start` no lee los valores de ejemplo, así que un despliegue no hereda el modo demostración.
 **Por qué:** el reto no pide autenticación, pero cada negocio tiene que ver solo lo suyo y eso tiene que poder probarse.
-**En este prototipo** está implementada solo la rama de demostración (`apps/api/src/http/auth.ts`). Verificar el token de Firebase es el otro camino del mismo middleware y no se implementa, porque necesita la configuración real de Kamai. Todo lo que viene después del middleware (aislamiento por negocio, roles, 401, 403 y 404) sí está probado.
+**En esta entrega** está implementada solo la rama de demostración (`apps/api/src/http/auth.ts`). Verificar el token de Firebase es el otro camino del mismo middleware y no se implementa, porque necesita la configuración real de Kamai. Todo lo que viene después del middleware (aislamiento por negocio, roles, 401, 403 y 404) sí está probado.
 
 ### D21. Estado `paused` en el plan
 **Decisión:** se agrega `paused` a los estados del plan y se crea la colección de eventos `planEvents`. El cambio es compatible: las lecturas que no conocen `paused` lo pueden tratar como `delayed`.

@@ -28,7 +28,8 @@ export default defineConfig({
   webServer: {
     command: 'npm run dev',
     cwd: '..',
-    url: 'http://localhost:5180',
+    // La salud de la API a través del proxy de la web: espera a las dos, y a que la base esté cargada.
+    url: 'http://localhost:5180/api/health',
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
     env: { DEMO_MODE: 'true' },

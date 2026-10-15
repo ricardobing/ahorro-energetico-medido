@@ -1,0 +1,24 @@
+/* Tokens de Kamai para Tailwind v4 (los mismos valores que tokens.ts). */
+@theme {
+  --color-surface-dark: #1f3636;
+  --color-primary: #143938;
+  --color-accent: #d4e63d;
+  --color-ink: #102525;
+  --color-fg: #4b6665;
+  --color-muted: #ececed;
+  --color-muted-fg: #7d8787;
+  --color-border: #d1dbdb;
+  --color-page: #f2f2f2;
+  --color-card: #ffffff;
+  --color-peach: #f5e3c6;
+  --color-peach-border: #ead3ad;
+  --color-mist: #e8f0ef;
+  --color-on-dark-soft: #cbdcda;
+  --color-info: #3da3b8;
+  --color-success: #44841a;
+  --color-warning: #d87c31;
+  --color-destructive: #e00000;
+  --font-sans: 'Mona Sans Variable', 'Manrope Variable', system-ui, sans-serif;
+  --radius-card: 0.75rem;
+  --radius-button: 0.5rem;
+}

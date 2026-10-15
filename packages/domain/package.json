@@ -1,0 +1,10 @@
+{
+  "name": "@ppam/domain",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Lógica pura: recomendación, medición del ahorro, agregados con privacidad, perfil asistido, fechas y dinero.",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

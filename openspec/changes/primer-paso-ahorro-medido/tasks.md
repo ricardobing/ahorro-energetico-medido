@@ -4,12 +4,12 @@
 
 ## 1. Base del repositorio
 
-- [ ] 1.1 Crear el monorepo con workspaces de npm (`apps/api`, `apps/web`, `apps/mocks`, `packages/domain`, `e2e`) y `engines.node >= 22`; verificar que `npm install` termina sin errores desde un clon limpio
-- [ ] 1.2 Configurar TypeScript estricto (referencias de proyecto), ESLint y Prettier compartidos; verificar que `npm run typecheck` y `npm run lint` pasan sobre los paquetes vacíos
-- [ ] 1.3 Configurar Vitest para todos los paquetes, con cobertura (v8) y umbral del 95 % en `packages/domain`; verificar que `npm test` corre y reporta cobertura
+- [x] 1.1 Crear el monorepo con workspaces de npm (`apps/api`, `apps/web`, `apps/mocks`, `packages/domain`, `e2e`) y `engines.node >= 22`; verificar que `npm install` termina sin errores desde un clon limpio
+- [x] 1.2 Configurar TypeScript estricto (referencias de proyecto), ESLint y Prettier compartidos; verificar que `npm run typecheck` y `npm run lint` pasan sobre los paquetes vacíos
+- [x] 1.3 Configurar Vitest para todos los paquetes, con cobertura (v8) y umbral del 95 % en `packages/domain`; verificar que `npm test` corre y reporta cobertura
 - [ ] 1.4 Crear el lanzador de MongoDB local (`mongodb-memory-server` en modo réplica, persistente en `./.data`, o `MONGODB_URI` si existe); verificar con un test que una transacción confirma y otra se revierte
 - [ ] 1.5 Crear `npm run dev` (API en 4100, web en 5180 y simulaciones en 4110, en paralelo) y `.env.example` con todas las variables documentadas (incluida la configuración de IA de desarrollo, comentada como «solo desarrollo, por costos»); verificar que levanta y que `GET /health` responde 200
-- [ ] 1.6 Crear `npm run trace`: lee los `#### Scenario:` de `spec.md` y busca cada nombre en los títulos de los tests; verificar que hoy lista todos los escenarios como pendientes y sale con error
+- [x] 1.6 Crear `npm run trace`: lee los `#### Scenario:` de `spec.md` y busca cada nombre en los títulos de los tests; verificar que hoy lista todos los escenarios como pendientes y sale con error
 - [ ] 1.7 Crear el workflow de GitHub Actions en Node 22 y 24 (instalación, lint, tipos, tests, `trace`, build) y el badge en el README; verificar que corre en local con `npm run ci`
 - [ ] 1.8 Escribir el README inicial (requisito Node 22 o más, `npm install`, `npm run dev`, `npm test`, qué es real, simulado o sintético) y verificar que los comandos documentados funcionan tal cual
 

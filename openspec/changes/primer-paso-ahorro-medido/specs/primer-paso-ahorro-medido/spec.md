@@ -243,7 +243,7 @@ El sistema SHALL rechazar fechas invertidas o futuras, periodos de más de 92 d�
 El sistema SHALL pedir una confirmación explícita antes de guardar una factura cuyo consumo por día sea menor a 0,3 veces o mayor a 3 veces la mediana del consumo por día de las facturas anteriores del mismo servicio, y SHALL marcar la factura confirmada como atípica.
 
 #### Scenario: Un cero de más
-- **WHEN** Inés registra julio con `kwhConsumed` 17900 (577 kWh por día, frente a una mediana de 60,0)
+- **WHEN** Inés registra julio con `kwhConsumed` 17900 (577 kWh por día, frente a una mediana de 59,9)
 - **THEN** la respuesta es un error 422 con código `BILL_NEEDS_CONFIRMATION` y el mensaje «Es mucho más que tu consumo habitual. ¿Está bien el número?»
 - **AND WHEN** reenvía la misma factura confirmando el valor
 - **THEN** la factura se guarda marcada como atípica

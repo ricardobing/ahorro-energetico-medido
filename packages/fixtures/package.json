@@ -1,0 +1,13 @@
+{
+  "name": "@ppam/fixtures",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Datos del caso del reto y datos sintéticos rotulados.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@ppam/domain": "0.1.0"
+  }
+}

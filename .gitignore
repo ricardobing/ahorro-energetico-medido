@@ -28,9 +28,9 @@ Thumbs.db
 !.vscode/extensions.json
 *.log
 
-# Estado temporal de impeccable (página de decisión)
-.impeccable/questions/
-.impeccable/review/
+# Contexto local de las herramientas de diseño (no se publica)
+PRODUCT.md
+.impeccable/
 
 # Configuración local del editor y de Claude Code
 .claude/

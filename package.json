@@ -25,6 +25,7 @@
     "trace": "tsx scripts/trace.ts",
     "build": "npm run build -w @ppam/web",
     "eval:profile": "tsx apps/api/eval/profile-eval.ts",
+    "capturas": "tsx scripts/capturas.ts",
     "ci": "npm run lint && npm run typecheck && npm run test:coverage && npm run trace && npm run build && npm run test:bundle && npm run test:e2e"
   },
   "devDependencies": {

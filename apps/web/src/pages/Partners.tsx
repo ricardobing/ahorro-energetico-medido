@@ -24,7 +24,7 @@ const NBSP = String.fromCharCode(0xa0);
 function Cell(props: { value: Hidden | null | undefined; suffix?: string }) {
   if (typeof props.value === 'number')
     return (
-      <span className="stat-value num">
+      <span className="stat-value">
         {props.value}
         {props.suffix ?? ''}
       </span>
@@ -130,7 +130,7 @@ export function PartnersPage(props: { staff: boolean }): ReactNode {
             <div className="card stat">
               <span className="stat-label">kWh ahorrados por mes</span>
               {r.measured.kwhPerMonth !== null ? (
-                <span className="stat-value num">{kwh.format(r.measured.kwhPerMonth)}</span>
+                <span className="stat-value">{kwh.format(r.measured.kwhPerMonth)}</span>
               ) : (
                 <Cell value={null} />
               )}
@@ -143,7 +143,7 @@ export function PartnersPage(props: { staff: boolean }): ReactNode {
             <div className="card stat">
               <span className="stat-label">Equivalente en USD por mes</span>
               {r.usd !== null ? (
-                <span className="stat-value num">{usd.format(r.usd)}</span>
+                <span className="stat-value">{usd.format(r.usd)}</span>
               ) : (
                 <Cell value={null} />
               )}

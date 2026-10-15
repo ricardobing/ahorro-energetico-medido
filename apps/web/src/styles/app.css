@@ -913,7 +913,13 @@ p {
 }
 .stat {
   display: grid;
+  align-content: start;
   gap: 4px;
+}
+/* En las grillas las tarjetas se separan con gap, no con el margen entre tarjetas apiladas. */
+.stat-grid > .card,
+.two-col > .card {
+  margin-top: 0;
 }
 .stat-value {
   font-size: 26px;

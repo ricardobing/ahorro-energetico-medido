@@ -78,8 +78,9 @@ export const IconBell = (p: P) => (
 );
 export const IconProfile = (p: P) => (
   <Icon {...p}>
-    <path d="M4 20V9l8-5 8 5v11z" />
-    <path d="M9 20v-6h6v6" />
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <circle cx="9" cy="11" r="2.2" />
+    <path d="M5.8 16c.6-1.6 1.8-2.4 3.2-2.4s2.6.8 3.2 2.4M14.5 10h4M14.5 13.5h3" />
   </Icon>
 );
 export const IconDemo = (p: P) => (

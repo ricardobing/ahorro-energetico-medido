@@ -28,7 +28,7 @@ export function RangeTrack(props: { rangeText: string; mostLikelyText: string })
         <div className="range-span" style={{ left: pct(lo), width: `calc(${pct(hi)} - ${pct(lo)})` }} />
         <div className="range-mark" style={{ left: pct(likely) }} />
       </div>
-      <div className="range-ticks num" aria-hidden="true">
+      <div className="range-ticks" aria-hidden="true">
         <span>{loText.length >= 2 ? loText[0] : 'desde 0'}</span>
         <strong>{props.mostLikelyText}</strong>
         <span>{loText.at(-1)}</span>

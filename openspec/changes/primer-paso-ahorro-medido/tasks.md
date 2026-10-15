@@ -11,7 +11,7 @@
 - [x] 1.5 Crear `npm run dev` (API en 4100, web en 5180 y simulaciones en 4110, en paralelo) y `.env.example` con todas las variables documentadas (incluida la configuración de IA de desarrollo, comentada como «solo desarrollo, por costos»); verificar que levanta y que `GET /health` responde 200
 - [x] 1.6 Crear `npm run trace`: lee los `#### Scenario:` de `spec.md` y busca cada nombre en los títulos de los tests; verificar que hoy lista todos los escenarios como pendientes y sale con error
 - [ ] 1.7 Crear el workflow de GitHub Actions en Node 22 y 24 (instalación, lint, tipos, tests, `trace`, build) y el badge en el README; verificar que corre en local con `npm run ci`
-- [ ] 1.8 Escribir el README inicial (requisito Node 22 o más, `npm install`, `npm run dev`, `npm test`, qué es real, simulado o sintético) y verificar que los comandos documentados funcionan tal cual
+- [x] 1.8 Escribir el README inicial (requisito Node 22 o más, `npm install`, `npm run dev`, `npm test`, qué es real, simulado o sintético) y verificar que los comandos documentados funcionan tal cual
 
 ## 2. Dominio: fechas, dinero y formatos
 

@@ -1,0 +1,33 @@
+schema: spec-driven
+
+context: |
+  Language: es
+  All artifacts must be written in es.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+  En los requisitos, SHALL y MUST se leen como «DEBE».
+
+  Producto: Kamai, plataforma web de Agora Partnerships que ayuda a mipymes de
+  Latinoamérica (sobre todo mujeres dueñas de negocios) a bajar costos con
+  ecoinnovaciones: catálogo de más de 40, autodiagnóstico, planes de acción y
+  facturas de luz y agua autosubidas.
+  Stack existente: frontend React + Vite, API Node.js, MongoDB. Integraciones:
+  proveedor de IA (subtareas, asistente, búsqueda), servicio interno de
+  mensajería (correo, con registro para no repetir), servicio de conversión de
+  moneda y almacenamiento de archivos para fotos.
+  Uso real: celular con datos móviles limitados.
+
+  Convenciones:
+  - Los nombres de campo del anexo del reto son contrato real y no se renombran
+    (kwhConsumed, costPerKwh, billingStartDate, billingEndDate, uploadedFiles,
+    totalCost, co2Equivalent, ecoCardOrigin, status, statusUpdatedAt, steps,
+    subSteps, ciiuCodes). Las rutas son ilustrativas y siguen su estilo.
+  - Fechas de periodos: sin hora (AAAA-MM-DD), con días inclusivos.
+  - Dinero en céntimos enteros; redondeo solo al mostrar.
+  - Textos para la usuaria: español neutro con «tú», sin jerga estadística.
+  - Todo dato que no viene del caso se rotula como sintético.
+
+rules:
+  specs:
+    - Cada escenario usa datos del caso (las seis facturas de Inés, el plan plan_552, el catálogo eco_118 / eco_071) o datos sintéticos rotulados.
+  tasks:
+    - Cada grupo incluye sus propios tests; no hay un grupo final de tests.

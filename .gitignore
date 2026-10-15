@@ -27,3 +27,7 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 *.log
+
+# Estado temporal de impeccable (página de decisión)
+.impeccable/questions/
+.impeccable/review/

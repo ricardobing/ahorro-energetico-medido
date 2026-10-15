@@ -41,6 +41,24 @@ Mostrar un número de ahorro a cualquier costo **no** cuenta como éxito: un «a
 
 Ninguna. El repositorio no tiene especificaciones previas. Los cambios a contratos existentes (estado `paused` del plan, campos nuevos de factura y catálogo) se describen en `design.md` y son compatibles hacia atrás.
 
+## Where We Go Deep
+
+El reto pide elegir dónde profundizar. Profundizamos en dos piezas, porque son las que hoy le fallan a Inés y las que decide la meta.
+
+1. **La medición del ahorro (la pieza más profunda).**
+   - *Por qué:* es lo que hoy engaña («ahorraste S/ 117» en un febrero en que consumió más por día), lo que pide la meta (ahorro medido, no declarado, para los aliados) y lo que no se puede deshacer: una cifra mostrada queda en la memoria de la usuaria y en los informes.
+   - *Hasta dónde:* comparación en kWh por día con jerarquía de métodos, exclusión de la factura del cambio, banda de ruido propia del negocio, tres resultados con su motivo, valorización a la tarifa vigente con la tarifa aparte y recálculo determinista con versión y huella. Es lógica pura, sin dependencias, con escenarios de números exactos calculados por script y pruebas de propiedades.
+2. **La recomendación del primer paso.**
+   - *Por qué:* la recomendación actual dejó a Inés siete semanas trabada en algo que no podía terminar, y con 1 a 11 casos por ecoinnovación el orden ingenuo elige mal.
+   - *Hasta dónde:* filtros por sus restricciones reales, puntaje con contracción, explicación con motivos verdaderos y una sola recomendación, guardada con su porqué, para las cuatro superficies.
+
+Con menos profundidad, a propósito:
+- **Perfil asistido con IA:** opcional y apagado por defecto. Antes de activarlo hace falta la evaluación de impacto (DPIA) de Agora.
+- **Informe para aliados:** agregados trimestrales con umbral de privacidad. El formato final se define con Agora y sus aliados.
+- **Integraciones:** simuladas con los contratos del anexo y sus modos de falla.
+- **Temporada en negocios nuevos:** se compara contra los meses cercanos y se rotula así. El grupo de comparación queda como evolución.
+- **Interfaz:** sigue el sistema visual de Kamai. Su objetivo es que Inés entienda el resultado en el celular, no explorar el diseño.
+
 ## Out of Scope
 
 - Integrar los servicios reales de Kamai (correo, subtareas con IA, conversión de moneda, almacenamiento): van simulados con sus mismos contratos y modos de falla.

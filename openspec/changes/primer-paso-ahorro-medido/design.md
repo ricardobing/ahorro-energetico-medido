@@ -19,6 +19,7 @@
   - tarifas que cambian casi todos los meses;
   - uso desde el celular con datos limitados;
   - políticas de Agora: POL-IT-003 de IA (explicabilidad, supervisión humana, evaluación de impacto o DPIA) y POL-IT-001 de datos (agregados para financiadores, minimización).
+- **Dónde profundizamos:** en la medición del ahorro y en la recomendación; el porqué y lo que queda con menos profundidad están en «Where We Go Deep», en `proposal.md`.
 - **Este repositorio** es un prototipo ejecutable del módulo. Corre solo en local, con los servicios existentes simulados con sus contratos. La lógica de negocio vive en un paquete puro, sin dependencias, para que pueda llevarse tal cual a la API real de Kamai.
 
 ## Goals / Non-Goals
@@ -186,6 +187,22 @@ Cada decisión tiene su porqué y las alternativas descartadas. Los parámetros 
 - *Docker Compose:* suma Dockerfiles, nginx, el inicio de la réplica de MongoDB y healthchecks, con fricción en Windows, para un beneficio que casi nadie usaría al evaluar.
 - *Node 24 como mínimo:* deja afuera a quien tiene la versión 22, que sigue con soporte.
 - *Un entorno en la nube (Codespaces):* posible más adelante; no hace falta para el reto.
+
+## Cuánta IA hace falta
+
+Responde el punto 2 del reto en un solo lugar: qué técnica usamos en cada parte, dónde no y por qué, con los datos que hay hoy (29 elecciones, 12 resultados medidos y de 6 a 12 facturas por negocio). Los detalles están en las decisiones que se citan.
+
+| Técnica | La usamos para | No la usamos para | Por qué, con los datos de hoy |
+|---|---|---|---|
+| **Reglas explícitas** | Elegibilidad: objetivo, sector, equipos, presupuesto, horas, nivel de diagnóstico y plan existente (D2, D4). Los textos que ve la usuaria. | — | Son deterministas, explicables y auditables, como pide la política de IA de Agora (POL-IT-003). Los textos los arma el código para que la web, el correo y el reporte digan lo mismo. |
+| **Estadística simple: promedios contraídos** | Probabilidad de completar y efecto esperado de cada ecoinnovación (D3). | Un modelo Beta-binomial completo. | Con 1 a 11 casos, contraer hacia una referencia conservadora evita que un caso único mande. El modelo completo no cambia el orden con estos datos. |
+| **Estadística simple: banda de ruido** | Decidir entre «medido», «todavía no» y «no vemos ahorro» (D7). | Pruebas de significancia formales. | Con 2 a 6 facturas por periodo dan una falsa sensación de rigor. La banda con la variación propia (2,57 % para Inés) es explicable. |
+| **Comparación con línea de base** (IPMVP, opción C) | Medir el ahorro en kWh por día, contra el año anterior o los meses cercanos (D5, D6). | Regresión por clima (grados-día). | Con 6 a 12 puntos por negocio la regresión no se sostiene, y en Arequipa la temporada la marca el calendario de la panadería, no el clima. |
+| **Modelo de lenguaje** (SDK de OpenAI) | Perfil asistido: interpretar la descripción libre y elegir rubro, equipos y tipo de horno de listas cerradas, con montos y horas solo si están escritos (D13). Apagado por defecto hasta la DPIA. | Elegir la recomendación, calcular el ahorro, redactar los resultados y leer fotos de factura. | Para decidir o calcular no es reproducible ni auditable y puede inventar números. Leer fotos queda como evolución porque sin facturas reales no se puede verificar. |
+| **IA existente de Kamai** (subtareas) | Ideas para cada paso, solo cuando la usuaria las pide. | Abrir el plan (no consume cupo). | Ya existe, con su cupo y su error 402. Se usa sin bloquear: los pasos del catálogo siempre están. |
+| **Modelo que aprende a ordenar** (aprendizaje supervisado) | Nada, por ahora. | Ordenar las ecoinnovaciones. | 29 elecciones y 12 resultados no alcanzan ni para entrenar ni para evaluar. Se guardan las recomendaciones con sus entradas y los eventos del embudo para entrenarlo cuando haya datos. |
+
+**Criterio:** una técnica más compleja reemplaza a una más simple solo si le gana en un eval con datos reales, con la regla de decisión escrita antes de medir.
 
 ## Arquitectura
 

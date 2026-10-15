@@ -175,19 +175,17 @@ Cada decisión tiene su porqué y las alternativas descartadas. Los parámetros 
 **Decisión:** `apps/api`, `apps/web`, `apps/mocks` y `packages/domain`, con `e2e/` y `openspec/` en la raíz.
 **Por qué:** la lógica de dominio se comparte entre la API (cálculo) y la web (formatos y textos), con un solo `npm install`.
 
-### D24. Docker Compose para correr la app; `npm run dev` para desarrollar
-**Decisión:** dos caminos que conviven.
-- **`docker compose up --build`** es la forma principal de correr la app completa (video y prueba por parte de Agora). Solo pide Docker. Servicios:
-  - `mongo` (imagen oficial de MongoDB con versión fija, una sola réplica `rs0` iniciada por un healthcheck, volumen persistente y sin puerto publicado en el host);
-  - `api` (Node 24, compilada en etapas, con los workers en el mismo proceso, `DEMO_MODE=true` y carga inicial al arrancar);
-  - `mocks` (simulaciones);
-  - `web` (la versión de producción de Vite servida por nginx, que reenvía `/api` a la API).
-  Puertos en el host: web **5180**, API **4100**, simulaciones **4110**, elegidos para no chocar con otros proyectos locales (3000, 27017, 5432x).
-- **`npm run dev`** para desarrollar, con MongoDB embebido (`mongodb-memory-server` en modo réplica), recarga en caliente y los mismos puertos.
-- **Tests:** `npm test` no necesita Docker. CI suma una prueba de humo que construye las imágenes, levanta el `compose`, espera los healthchecks y recorre el flujo principal.
+### D24. Correr la app con npm, sin Docker
+**Decisión:** un solo camino: `npm install` y `npm run dev`, con **Node 22 o más** (CI prueba en 22 y 24).
+- Levanta MongoDB embebido (`mongodb-memory-server` en modo réplica, persistente en `./.data`), carga los datos del caso y arranca la API (puerto 4100), las simulaciones (4110) y la web (5180).
+- Los puertos se eligieron para no chocar con otros proyectos locales (3000, 27017, 5432x). Con `MONGODB_URI` se puede usar un MongoDB propio.
+- La vitrina para quien entra desde GitHub sin correr nada es el README: capturas y GIF del recorrido, el **badge de CI en verde** y los enlaces a la spec y al video.
 
-**Por qué:** quien evalúa la abre con un comando, sin instalar Node ni MongoDB. MongoDB real en modo réplica se parece más a producción (Atlas) que el embebido. El desarrollo y los tests quedan rápidos, sin depender de Docker.
-**Descartado:** solo Docker (hace lentos los tests y el desarrollo, y obliga a tener Docker en CI para todo); solo `npm run dev` (quien evalúa necesita Node 24 y descarga el binario de MongoDB en la primera ejecución).
+**Por qué:** la mayoría de quienes evalúan lee el repositorio, la spec y el video, y no ejecuta nada. Quien sí quiere probarla necesita solo Node. Para nosotros es el camino más rápido (recarga en caliente, tests sin dependencias externas) y el que menos hay que mantener.
+**Descartado:**
+- *Docker Compose:* suma Dockerfiles, nginx, el inicio de la réplica de MongoDB y healthchecks, con fricción en Windows, para un beneficio que casi nadie usaría al evaluar.
+- *Node 24 como mínimo:* deja afuera a quien tiene la versión 22, que sigue con soporte.
+- *Un entorno en la nube (Codespaces):* posible más adelante; no hace falta para el reto.
 
 ## Arquitectura
 
@@ -199,7 +197,7 @@ flowchart LR
     WEB["App web React + Vite (PWA)<br/>estructura en caché · borradores locales<br/>compresión y revisión de la foto"]
   end
 
-  subgraph API["API Node 24 · Express 5 · TypeScript"]
+  subgraph API["API Node 22+ · Express 5 · TypeScript"]
     MW["Middleware: autenticación (Firebase / demo),<br/>id de pedido, zod, límites, errores"]
     REC["Recomendación"]
     PLAN["Planes y eventos"]
@@ -382,7 +380,7 @@ La medición devuelve `display` con los textos ya armados para la usuaria (frase
 
 ## Tecnologías
 
-- **API:** Node.js 24 LTS, TypeScript estricto, Express 5, Mongoose, zod, pino (registros JSON con id de pedido), helmet, multer (subidas en memoria con límites), SDK `openai`. Las versiones exactas se fijan en la etapa 2.
+- **API:** Node.js 22 o más (probado en 22 y 24), TypeScript estricto, Express 5, Mongoose, zod, pino (registros JSON con id de pedido), helmet, multer (subidas en memoria con límites), SDK `openai`. Las versiones exactas se fijan en la etapa 2.
 - **Dominio:** TypeScript puro, sin dependencias de ejecución.
 - **Web:** React 19, Vite, TypeScript, React Router, TanStack Query, Tailwind CSS v4, `vite-plugin-pwa`, IndexedDB para borradores, SVG propio para gráficos y Mona Sans servida desde el proyecto.
 - **Simulaciones:** Express en el puerto 4010, con los contratos del anexo y modos de falla.
@@ -392,8 +390,8 @@ La medición devuelve `display` con los textos ya armados para la usuaria (frase
   - React Testing Library para componentes;
   - Playwright para e2e en vista de celular y de escritorio, con red lenta simulada y `@axe-core/playwright`;
   - un chequeo del peso del bundle en CI.
-- **Local:** `docker compose up --build` (D24) para correr todo con MongoDB real: web en `localhost:5180`, API en `4100`, simulaciones en `4110`. Para desarrollar, `npm run dev` con MongoDB embebido (persistente en `./.data`, o `MONGODB_URI`), con los mismos puertos.
-- **CI:** GitHub Actions con lint, tipos, tests, build, peso del bundle, e2e y la prueba de humo de Docker Compose.
+- **Local (D24):** `npm install` y `npm run dev` con MongoDB embebido (persistente en `./.data`, o `MONGODB_URI`): web en `localhost:5180`, API en `4100`, simulaciones en `4110`. Sin Docker.
+- **CI:** GitHub Actions en Node 22 y 24 con lint, tipos, tests, `trace`, build, peso del bundle y e2e. El badge del README muestra el resultado.
 - **Producción (propuesta, fuera de esta instancia):** donde ya corra Kamai. Si es GCP, que el aviso del puesto menciona: Cloud Run para la API y los workers, MongoDB Atlas, Cloud Storage para las fotos, Cloud Scheduler para recordatorios y estadísticas, y Firebase Hosting para la web (Kamai ya usa Firebase para el login). Banderas por variable de entorno.
 
 ## Cómo se prueba

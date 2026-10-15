@@ -1,18 +1,17 @@
 # Tareas: Primer paso con ahorro medido
 
-> En orden de dependencias. Cada tarea dice cómo se verifica, y cada grupo trae sus propios tests. **Trazabilidad:** el título de cada test de dominio o de API incluye el nombre exacto del escenario que cubre, y el script `npm run trace` (tarea 1.7) falla si algún escenario de `spec.md` no tiene test.
+> En orden de dependencias. Cada tarea dice cómo se verifica, y cada grupo trae sus propios tests. **Trazabilidad:** el título de cada test de dominio o de API incluye el nombre exacto del escenario que cubre, y el script `npm run trace` (tarea 1.6) falla si algún escenario de `spec.md` no tiene test.
 
 ## 1. Base del repositorio
 
-- [ ] 1.1 Crear el monorepo con workspaces de npm (`apps/api`, `apps/web`, `apps/mocks`, `packages/domain`, `e2e`) y `engines.node >= 24`; verificar que `npm install` termina sin errores desde un clon limpio
+- [ ] 1.1 Crear el monorepo con workspaces de npm (`apps/api`, `apps/web`, `apps/mocks`, `packages/domain`, `e2e`) y `engines.node >= 22`; verificar que `npm install` termina sin errores desde un clon limpio
 - [ ] 1.2 Configurar TypeScript estricto (referencias de proyecto), ESLint y Prettier compartidos; verificar que `npm run typecheck` y `npm run lint` pasan sobre los paquetes vacíos
 - [ ] 1.3 Configurar Vitest para todos los paquetes, con cobertura (v8) y umbral del 95 % en `packages/domain`; verificar que `npm test` corre y reporta cobertura
 - [ ] 1.4 Crear el lanzador de MongoDB local (`mongodb-memory-server` en modo réplica, persistente en `./.data`, o `MONGODB_URI` si existe); verificar con un test que una transacción confirma y otra se revierte
 - [ ] 1.5 Crear `npm run dev` (API en 4100, web en 5180 y simulaciones en 4110, en paralelo) y `.env.example` con todas las variables documentadas (incluida la configuración de IA de desarrollo, comentada como «solo desarrollo, por costos»); verificar que levanta y que `GET /health` responde 200
-- [ ] 1.6 Crear los Dockerfile de `api`, `mocks` y `web` (etapas, Node 24 con versión fija, nginx para la web) y `docker-compose.yml` con `mongo` en una sola réplica (healthcheck que inicia `rs0`, volumen, sin puerto en el host), healthchecks y dependencias; verificar que `docker compose up --build` levanta todo y que `localhost:5180` y `localhost:4100/health` responden
-- [ ] 1.7 Crear `npm run trace`: lee los `#### Scenario:` de `spec.md` y busca cada nombre en los títulos de los tests; verificar que hoy lista todos los escenarios como pendientes y sale con error
-- [ ] 1.8 Crear el workflow de GitHub Actions (instalación, lint, tipos, tests, `trace`, build); verificar que corre en local con `npm run ci`
-- [ ] 1.9 Escribir el README inicial (requisitos, `docker compose up --build`, `npm install`, `npm run dev`, `npm test`, qué es real, simulado o sintético) y verificar que los comandos documentados funcionan tal cual
+- [ ] 1.6 Crear `npm run trace`: lee los `#### Scenario:` de `spec.md` y busca cada nombre en los títulos de los tests; verificar que hoy lista todos los escenarios como pendientes y sale con error
+- [ ] 1.7 Crear el workflow de GitHub Actions en Node 22 y 24 (instalación, lint, tipos, tests, `trace`, build) y el badge en el README; verificar que corre en local con `npm run ci`
+- [ ] 1.8 Escribir el README inicial (requisito Node 22 o más, `npm install`, `npm run dev`, `npm test`, qué es real, simulado o sintético) y verificar que los comandos documentados funcionan tal cual
 
 ## 2. Dominio: fechas, dinero y formatos
 
@@ -150,7 +149,7 @@
 - [ ] 20.2 e2e: perfil asistido sin IA (simulación caída) y factura con foto oscura guardada igual; verificar que pasa en 390 px
 - [ ] 20.3 e2e: aliado en 1440 px ve el informe con celdas ocultas y no puede abrir datos de un negocio; verificar que pasa
 - [ ] 20.4 Revisión de diseño: correr `impeccable detect` sobre la web, corregir lo mecánico, revisión final con `impeccable-finish-reviewer` y `DESIGN.md` con `impeccable-documenter`; verificar que la revisión termina en `ship`
-- [ ] 20.5 Prueba de humo con Docker: `npm run smoke:docker` construye, levanta el `compose` con la carga inicial, espera los healthchecks y corre el recorrido e2e 20.1 contra `localhost:5180`; verificar que pasa y que `docker compose down -v` deja todo limpio
+- [ ] 20.5 README final como vitrina para quien no corre nada: capturas de celular y de escritorio, un GIF del recorrido de Inés, el badge de CI, enlaces a la spec, al diseño y al video, y el guion de prueba; verificar que todos los enlaces abren desde GitHub sin sesión
 - [ ] 20.6 Correr `npm run ci` completo (lint, tipos, tests con cobertura, `trace` sin escenarios pendientes, build, peso y e2e); verificar que todo pasa en verde con un solo comando
 
 ## Workflow follow-up
